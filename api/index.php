@@ -28,8 +28,8 @@ function collection(array $value, string $key, int $limit): array {
     if (!isset($value[$key]) || !is_array($value[$key]) || !array_is_list($value[$key]) || count($value[$key]) > $limit) fail(422, 'Неверный список: '.$key);
     return $value[$key];
 }
-function validId(array $row, array &$ids): void {
-    textField($row, 'id', 100);
+function validId(array $row, array &$ids, int $limit = 100): void {
+    textField($row, 'id', $limit);
     if (!preg_match('/^[A-Za-z0-9_-]+$/D', $row['id']) || isset($ids[$row['id']])) fail(422, 'ID должен быть уникальным: латиница, цифры, _ и -');
     $ids[$row['id']] = true;
 }
@@ -87,6 +87,19 @@ function validatePayload(array $payload): void {
     if (($s['version']??0)!==1 || !is_array($s['done']??null) || !is_array($s['notes']??null)) fail(422,'Неверное состояние плана');
     foreach ($s['done'] as $id=>$done) if (!is_string($id) || !is_bool($done)) fail(422,'Неверная отметка');
     foreach ($s['notes'] as $id=>$note) if (!is_string($id) || !is_string($note) || strlen($note)>100000) fail(422,'Неверная заметка');
+    if (isset($s['comments'])) {
+        if (!is_array($s['comments']) || count($s['comments'])>10000) fail(422,'Неверные комментарии');
+        $commentIds=[];
+        foreach ($s['comments'] as $taskId=>$list) {
+            if (!is_string($taskId) || !is_array($list) || !array_is_list($list) || count($list)>1000) fail(422,'Неверный список комментариев');
+            foreach ($list as $comment) {
+                if (!is_array($comment)) fail(422,'Неверный комментарий'); validId($comment,$commentIds,200); textField($comment,'text',100000);
+                if (!trim($comment['text'])) fail(422,'Комментарий не может быть пустым');
+                if (!array_key_exists('researchDate',$comment) || ($comment['researchDate']!==null && (!is_string($comment['researchDate']) || !validDate($comment['researchDate'])))) fail(422,'Неверная дата исследования');
+                if (!array_key_exists('createdAt',$comment) || ($comment['createdAt']!==null && (!is_string($comment['createdAt']) || !preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/D',$comment['createdAt']) || strtotime($comment['createdAt'])===false))) fail(422,'Неверная дата комментария');
+            }
+        }
+    }
     foreach (collection($s,'custom',2000) as $t) {
         if (!is_array($t)) fail(422,'Неверный шаг'); validId($t,$taskIds);
         foreach (['title','description','proof','gate'] as $key) textField($t,$key,20000);

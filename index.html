@@ -7,11 +7,12 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=2" defer></script>
-  <script src="app.js?v=2" defer></script>
+  <script src="editor.js?v=3" defer></script>
+  <script src="comments.js?v=3" defer></script>
+  <script src="app.js?v=3" defer></script>
 </head>
 <body>
   <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -80,15 +81,24 @@
   </div>
 
   <div class="overlay" id="taskOverlay" hidden>
-    <button class="overlay-shade" data-close-task aria-label="Закрыть заметку"></button>
+    <button class="overlay-shade" data-close-task aria-label="Закрыть задачу"></button>
     <section class="task-panel" role="dialog" aria-modal="true" aria-labelledby="taskTitle">
       <header class="reader-header"><div><p class="eyebrow" id="taskGate"></p><h2 id="taskTitle"></h2></div><button class="icon-button" data-close-task aria-label="Закрыть"><svg><use href="#i-close"/></svg></button></header>
       <div class="task-panel-body">
         <p id="taskDescription"></p>
         <div class="proof-box"><strong>Что считать результатом</strong><p id="taskProof"></p></div>
-        <label class="field-label" for="taskNote">Моя заметка / ответ другого ИИ</label>
-        <textarea id="taskNote" rows="9" placeholder="Например: что проверили, в какой VM и где лежит лог. Заметка сохраняется на сервере после входа."></textarea>
-        <div class="task-panel-footer"><span id="noteSaved">Общие заметки проекта</span><button class="button button-dark" id="taskToggle">Отметить выполненным</button></div>
+        <section class="task-comments" aria-labelledby="commentsHeading">
+          <h3 id="commentsHeading">Комментарии <span id="commentCount">0</span></h3>
+          <div id="commentList" aria-live="polite"></div>
+          <form id="commentForm" class="comment-form" hidden>
+            <label class="field-label" for="commentDate">Дата исследования</label>
+            <input id="commentDate" type="date" required>
+            <label class="field-label" for="commentText">Комментарий / результат исследования</label>
+            <textarea id="commentText" rows="5" maxlength="100000" required placeholder="Что проверили, какой результат получили и где лежит источник"></textarea>
+            <div class="comment-form-actions"><button id="commentSubmit" class="button button-dark" type="submit">Добавить комментарий</button><button id="cancelCommentEdit" class="button button-light" type="button" hidden>Отменить редактирование</button></div>
+          </form>
+        </section>
+        <div class="task-panel-footer"><span id="noteSaved">Комментарии сохраняются на сервере</span><button class="button button-dark" id="taskToggle">Отметить выполненным</button></div>
         <button class="task-delete" id="taskDelete" type="button" hidden>Удалить мой шаг</button>
       </div>
     </section>

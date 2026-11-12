@@ -19,6 +19,7 @@ function useContent(next){
  if(!ARCH[archMode])archMode='nt';archIndex=Math.max(0,Math.min(archIndex,ARCH[archMode].length-1));
 }
 async function replacePlan(next){
+ next=normalizePlan(next);
  if(pendingSave||saving){await flushSaves();if(pendingSave||saving)throw new Error('Дождитесь сохранения текущих изменений');}
  const result=await api('save',{revision:serverRevision,content,state:next});serverRevision=result.revision;state=next;setSync('Сохранено на сервере');
 }
@@ -27,7 +28,7 @@ async function initializeAtlas(){
  try{
   const [session,data]=await Promise.all([api('session'),api('data')]);auth=session;serverRevision=data.revision;
   if(data.content)useContent(data.content);
-  state=data.state;serverReady=true;
+  state=normalizePlan(data.state);serverReady=true;
   render();setSync('Данные загружены');
  }catch(error){setSync('Нет связи с сервером');document.getElementById('accessNotice').textContent=error.message;render();}
 }
@@ -164,10 +165,10 @@ document.getElementById('restoreBackup').addEventListener('change',async event=>
  const file=event.target.files?.[0];event.target.value='';if(!file||!canEdit())return;
  try{const data=JSON.parse(await file.text());if(data.app!=='Windows11X Atlas'||data.version!==2||!data.content||!data.state)throw new Error('Нужна полная резервная копия Windows11X');if(!confirm('Заменить всё содержимое сайта и общий план этой копией?'))return;
  if(pendingSave||saving){await flushSaves();if(pendingSave||saving)throw new Error('Сначала сохраните текущие изменения');}
- const result=await api('save',{revision:serverRevision,content:data.content,state:data.state});serverRevision=result.revision;state=data.state;useContent(data.content);render();toast('Полная копия восстановлена на сервере');
+ const result=await api('save',{revision:serverRevision,content:data.content,state:normalizePlan(data.state)});serverRevision=result.revision;state=normalizePlan(data.state);useContent(data.content);render();toast('Полная копия восстановлена на сервере');
  }catch(error){toast(error.message);}
 });
-window.addEventListener('beforeunload',event=>{if(pendingSave||saving||(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline)){event.preventDefault();event.returnValue='';}});
+window.addEventListener('beforeunload',event=>{if(pendingSave||saving||commentBusy||commentDrafts.size||(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline)){event.preventDefault();event.returnValue='';}});
 
 document.addEventListener('keydown',event=>{
  const overlay=['loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);

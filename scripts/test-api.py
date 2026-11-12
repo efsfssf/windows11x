@@ -101,6 +101,23 @@ with tempfile.TemporaryDirectory(prefix='windows11x-api-') as tmp:
         check(guest.call('save', broken)[0] == 422, 'invalid date accepted')
         check(guest.call('save', '{broken')[0] == 400, 'non-object body accepted')
         check(guest.call('data')[1]['revision'] == 2, 'failed write changed revision')
+        payload['revision']=2
+        payload['state']['comments']={'g2-dual':[{'id':'comment-test','text':'Research result','researchDate':'2026-11-08','createdAt':'2026-11-13T00:01:00.000Z'}]}
+        check(guest.call('save',payload)[0]==200,'Dated comments rejected')
+        saved=viewer.call('data')[1]['state']['comments']['g2-dual'][0]
+        check(saved['researchDate']=='2026-11-08' and saved['text']=='Research result','Comment date/text lost across clients')
+        payload['revision']=3
+        payload['state']['comments']['g2-dual'][0]['researchDate']='2026-02-31'
+        check(guest.call('save',payload)[0]==422,'Invalid research date accepted')
+        payload['state']['comments']['g2-dual'][0]['researchDate']=None
+        payload['state']['comments']['g2-dual'][0]['createdAt']=None
+        check(guest.call('save',payload)[0]==200,'Legacy comment without date rejected')
+        payload['revision']=4
+        payload['state']['comments']['g2-dual'].append(copy.deepcopy(payload['state']['comments']['g2-dual'][0]))
+        check(guest.call('save',payload)[0]==422,'Duplicate comment IDs accepted')
+        payload['state']['comments']['g2-dual']=[]
+        check(guest.call('save',payload)[0]==200,'Deleting comments rejected')
+        check(viewer.call('data')[1]['state']['comments']['g2-dual']==[], 'Deleted comment reappeared')
         check(guest.call('logout', {})[0] == 200, 'logout failed')
         guest.session()
         check(guest.call('save', payload)[0] == 401, 'logout kept write access')

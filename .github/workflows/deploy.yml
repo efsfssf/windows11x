@@ -21,6 +21,7 @@ jobs:
         run: |
           node --check app.js
           node --check editor.js
+          node --check comments.js
           node scripts/smoke-ui.js
           php -l api/index.php
           php -l scripts/configure-admin.php

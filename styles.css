@@ -118,3 +118,15 @@ body:not(.is-editor) .owner-only { display:none !important; }
 .gate-map { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
 .arch-flow { grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); }
 .volume-grid,.phase-grid,.correction-grid { grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); }
+.task-comments h3 { display:flex;gap:10px;align-items:center;margin:28px 0 16px; }
+#commentCount { border-radius:20px;padding:3px 9px;background:#e5eeeb;font-size:12px;color:#34665a; }
+.task-comment { margin-bottom:14px;padding:18px;border:1px solid #dce6e3;border-radius:12px;background:#fff; }
+.task-comment header { display:flex;flex-direction:column;gap:5px;font-size:13px; }
+.task-comment header strong { color:#24735f; }
+.task-comment header small,.comments-empty { color:#71817f;font-size:12px; }
+.task-comment p { white-space:pre-wrap;overflow-wrap:anywhere;margin:14px 0 0;line-height:1.65; }
+.comment-actions,.comment-form-actions { display:flex;gap:10px;flex-wrap:wrap;margin-top:14px; }
+.comment-actions button { background:none;border:0;color:#327866;padding:0;cursor:pointer;font:inherit;font-size:12px; }
+.comment-form { display:grid;gap:10px;margin-top:22px;padding:18px;border-radius:12px;background:#edf3f0; }
+.comment-form input,.comment-form textarea { width:100%;font:inherit;padding:11px;border:1px solid #cbd9d3;border-radius:7px;background:#fff; }
+.comment-form textarea { resize:vertical; }
