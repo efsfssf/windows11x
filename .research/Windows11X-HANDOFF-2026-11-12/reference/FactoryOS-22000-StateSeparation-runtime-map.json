@@ -1,0 +1,2664 @@
+{
+  "title": "FactoryOSArgon 22000.1 - running host State Separation configuration baseline",
+  "source_log_sha256": "489862be0faecf54152ae63779e1d7a5a90c53db4977dcf460c1204b30974704",
+  "source": "SSH diagnostic output from Windows Factory OS host 10.0.22000.1",
+  "evidence_limitations": [
+    "Read-only runtime configuration and minifilter instances are observed; persistence and write enforcement were not tested.",
+    "The map is a configuration inventory, not proof that every rule is exercised.",
+    "M:\\Data paths must not be treated as physical writes to MainOS without verifying the mount or reparse boundary.",
+    "The SSH host output does not establish actual underlying Storage Spaces topology."
+  ],
+  "observed_volumes": {
+    "M:": "MainOS",
+    "B:": "BSP",
+    "O:": "OSData",
+    "C:": "Data",
+    "S:": "SERVICING_FILES",
+    "P:": "PreInstalled"
+  },
+  "xro_filter": {
+    "attached_drive_letters": [
+      "M:",
+      "B:"
+    ],
+    "altitude": 261101,
+    "registry_filter_enabled": "0x1",
+    "disable_exempt_keys": "0x1"
+  },
+  "state_separation_policy": {
+    "Enabled": "0x1"
+  },
+  "counts": {
+    "RedirectionMap_Files": 62,
+    "RedirectionMap_Keys": 459,
+    "KeyRedirectionLinks": 81
+  },
+  "target_counts": {
+    "RedirectionMap_Files": {
+      "OSDATA": 37,
+      "M_Data_alias_unverified": 25
+    },
+    "RedirectionMap_Keys": {
+      "OSDATA": 400,
+      "OSBOOT": 40,
+      "DEVICES": 19
+    },
+    "KeyRedirectionLinks": {
+      "OSDATA": 78,
+      "OSBOOT": 3
+    }
+  },
+  "RedirectionMap": {
+    "Files": {
+      "1": {
+        "SourcePath": "M:\\Windows\\System32\\config",
+        "TargetPath": "O:\\windows\\system32\\config"
+      },
+      "10": {
+        "SourcePath": "M:\\Users\\Public",
+        "TargetPath": "M:\\Data\\Users\\Public"
+      },
+      "11": {
+        "SourcePath": "M:\\Windows\\System32\\Config\\SystemProfile",
+        "TargetPath": "M:\\Data\\Users\\System"
+      },
+      "12": {
+        "SourcePath": "M:\\ProgramData",
+        "TargetPath": "M:\\Data\\ProgramData"
+      },
+      "13": {
+        "SourcePath": "M:\\Program Files\\WindowsApps",
+        "TargetPath": "M:\\Data\\Programs\\WindowsApps"
+      },
+      "14": {
+        "SourcePath": "M:\\SystemData",
+        "TargetPath": "O:\\SystemData"
+      },
+      "15": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\AppRepository",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\Windows\\AppRepository"
+      },
+      "16": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Diagnosis\\ETLLogs\\AutoLogger",
+        "TargetPath": "O:\\shareddata\\Microsoft\\Diagnosis\\ETLLogs\\AutoLogger"
+      },
+      "17": {
+        "SourcePath": "M:\\Windows\\System32\\LogFiles\\WMI",
+        "TargetPath": "O:\\systemdata\\etw"
+      },
+      "18": {
+        "SourcePath": "M:\\Windows\\System32\\sru",
+        "TargetPath": "O:\\shareddata\\sru"
+      },
+      "2": {
+        "SourcePath": "M:\\Windows\\prefetch",
+        "TargetPath": "O:\\windows\\prefetch"
+      },
+      "3": {
+        "SourcePath": "M:\\Windows\\System32",
+        "TargetPath": "O:\\LogFiles\\ETW"
+      },
+      "8": {
+        "SourcePath": "M:\\Windows\\Temp",
+        "TargetPath": "O:\\SystemData\\Temp"
+      },
+      "9": {
+        "SourcePath": "M:\\Users\\Default",
+        "TargetPath": "M:\\Data\\Users\\Default"
+      },
+      "Amcache": {
+        "SourcePath": "M:\\Windows\\appcompat\\Programs",
+        "TargetPath": "O:\\Windows\\appcompat\\Programs"
+      },
+      "AppraiserHostInput": {
+        "SourcePath": "M:\\Windows\\appcompat\\appraiser\\telemetry\\VailHostSerializedInput",
+        "TargetPath": "O:\\Windows\\appcompat\\appraiser\\telemetry\\VailHostSerializedInput"
+      },
+      "AppraiserHostOutput": {
+        "SourcePath": "M:\\Windows\\appcompat\\appraiser\\telemetry\\VailHostSerializedOutputRoot",
+        "TargetPath": "O:\\Windows\\appcompat\\appraiser\\telemetry\\VailHostSerializedOutputRoot"
+      },
+      "AppReadinessDirectory": {
+        "SourcePath": "M:\\Windows\\AppReadiness",
+        "TargetPath": "O:\\Windows\\AppReadiness"
+      },
+      "CapabilityAccessManagerDatabaseRoot": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\CapabilityAccessManager",
+        "TargetNtPath": "\\??\\M:\\data\\ProgramData\\Microsoft\\Windows\\CapabilityAccessManager",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\Windows\\CapabilityAccessManager"
+      },
+      "CiDataDirectory": {
+        "SourcePath": "M:\\Windows\\System32\\CodeIntegrity",
+        "TargetNtPath": "\\OSDataRoot\\Windows\\System32\\CodeIntegrity",
+        "TargetPath": "O:\\Windows\\System32\\CodeIntegrity"
+      },
+      "ClipSVCStorage": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\ClipSvc",
+        "TargetPath": "O:\\Windows\\ClipSVC"
+      },
+      "CrashDump": {
+        "SourcePath": "M:\\Windows",
+        "TargetPath": "M:\\Data\\CrashDump"
+      },
+      "DataSharedData": {
+        "SourcePath": "M:\\SharedData",
+        "TargetPath": "M:\\Data\\SharedData"
+      },
+      "DefaultScmLogFolder": {
+        "SourcePath": "M:\\Windows\\System32\\LogFiles\\Scm",
+        "TargetNtPath": "\\OSDataRoot\\LogFiles\\Scm",
+        "TargetPath": "O:\\LogFiles\\Scm"
+      },
+      "DriverData": {
+        "SourcePath": "M:\\Windows\\System32\\Drivers\\DriverData",
+        "TargetNtPath": "\\OSDataRoot\\DriverData",
+        "TargetPath": "O:\\DriverData"
+      },
+      "DriverState": {
+        "SourcePath": "M:\\Windows\\System32\\DriverState",
+        "TargetNtPath": "\\OSDataRoot\\DriverState",
+        "TargetPath": "O:\\DriverState"
+      },
+      "DriverState_Devices": {
+        "SourcePath": "M:\\Windows\\System32\\DriverState\\Devices",
+        "TargetNtPath": "\\OSDataRoot\\DriverState\\Devices",
+        "TargetPath": "O:\\DriverState\\Devices"
+      },
+      "LiveKernelReports": {
+        "SourcePath": "M:\\Windows\\LiveKernelReports",
+        "TargetNtPath": "\\??\\M:\\Data\\SystemData\\LiveKernelReports",
+        "TargetPath": "M:\\Data\\SystemData\\LiveKernelReports"
+      },
+      "LocalDumps": {
+        "SourcePath": "M:\\SystemData\\LocalDumps",
+        "TargetPath": "M:\\Data\\SystemData\\LocalDumps"
+      },
+      "LogfilesWMI": {
+        "SourcePath": "M:\\Windows\\System32\\LogFiles\\WMI",
+        "TargetPath": "O:\\LogFiles\\WMI"
+      },
+      "MessagingTempMMS": {
+        "SourcePath": "M:\\SharedData\\Comms\\Messaging\\Temp\\MMS",
+        "TargetPath": "M:\\Data\\SharedData\\Comms\\Messaging\\Temp\\MMS"
+      },
+      "PersonalizationCspDownloads": {
+        "SourcePath": "M:\\Personalization",
+        "TargetPath": "O:\\Windows\\Personalization"
+      },
+      "PersonalizationCspProvisionedDrop": {
+        "SourcePath": "M:\\Users\\Public\\Downloads",
+        "TargetPath": "O:\\Users\\Public\\Downloads"
+      },
+      "Rescache": {
+        "SourcePath": "M:\\Windows\\rescache\\_merged",
+        "TargetPath": "O:\\windows\\rescache\\_merged"
+      },
+      "RtBackup": {
+        "SourcePath": "M:\\Windows\\System32\\Logfiles\\WMI\\RtBackup",
+        "TargetPath": "M:\\Data\\Logfiles\\WMI\\RtBackup"
+      },
+      "SedEncMgr": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\SedEncMgr",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\SedEncMgr"
+      },
+      "SharedData": {
+        "SourcePath": "M:\\SharedData",
+        "TargetPath": "O:\\SharedData"
+      },
+      "SiufLocFileRoot": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Diagnosis\\Siufloc",
+        "TargetPath": "O:\\SharedData\\Microsoft\\Diagnosis\\Siufloc"
+      },
+      "SystemTemp": {
+        "SourcePath": "M:\\Windows\\SystemTemp",
+        "TargetPath": "O:\\SystemData\\SystemTemp"
+      },
+      "TestRoot": {
+        "SourcePath": "M:\\test",
+        "TargetPath": "O:\\test"
+      },
+      "TestRootData": {
+        "SourcePath": "M:\\test",
+        "TargetPath": "M:\\data\\test"
+      },
+      "TpmDriverLogPath": {
+        "SourcePath": "M:\\windows\\Logs\\MeasuredBoot",
+        "TargetNtPath": "\\??\\O:\\windows\\Logs\\MeasuredBoot",
+        "TargetPath": "O:\\windows\\Logs\\MeasuredBoot"
+      },
+      "TpmDriverMsCryptoPath": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Crypto",
+        "TargetNtPath": "\\??\\M:\\data\\ProgramData\\Microsoft\\Crypto",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\Crypto"
+      },
+      "TpmDriverMsDataPath": {
+        "SourcePath": "M:\\ProgramData\\Microsoft",
+        "TargetNtPath": "\\??\\M:\\data\\ProgramData\\Microsoft",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft"
+      },
+      "TpmDriverMsPcpKspPath": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Crypto\\PCPKSP",
+        "TargetNtPath": "\\??\\M:\\data\\ProgramData\\Microsoft\\Crypto\\PCPKSP",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\Crypto\\PCPKSP"
+      },
+      "TpmDriverMsWinAikPath": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Crypto\\PCPKSP\\WindowsAIK",
+        "TargetNtPath": "\\??\\M:\\data\\ProgramData\\Microsoft\\Crypto\\PCPKSP\\WindowsAIK",
+        "TargetPath": "M:\\data\\ProgramData\\Microsoft\\Crypto\\PCPKSP\\WindowsAIK"
+      },
+      "WaaSMedicLogDirectory": {
+        "SourcePath": "M:\\windows\\logs\\waasmedic",
+        "TargetPath": "O:\\windows\\logs\\waasmedic"
+      },
+      "WBEM": {
+        "SourcePath": "M:\\Windows\\System32\\WBEM",
+        "TargetPath": "O:\\WBEM"
+      },
+      "WBEM_MOF": {
+        "SourcePath": "M:\\Windows\\System32\\WBEM\\MOF",
+        "TargetPath": "O:\\WBEM\\MOF"
+      },
+      "WBEM_Repository": {
+        "SourcePath": "M:\\Windows\\System32\\WBEM\\Repository",
+        "TargetPath": "O:\\WBEM\\Repository"
+      },
+      "Wer": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\Wer",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\Windows\\Wer"
+      },
+      "WerZipArchive": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\Wer\\ZipArchive",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\Windows\\Wer\\ZipArchive"
+      },
+      "WerZipArchiveContainers": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\Windows\\Wer\\ZipArchive\\Containers",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\Windows\\Wer\\ZipArchive\\Containers"
+      },
+      "Win32ServiceStateRoot": {
+        "SourcePath": "M:\\windows\\ServiceState",
+        "TargetNtPath": "\\OSDataRoot\\ServiceState",
+        "TargetPath": "O:\\ServiceState"
+      },
+      "WindowsAppCompat": {
+        "SourcePath": "M:\\Windows\\appcompat\\",
+        "TargetPath": "O:\\Windows\\appcompat\\"
+      },
+      "WinevtLogs": {
+        "SourcePath": "M:\\Windows\\System32\\winevt\\Logs",
+        "TargetPath": "O:\\LogFiles\\winevt\\Logs"
+      },
+      "WinsockDatabase": {
+        "SourcePath": "M:\\Windows\\System32\\drivers\\etc",
+        "TargetNtPath": "\\OSDataRoot\\Winsock\\Database",
+        "TargetPath": "O:\\Winsock\\Database"
+      },
+      "WMILogFolder": {
+        "SourcePath": "M:\\Windows\\System32\\LogFiles\\WMI",
+        "TargetPath": "O:\\Windows\\System32\\LogFiles\\WMI"
+      },
+      "WPSettingsDatID": {
+        "SourcePath": "M:\\System Volume Information\\wpsettings.dat",
+        "TargetPath": "O:\\System Volume Information\\wpsettings.dat"
+      },
+      "WwanSvc": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\WwanSvc",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\WwanSvc"
+      },
+      "WwanSvcDMProfiles": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\WwanSvc\\DMProfiles",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\WwanSvc\\DMProfiles"
+      },
+      "WwanSvcProfiles": {
+        "SourcePath": "M:\\ProgramData\\Microsoft\\WwanSvc\\Profiles",
+        "TargetPath": "M:\\Data\\ProgramData\\Microsoft\\WwanSvc\\Profiles"
+      }
+    },
+    "Keys": {
+      "1": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\UserManager",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\UserManager\\Users"
+      },
+      "13": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI",
+        "TargetPath": "OSBOOT\\WMI"
+      },
+      "2": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\ProfileList",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\ProfileList"
+      },
+      "4": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\FontCache\\Parameters",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\FontCache\\SystemFontProvider"
+      },
+      "5": {
+        "SourcePath": "SYSTEM\\ResourceManager",
+        "TargetPath": "OSDATA\\ResourceManager\\MemoryHistory"
+      },
+      "6": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\AppHost",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\AppHost"
+      },
+      "7": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization",
+        "TargetPath": "OSDATA\\DeliveryOptimization"
+      },
+      "8": {
+        "SourcePath": "SOFTWARE\\Microsoft\\SecurityManager",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\SecurityManager"
+      },
+      "9": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WLANSVC",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\\\WLANSVC"
+      },
+      "AcceptedEula": {
+        "SourcePath": "System\\Setup",
+        "TargetPath": "OSDATA\\System\\EULA"
+      },
+      "AccessFlagsID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\AccessFlags",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\AccessFlags"
+      },
+      "AccessibilitySettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\AccessibilitySettings\\Theme",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\CurrentControlSet\\Control\\AccessibilitySettings\\Theme",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\AccessibilitySettings\\Theme"
+      },
+      "AccountManagementCSPConfiguration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountManagementCSP\\Configuration",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountManagementCSP\\Configuration"
+      },
+      "AdapterCacheKeyID": {
+        "SourcePath": "SOFTWARE\\Microsoft\\DirectX",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\DirectX"
+      },
+      "AdvertisingIdPolicy": {
+        "SourcePath": "Software\\Policies\\Microsoft\\Windows\\AdvertisingInfo",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\Windows\\AdvertisingInfo"
+      },
+      "AnalogProvidersRegistrations": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Analog\\Providers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Analog\\Providers"
+      },
+      "AnalogRegistryPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Analog",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Analog"
+      },
+      "ANDPower": {
+        "SourcePath": "Software\\Microsoft\\Andromeda\\Power",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Andromeda\\Power"
+      },
+      "AndromedaDisplayBrightness": {
+        "SourcePath": "Software\\Microsoft\\Andromeda\\DisplayBrightness",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Andromeda\\DisplayBrightness"
+      },
+      "AppCompatCache": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache"
+      },
+      "AppCompatFlags": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
+      },
+      "AppModelDeploymentNotifications": {
+        "SourcePath": "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Deployment",
+        "TargetPath": "OSDATA\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Deployment"
+      },
+      "AppModelPackageRepository": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository",
+        "SourcePath": "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository",
+        "TargetPath": "OSDATA\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository"
+      },
+      "AppModelRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel"
+      },
+      "AppModelUnlock": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock"
+      },
+      "AppPaths": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths"
+      },
+      "AppxAllUserStore": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore"
+      },
+      "AppxAllUserStore-Applications": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Applications",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Applications"
+      },
+      "AppxAllUserStore-Config": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Config",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Config"
+      },
+      "AppxAllUserStore-Deleted": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Deleted",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Deleted"
+      },
+      "AppxAllUserStore-EndOfLife": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\EndOfLife",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\EndOfLife"
+      },
+      "AppxAllUserStore-InboxApplications": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\InboxApplications",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\InboxApplications"
+      },
+      "AppxAllUserStore-OverrideConfig": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\OverrideConfig",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\OverrideConfig"
+      },
+      "AppxAllUserStore-Staged": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Staged",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Staged"
+      },
+      "AppxAllUserStore-Upgrade": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Upgrade",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\Upgrade"
+      },
+      "AppxByteCodeQueue": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\ByteCodeQueue",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\ByteCodeQueue"
+      },
+      "AppxMiniRepository": {
+        "SourcePath": "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository",
+        "TargetPath": "OSDATA\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository"
+      },
+      "AppxNewDeploymentOperation": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\NewDeploymentOperation",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\NewDeploymentOperation"
+      },
+      "AppxPackageSidRef": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageSidRef",
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageSidRef",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageSidRef",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageSidRef"
+      },
+      "AppxPackageVolumes": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageVolumes",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageVolumes"
+      },
+      "AppxPolicies": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\Windows\\Appx",
+        "SourcePath": "Software\\Policies\\Microsoft\\Windows\\Appx",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\Windows\\Appx",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\Windows\\Appx"
+      },
+      "AppxPurgeList": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PurgeList",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PurgeList"
+      },
+      "AppxRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx"
+      },
+      "AppxStagingInfo": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StagingInfo",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StagingInfo"
+      },
+      "AppxStateChange": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateChange",
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateChange",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateChange",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateChange"
+      },
+      "AreaAutopilot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot"
+      },
+      "AssignedAccessConfiguration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\AssignedAccessConfiguration",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\AssignedAccessConfiguration"
+      },
+      "AssignedAccessCSP": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\AssignedAccessCSP",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\AssignedAccessCSP"
+      },
+      "AudioSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Multimedia\\Audio\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Multimedia\\Audio\\Settings"
+      },
+      "AutopilotEventViewerEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\EventViewerEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\EventViewerEntry"
+      },
+      "AutopilotFileEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\FileEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\FileEntry"
+      },
+      "AutopilotHkcuRegEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\HkcuRegEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\HkcuRegEntry"
+      },
+      "AutopilotHklmRegEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\HklmRegEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\HklmRegEntry"
+      },
+      "AutopilotSubAreaEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\SubAreaEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\Autopilot\\SubAreaEntry"
+      },
+      "AutopilotTPMTracingSessionEntry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\TPM\\TracingSessionEntry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmDiagnostics\\Area\\TPM\\TracingSessionEntry"
+      },
+      "AutoUnlockEnrollment": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SignIn\\AutoUnlockEnrollment",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SignIn\\AutoUnlockEnrollment"
+      },
+      "BatteryTelemetryAnalysis": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PowerEfficiencyDiagnostics",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PowerEfficiencyDiagnostics"
+      },
+      "BioEnrollmentAutologger": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\BioEnrollment",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\BioEnrollment",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\BioEnrollment"
+      },
+      "BitsNonVolatilePoliciesRoot": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\BITS",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\BITS"
+      },
+      "BitsNonVolatileSettingsRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\BITS",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\BITS"
+      },
+      "BluetoothAudioGatewaySettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Bluetooth\\Audio\\Hfp\\AudioGateway",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Bluetooth\\Audio\\Hfp\\AudioGateway"
+      },
+      "BluetoothBthPortParams": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\BTHPORT\\Parameters",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\bthportparams",
+        "TargetPath": "DEVICES\\bthportparams"
+      },
+      "BluetoothGatt": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Bluetooth\\Gatt",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Bluetooth\\Gatt"
+      },
+      "BluetoothLooselyCoupledDevices": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Bluetooth\\LooselyCoupledDevices",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Bluetooth\\LooselyCoupledDevices"
+      },
+      "BluetoothPolicy": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Policies\\Hardware\\Bluetooth",
+        "TargetNtPath": "\\REGISTRY\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Policies\\Hardware\\Bluetooth",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Policies\\Hardware\\Bluetooth"
+      },
+      "BootSHID": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Bootsh\\Parameters",
+        "TargetPath": "OSDATA\\BootSH"
+      },
+      "CachedSizesID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\CachedSizes",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\CachedSizes"
+      },
+      "CallAndMessagingEnhancement": {
+        "SourcePath": "SOFTWARE\\Microsoft\\CallAndMessagingEnhancement",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\CallAndMessagingEnhancement"
+      },
+      "CallAndMessagingEnhancement2": {
+        "SourcePath": "SOFTWARE\\Microsoft\\CallAndMessagingEnhancement\\BlockingApp",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\CallAndMessagingEnhancement\\BlockingApp"
+      },
+      "CallAndMessagingEnhancement3": {
+        "SourcePath": "SOFTWARE\\Microsoft\\CallAndMessagingEnhancement\\CallOriginApp",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\CallAndMessagingEnhancement\\CallOriginApp"
+      },
+      "CapabilityAccessManager": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\CapabilityAccessManager"
+      },
+      "CellManager": {
+        "SourcePath": "Software\\Microsoft\\Cellular\\CellManager",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Cellular\\CellManager"
+      },
+      "CellularMVSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Cellular\\MVSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Cellular\\MVSettings"
+      },
+      "CellularSMSOEM": {
+        "SourcePath": "Software\\Microsoft\\Cellular\\SMS\\OEM",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Cellular\\SMS\\OEM"
+      },
+      "CellularTelemetryProperty": {
+        "SourcePath": "Software\\Microsoft\\Cellular\\TelemetryProperty",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Cellular\\TelemetryProperty"
+      },
+      "CellUXOEMConfigurable": {
+        "SourcePath": "Software\\Microsoft\\Connectivity\\CellUXOEMConfigurable",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Connectivity\\CellUXOEMConfigurable"
+      },
+      "ChargeLimiting": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power\\CAD\\ChargeLimiting",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\CurrentControlSet\\Control\\Power\\CAD\\ChargeLimiting",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\Power\\CAD\\ChargeLimiting"
+      },
+      "CIDeveloper": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CI\\Developer\\DeveloperUnlock",
+        "TargetNtPath": "\\REGISTRY\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\CI\\Developer\\DeveloperUnlock",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Developer\\DeveloperUnlock"
+      },
+      "CIDeveloperCerts": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CI\\Developer\\DeveloperUnlockCertificates",
+        "TargetNtPath": "\\REGISTRY\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Developer\\DeveloperUnlockCertificates",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Developer\\DeveloperUnlockCertificates"
+      },
+      "CIDevParent": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CI\\Developer",
+        "TargetNtPath": "\\REGISTRY\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Developer",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Developer"
+      },
+      "CIEnrollments": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CI\\Enrollments",
+        "TargetNtPath": "\\REGISTRY\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Enrollments",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CI\\Enrollments"
+      },
+      "CIVAILSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CI\\VAILSettings",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\SYSTEM\\CurrentControlSet\\Control\\CI\\VAILSettings",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\CI\\VAILSettings"
+      },
+      "ClipProductOptions": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\ProductOptions"
+      },
+      "ClipSVC": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ClipSVC",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ClipSVC",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ClipSVC"
+      },
+      "CloudDomainJoinParameters": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDJ",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDJ"
+      },
+      "CloudDomainJoinRoot": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CloudDomainJoin",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\CloudDomainJoin"
+      },
+      "CloudPrintMPSKey": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Print\\MPS",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Print\\MPS"
+      },
+      "CmServiceImages": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Images",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Images"
+      },
+      "CmServiceLayers": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Layers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Layers"
+      },
+      "CmServicePersistedStorages": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\PersistedStorages",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\PersistedStorages"
+      },
+      "CmServicePolicy": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Policy",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Containers\\CmService\\Policy"
+      },
+      "CngRng": {
+        "SourcePath": "SYSTEM\\RNG",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\RNG",
+        "TargetPath": "OSBOOT\\RNG"
+      },
+      "ComNameArbiter": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\COM Name Arbiter",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\CurrentControlSet\\Control\\COM Name Arbiter",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\COM Name Arbiter"
+      },
+      "CompatMarkers": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\CompatMarkers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\CompatMarkers"
+      },
+      "CompatSharedMarkers": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Shared\\CompatMarkers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Shared\\CompatMarkers"
+      },
+      "CompatSharedTargetVersionUpgradeExperienceIndicators": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Shared\\TargetVersionUpgradeExperienceIndicators",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Shared\\TargetVersionUpgradeExperienceIndicators"
+      },
+      "CompatTargetVersionUpgradeExperienceIndicators": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\TargetVersionUpgradeExperienceIndicators",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\TargetVersionUpgradeExperienceIndicators"
+      },
+      "CompatTelRunner": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\TelemetryController",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\TelemetryController"
+      },
+      "ComposerExternalDisplayExperience": {
+        "SourcePath": "Software\\Microsoft\\CoreShell\\ExternalDisplayExperience",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\CoreShell\\ExternalDisplayExperience"
+      },
+      "ComputerName": {
+        "SourceNtPath": "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName",
+        "SourcePath": "System\\CurrentControlSet\\Control\\ComputerName",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Control\\ComputerName",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Control\\ComputerName"
+      },
+      "ConnFakeModem": {
+        "SourcePath": "Software\\Microsoft\\Connectivity\\FakeModem",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Connectivity\\FakeModem"
+      },
+      "Container Policy Manager Storage": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Container Policy Manager\\Storage",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\Container Policy Manager\\Storage"
+      },
+      "Container Policy Manager Users": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Container Policy Manager\\Users",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\Container Policy Manager\\Users"
+      },
+      "ContentMonitorRootKey": {
+        "SourcePath": "Software\\Microsoft\\ContentMonitor",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\ContentMonitor"
+      },
+      "ControlPanelSettings": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings"
+      },
+      "CoreShellComposer": {
+        "SourcePath": "Software\\Microsoft\\CoreShell\\Composer",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\CoreShell\\Composer"
+      },
+      "CrashControl": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\CrashControl",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CrashControl",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\CrashControl"
+      },
+      "DataCollection": {
+        "SourcePath": "Software\\Microsoft\\DataCollection",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\DataCollection"
+      },
+      "DataCollectionGroupPolicy": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+      },
+      "DataMarketplace": {
+        "SourcePath": "Software\\Microsoft\\DataMarketplace",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\DataMarketplace"
+      },
+      "DataMigrationFramework": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DataMigrationFramework\\PersistentState",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DataMigrationFramework\\PersistentState"
+      },
+      "DateTime": {
+        "SourcePath": "System\\State\\DateTime",
+        "TargetPath": "OSDATA\\System\\State\\DateTime"
+      },
+      "DebugRegSvcParameters": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\debugregsvc\\Parameters",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\debugregsvc\\Parameters"
+      },
+      "DeviceCensus": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Census",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Census"
+      },
+      "DeviceCompatDrivers": {
+        "SourcePath": "System\\Setup\\DeviceCompat\\Drivers",
+        "TargetPath": "OSDATA\\System\\Setup\\DeviceCompat\\Drivers"
+      },
+      "DeviceDirectoryClient": {
+        "SourcePath": "SOFTWARE\\Microsoft\\MdmCommon\\SettingValues",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\MdmCommon\\SettingValues"
+      },
+      "DeviceInfoDeviceVersion": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\DeviceInfo\\DeviceVersion",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\DeviceInfo\\DeviceVersion"
+      },
+      "DeviceManagementAccount": {
+        "SourcePath": "Software\\Microsoft\\Provisioning\\OMADM\\Accounts",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Provisioning\\OMADM\\Accounts"
+      },
+      "DeviceManagementCDNDownload": {
+        "SourcePath": "Software\\Microsoft\\CDNDownload",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\CDNDownload"
+      },
+      "DeviceManagementDeclaredConfiguration": {
+        "SourcePath": "Software\\Microsoft\\DeclaredConfiguration",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\DeclaredConfiguration"
+      },
+      "DeviceManagementDMOrchestrator": {
+        "SourcePath": "Software\\Microsoft\\DMOrchestrator",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\DMOrchestrator"
+      },
+      "DeviceManagementEnrollment": {
+        "SourcePath": "Software\\Microsoft\\Enrollments",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Enrollments"
+      },
+      "DeviceManagementPolicyManager": {
+        "SourcePath": "Software\\Microsoft\\PolicyManager",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\Software\\Microsoft\\PolicyManager",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\PolicyManager"
+      },
+      "DeviceSetup": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\DeviceSetup",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\DeviceSetup"
+      },
+      "DeviceUpdate": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate"
+      },
+      "DeviceUpdateAgent": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate\\Agent",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate\\Agent"
+      },
+      "DeviceUpdateAgentSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate\\Agent\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeviceUpdate\\Agent\\Settings"
+      },
+      "Dfrg": {
+        "SourcePath": "Software\\Microsoft\\Dfrg",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Dfrg"
+      },
+      "DfrgBootOptimizeFunction": {
+        "SourcePath": "Software\\Microsoft\\Dfrg\\BootOptimizeFunction",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Dfrg\\BootOptimizeFunction"
+      },
+      "DfrgRetrimFunction": {
+        "SourcePath": "Software\\Microsoft\\Dfrg\\RetrimFunction",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Dfrg\\RetrimFunction"
+      },
+      "DfrgSlabifyFunction": {
+        "SourcePath": "Software\\Microsoft\\Dfrg\\SlabifyFunction",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Dfrg\\SlabifyFunction"
+      },
+      "DfrgStatistics": {
+        "SourcePath": "Software\\Microsoft\\Dfrg\\Statistics",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Dfrg\\Statistics"
+      },
+      "DHCPV6_CLIENT_INTERFACE": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\Interfaces",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client6"
+      },
+      "DHCPV6_CLIENT_OPTION": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp\\Parametersv6\\Options",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client6\\Parameters\\Options"
+      },
+      "DHCPV6_CLIENT_PARAMETER": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp\\Parametersv6",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client6\\Parameters"
+      },
+      "DHCP_BASE": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp",
+        "TargetPath": "OSDATA\\Networking\\Dhcp"
+      },
+      "DHCP_CLIENT_CONFIGURATIONS": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp\\Configurations",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client4\\Configurations"
+      },
+      "DHCP_CLIENT_INTERFACE": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client4"
+      },
+      "DHCP_CLIENT_OPTION": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp\\Parameters\\Options",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client4\\Parameters\\Options"
+      },
+      "DHCP_CLIENT_PARAMETER": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp\\Parameters",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\Client4\\Parameters"
+      },
+      "DHCP_PDC_SERVICES": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\Dhcp",
+        "TargetPath": "OSDATA\\Networking\\Dhcp\\PDC"
+      },
+      "DiagnosticLogCSPAutopilot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\DiagnosticLogCSP\\Autopilot",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\DiagnosticLogCSP\\Autopilot"
+      },
+      "DiagnosticLogCSPEtwLogRegistered": {
+        "SourcePath": "SOFTWARE\\Microsoft\\DiagnosticLogCSP\\EtwLog\\Registered",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\DiagnosticLogCSP\\EtwLog\\Registered"
+      },
+      "DiagnosticLogCSPEtwLogRegisteredCollectors": {
+        "SourcePath": "SOFTWARE\\Microsoft\\DiagnosticLogCSP\\EtwLog\\Registered\\Collectors",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\DiagnosticLogCSP\\EtwLog\\Registered\\Collectors"
+      },
+      "Diagnostics_AllowTelemetry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection"
+      },
+      "DigitsPersistentSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Digits",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Digits"
+      },
+      "Dnscache": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Dnscache",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache"
+      },
+      "DnscacheDnsActiveIfs": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsActiveIfs",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsActiveIfs"
+      },
+      "DnscacheDnsConnections": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnections",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnections"
+      },
+      "DnscacheDnsConnectionsProxies": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnectionsProxies",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnectionsProxies"
+      },
+      "DnscacheTcpip6Interfaces": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\Interfaces",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Interfaces6"
+      },
+      "DnscacheTcpipInterfaces": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Interfaces"
+      },
+      "DnscacheTcpipParameters": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\TcpipParameters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\TcpipParameters"
+      },
+      "DNSRegisteredAdapters": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DNSRegisteredAdapters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DNSRegisteredAdapters"
+      },
+      "dot3svc": {
+        "SourcePath": "Software\\Microsoft\\dot3svc",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\dot3svc"
+      },
+      "DplDuckRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\EFS\\EdpCredentials",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\EFS\\EdpCredentials"
+      },
+      "DriverDatabaseUpdates": {
+        "SourcePath": "SYSTEM\\DriverDatabase\\Updates",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\DriverDatabase\\Updates",
+        "TargetPath": "DEVICES\\DriverDatabase\\Updates"
+      },
+      "DriverStatePath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\SecurityTemplates\\DriverState",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\System\\Services",
+        "TargetPath": "DEVICES\\System\\Services"
+      },
+      "DriverVerifier": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\ControlSetOverride\\Session Manager\\Memory Management",
+        "TargetPath": "OSBOOT\\ControlSetOverride\\Session Manager\\Memory Management"
+      },
+      "DriverVerifierExts": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\VerifierExt\\Extensions",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\ControlSetOverride\\Session Manager\\Memory Management\\Extensions",
+        "TargetPath": "OSBOOT\\ControlSetOverride\\Session Manager\\Memory Management\\Extensions"
+      },
+      "DRM_RNG": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Cryptography\\DRM_RNG",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\SOFTWARE\\Microsoft\\Cryptography\\DRM_RNG",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Cryptography\\DRM_RNG"
+      },
+      "DusmSvcRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\DusmSvc",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\DusmSvc"
+      },
+      "DWMSceneSwitches": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene"
+      },
+      "DWMSwitches": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\Dwm",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\Dwm"
+      },
+      "DynamicInstalledProducts": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Update\\TargetingInfo\\DynamicInstalled",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Update\\TargetingInfo\\DynamicInstalled",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Update\\TargetingInfo\\DynamicInstalled"
+      },
+      "EAPAKAIdentities": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\23\\Identities",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\23\\Identities"
+      },
+      "EAPAKAPrimeIdentities": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\50\\Identities",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\50\\Identities"
+      },
+      "EAPAKAPrimeReauthKeys": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\50\\FastReauthContext",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\50\\FastReauthContext"
+      },
+      "EAPAKAReauthKeys": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\23\\FastReauthContext",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\23\\FastReauthContext"
+      },
+      "EAPSIMIdentities": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\18\\Identities",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\18\\Identities"
+      },
+      "EAPSIMReauthKeys": {
+        "SourcePath": "SOFTWARE\\Microsoft\\EAPSIMMethods\\18\\FastReauthContext",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\EAPSIMMethods\\18\\FastReauthContext"
+      },
+      "EnterpriseModernAppManagement": {
+        "SourcePath": "Software\\Microsoft\\EnterpriseModernAppManagement",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\EnterpriseModernAppManagement"
+      },
+      "EnterpriseModernAppManagementAppIDs": {
+        "SourcePath": "Software\\Microsoft\\EnterpriseModernAppManagement\\AppIDs",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\EnterpriseModernAppManagement\\AppIDs"
+      },
+      "EnterpriseModernAppManagementEnterpriseIDs": {
+        "SourcePath": "Software\\Microsoft\\EnterpriseModernAppManagement\\EnterpriseIDs",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\EnterpriseModernAppManagement\\EnterpriseIDs"
+      },
+      "EnterpriseModernAppReleaseManagement": {
+        "SourcePath": "Software\\Policies\\Microsoft\\WindowsStore\\Apps",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\WindowsStore\\Apps"
+      },
+      "ETPersistentSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\EyeTracking",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\EyeTracking"
+      },
+      "ETWAutoLoggerPath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\AutoLogger",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\AutoLogger",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\AutoLogger"
+      },
+      "ETWGlobalLoggerPath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\GlobalLogger",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\GlobalLogger",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\GlobalLogger"
+      },
+      "ETWSecurityPath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\Security",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Security",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Security"
+      },
+      "ExtendedCompositionSourceID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\DWM\\ExtendedComposition",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\DWM\\ExtendedComposition"
+      },
+      "FaceAuthPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Analog\\FaceAuth",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Analog\\FaceAuth"
+      },
+      "FaceCredProvAutologger": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceCredProv",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceCredProv",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceCredProv"
+      },
+      "FaceDeviceInfoPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Analog\\FaceDeviceInfo",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Analog\\FaceDeviceInfo"
+      },
+      "FaceLogonEnrolledUsersPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\FaceLogonEnrolledUsers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\FaceLogonEnrolledUsers"
+      },
+      "FaceLogonUI": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\FaceLogon",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\FaceLogon"
+      },
+      "FaceOneSettingsRegistryRootPathName": {
+        "SourcePath": "Software\\Microsoft\\Analog\\OneSettings",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Analog\\OneSettings"
+      },
+      "FaceSensorAdapterProviderKeyPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Analog\\Providers\\MediaFoundationDefaultPerceptionProvider",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Analog\\Providers\\MediaFoundationDefaultPerceptionProvider"
+      },
+      "FaceTelAutologger": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceTel",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceTel",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FaceTel"
+      },
+      "FacialFeaturesPolicies": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Biometrics\\FacialFeatures",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\FacialFeatures"
+      },
+      "FeatureConfiguration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fcon",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fcon"
+      },
+      "FeatureManagement": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\FeatureManagement",
+        "TargetPath": "OSBOOT\\ControlSetOverride\\FeatureManagement"
+      },
+      "FESyncRootManager": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SyncRootManager",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SyncRootManager"
+      },
+      "FileSystem": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\FileSystem"
+      },
+      "FirmwareResources": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\FirmwareResources",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\CurrentControlSet\\Control\\FirmwareResources",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\FirmwareResources"
+      },
+      "FlightingAccount": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\Account",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\Account"
+      },
+      "FlightingApplicability": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\Applicability",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\Applicability"
+      },
+      "FlightingBuild": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Flighting\\Build",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Flighting\\Build"
+      },
+      "FlightingCache": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\Cache",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\Cache"
+      },
+      "FlightingClientState": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\ClientState",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\ClientState"
+      },
+      "FlightingCTAC": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\CTAC",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\CTAC"
+      },
+      "FlightingDriver": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\Driver",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\Driver"
+      },
+      "FlightingFIDs": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\FIDs",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\FIDs"
+      },
+      "FlightingFileHash": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\FileHash",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\FileHash"
+      },
+      "FlightingOneSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\OneSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\OneSettings"
+      },
+      "FlightingPreMigration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\PreMigration",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\PreMigration"
+      },
+      "FlightingPreviewBuildsManager": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\PreviewBuildsManager",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\PreviewBuildsManager"
+      },
+      "FlightingRestricted": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\Restricted",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\Restricted"
+      },
+      "FlightingToastNotification": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\ToastNotification",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\ToastNotification"
+      },
+      "FlightingUI": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\UI",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\UI"
+      },
+      "FlightingUISelection": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Selection",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Selection"
+      },
+      "FlightingUIStrings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Strings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Strings"
+      },
+      "FlightingUIVisibility": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Visibility",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsSelfhost\\UI\\Visibility"
+      },
+      "GlobalizationUserSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\International",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\CurrentControlSet\\Control\\International",
+        "TargetPath": "OSDATA\\CurrentControlSet\\Control\\International"
+      },
+      "HardwareConfigState": {
+        "SourcePath": "SYSTEM\\HardwareConfig",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\DEVICES\\HardwareConfig",
+        "TargetPath": "DEVICES\\HardwareConfig"
+      },
+      "HASCSPHealthAttestation": {
+        "SourcePath": "Software\\Microsoft\\Provisioning\\CSPs\\.\\Vendor\\MSFT\\HealthAttestation",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Provisioning\\CSPs\\.\\Vendor\\MSFT\\HealthAttestation"
+      },
+      "HoloOOBEOverrides": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE"
+      },
+      "HotspotOffload": {
+        "SourcePath": "Software\\Microsoft\\Windows Phone\\HotspotOffload",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows Phone\\HotspotOffload"
+      },
+      "HubOS": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Hub",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Hub"
+      },
+      "IdentityCRL": {
+        "SourcePath": "SOFTWARE\\Microsoft\\IdentityCRL",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IdentityCRL"
+      },
+      "IDStoreCache": {
+        "SourcePath": "SOFTWARE\\Microsoft\\IdentityStore\\Cache",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IdentityStore\\Cache"
+      },
+      "IDStoreLoadParameters": {
+        "SourcePath": "SOFTWARE\\Microsoft\\IdentityStore\\LoadParameters",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IdentityStore\\LoadParameters"
+      },
+      "IDStoreLoadParametersAad": {
+        "SourcePath": "SOFTWARE\\Microsoft\\IdentityStore\\LoadParameters\\{B16898C6-A148-4967-9171-64D755DA8520}",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IdentityStore\\LoadParameters\\{B16898C6-A148-4967-9171-64D755DA8520}"
+      },
+      "IDStoreLogonCache": {
+        "SourcePath": "SOFTWARE\\Microsoft\\IdentityStore\\LogonCache",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IdentityStore\\LogonCache"
+      },
+      "ImeRegistration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\CTF",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\CTF"
+      },
+      "ImsSvcSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\ImsSvc",
+        "TargetPath": "OSDATA\\System\\Services\\ImsSvc"
+      },
+      "Input": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Input",
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Input",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Input",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Input"
+      },
+      "InputLocales": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales"
+      },
+      "InputSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Settings"
+      },
+      "InputSettingsCHS": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0804\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0804\\Settings"
+      },
+      "InputSettingsHKG": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0C04\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0C04\\Settings"
+      },
+      "InputSettingsJPN": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0411\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0411\\Settings"
+      },
+      "InputSettingsKOR": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0412\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0412\\Settings"
+      },
+      "InputSettingsTWN": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0404\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0404\\Settings"
+      },
+      "InstalledColorProfiles": {
+        "SourcePath": "M:\\windows\\system32\\spool\\drivers\\color",
+        "TargetPath": "O:\\windows\\system32\\spool\\drivers\\color"
+      },
+      "InstallServiceMutableState": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InstallService\\State",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InstallService\\State"
+      },
+      "InstallServiceStubification": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InstallService\\Stubification",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InstallService\\Stubification"
+      },
+      "InternetSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"
+      },
+      "InternetSettingsConnections": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Connections",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Connections"
+      },
+      "InternetSettingsPolicies": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"
+      },
+      "IotShellExtensionCBT": {
+        "SourcePath": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\IoTShellExtension\\CBT",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows NT\\CurrentVersion\\IotShellExtension\\CBT"
+      },
+      "KernelExecutive": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive"
+      },
+      "LanguageComponentsInstallerKeyName": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\LanguageComponentsInstaller",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\LanguageComponentsInstaller"
+      },
+      "LanguageOverlayKeyName": {
+        "SourcePath": "Software\\Microsoft\\LanguageOverlay",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\LanguageOverlay"
+      },
+      "LanguageSettingsKeyName": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\LanguageSettings",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\LanguageSettings"
+      },
+      "LanmanServer": {
+        "SourcePath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer",
+        "TargetPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer"
+      },
+      "LanmanWorkStationParameters": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkStation\\Parameters",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\LanmanWorkStation\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkStation\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkStation\\Parameters"
+      },
+      "LfSvc": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\lfsvc",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\lfsvc"
+      },
+      "LiveDump": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\LiveDump",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\LiveDump",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\LiveDump"
+      },
+      "LogonUI": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI"
+      },
+      "MapsBackgroundTransfer": {
+        "SourcePath": "System\\Maps\\BackgroundTransferService",
+        "TargetPath": "OSDATA\\System\\Maps\\BackgroundTransferService"
+      },
+      "MapsBase": {
+        "SourcePath": "System\\Maps",
+        "TargetPath": "OSDATA\\System\\Maps"
+      },
+      "MapsStorage": {
+        "SourcePath": "System\\Maps\\Storage",
+        "TargetPath": "OSDATA\\System\\Maps\\Storage"
+      },
+      "Messaging": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Messaging",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Messaging"
+      },
+      "MessagingGlobalSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Messaging\\GlobalSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Messaging\\GlobalSettings"
+      },
+      "MessagingMMS": {
+        "SourcePath": "SYSTEM\\Messaging\\MMS",
+        "TargetPath": "OSDATA\\SYSTEM\\Messaging\\MMS"
+      },
+      "MessagingSMS": {
+        "SourcePath": "SYSTEM\\Messaging\\SMS",
+        "TargetPath": "OSDATA\\SYSTEM\\Messaging\\SMS"
+      },
+      "MessagingSystem": {
+        "SourcePath": "SYSTEM\\Messaging",
+        "TargetPath": "OSDATA\\SYSTEM\\Messaging"
+      },
+      "MicrosoftCellularRIL3GPP2SIDMCCMappingTable": {
+        "SourcePath": "Software\\Microsoft\\Cellular\\RIL\\3GPP2SIDMCCMappingTable",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Cellular\\RIL\\3GPP2SIDMCCMappingTable"
+      },
+      "MicrosoftCellularUiccDatastore": {
+        "SourcePath": "Software\\Microsoft\\Cellular\\UiccDatastore",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Cellular\\UiccDatastore"
+      },
+      "MiracastReceiver": {
+        "SourcePath": "Software\\Microsoft\\MiracastReceiver",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\MiracastReceiver"
+      },
+      "MixedRealityCapture": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Capture",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Capture"
+      },
+      "MMDevices": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\MMDevices"
+      },
+      "MMDevicesAudio": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\MMDevices\\Audio"
+      },
+      "MMDevicesAudioCapture": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\MMDevices\\Audio\\Capture"
+      },
+      "MMDevicesAudioRender": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\MMDevices\\Audio\\Render"
+      },
+      "MotionControllerPersistentSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Holographic\\MotionController",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Holographic\\MotionController"
+      },
+      "MovingPlatformPersistentSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MovingPlatformMode\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\MovingPlatformMode\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\MovingPlatformMode\\Parameters"
+      },
+      "MpssvcACService": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\ACService",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\ACService"
+      },
+      "MpssvcAppCs": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\AppCs",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\AppCs"
+      },
+      "MpssvcParameters": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters"
+      },
+      "MpssvcParametersPortKeywords": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords"
+      },
+      "MpssvcParametersPortKeywordsCDPSvcTcp": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\CDPSvcTcp",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\CDPSvcTcp"
+      },
+      "MpssvcParametersPortKeywordsCortana": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\Cortana",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\Cortana"
+      },
+      "MpssvcParametersPortKeywordsDHCP": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\DHCP",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\DHCP"
+      },
+      "MpssvcParametersPortKeywordsIPTLSIn": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\IPTLSIn",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\IPTLSIn"
+      },
+      "MpssvcParametersPortKeywordsIPTLSOut": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\IPTLSOut",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\IPTLSOut"
+      },
+      "MpssvcParametersPortKeywordsmDns": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\mDns",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\mDns"
+      },
+      "MpssvcParametersPortKeywordsPlayToDisc": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\PlayToDisc",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\PlayToDisc"
+      },
+      "MpssvcParametersPortKeywordsRPC-EPMap": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\RPC-EPMap",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\RPC-EPMap"
+      },
+      "MpssvcParametersPortKeywordsTeredo": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\Teredo",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\MpsSvc\\Parameters\\PortKeywords\\Teredo"
+      },
+      "MRxSmbParameters": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\MRxSmb\\Parameters",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\MRxSmb\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\MRxSmb\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\MRxSmb\\Parameters"
+      },
+      "MultivariantKey": {
+        "SourcePath": "Software\\Microsoft\\Multivariant",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Multivariant"
+      },
+      "NCSIPolicies": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
+      },
+      "NetworkConnectionBroker": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\NcbService\\NCB",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\DEVICES\\Networking\\ConnectionBroker",
+        "TargetPath": "DEVICES\\Networking\\ConnectionBroker"
+      },
+      "NetworkList": {
+        "SourcePath": "Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList"
+      },
+      "NetworkQoSPolicyRoot": {
+        "SourceNtPath": "\\Registry\\Machine\\SOFTWARE\\Policies\\Microsoft\\Windows\\QoS",
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\QoS",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkQoSPolicy",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkQoSPolicy"
+      },
+      "NgcCredprov": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\Credential Providers\\{D6886603-9D2F-4EB2-B667-1971041FA96B}",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\Credential Providers\\{D6886603-9D2F-4EB2-B667-1971041FA96B}"
+      },
+      "NgcCrypto": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Cryptography\\Ngc",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Cryptography\\Ngc"
+      },
+      "NgcLogonUi": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\NgcPin",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\NgcPin"
+      },
+      "NlaSvcRoot": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\NlaSvc",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\NlaSvc"
+      },
+      "NoAuthEnrollment": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SignIn\\NoAuthEnrollment",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SignIn\\NoAuthEnrollment"
+      },
+      "NsiPersistentStore": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Nsi",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\DEVICES\\Networking\\Nsi\\PersistentStore",
+        "TargetPath": "DEVICES\\Networking\\Nsi\\PersistentStore"
+      },
+      "OCUAP_Speech_CloudSettings_Storage": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Speech_OneCore\\CloudSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Speech_OneCore\\CloudSettings"
+      },
+      "OEMCellular": {
+        "SourcePath": "Software\\OEM\\Cellular",
+        "TargetPath": "OSDATA\\Software\\OEM\\Cellular"
+      },
+      "OEMCellularDeviceSpecific": {
+        "SourcePath": "Software\\OEM\\Cellular\\DeviceSpecific",
+        "TargetPath": "OSDATA\\Software\\OEM\\Cellular\\DeviceSpecific"
+      },
+      "OEMCellularRIL3GPP2SIDMCCMappingTable": {
+        "SourcePath": "Software\\OEM\\Cellular\\RIL\\3GPP2SIDMCCMappingTable",
+        "TargetPath": "OSDATA\\Software\\OEM\\Cellular\\RIL\\3GPP2SIDMCCMappingTable"
+      },
+      "OEMCellularUiccDatastore": {
+        "SourcePath": "Software\\OEM\\Cellular\\UiccDatastore",
+        "TargetPath": "OSDATA\\Software\\OEM\\Cellular\\UiccDatastore"
+      },
+      "OEMInformationPath": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OEMInformation",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OEMInformation"
+      },
+      "OEMSystemTray": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Shell\\OEM\\SystemTray",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Shell\\OEM\\SystemTray"
+      },
+      "OfflineDeviceID": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\ODUID",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\ODUID"
+      },
+      "OnecoreUAP_Speech_StorageRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Speech_OneCore",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Speech_OneCore"
+      },
+      "OneSettingsClient": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Wosc\\Client\\Persistent",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Wosc\\Client\\Persistent"
+      },
+      "OneSettingsQuery": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OneSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OneSettings"
+      },
+      "OOBECompletedForOOBEHealth": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompletedForOOBEHealth",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompletedForOOBEHealth"
+      },
+      "OOBECompleteTimestamp": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompleteTimestamp",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompleteTimestamp"
+      },
+      "OOBEHealth": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\Health",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\Health"
+      },
+      "OOBESettings_Ads_Enabled": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo"
+      },
+      "OOBESettings_Diagnostics_Enabled": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Input\\TIPC",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\TIPC"
+      },
+      "OOBESettings_Location_SensorPermissionState": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+      },
+      "OOBESettings_Location_Status": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration"
+      },
+      "OOBESettings_Speech_AcceptedPrivacyPolicy": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy"
+      },
+      "OOBESettings_Tailored_TailoredExperiencesWithDiagnosticDataEnabled": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Privacy"
+      },
+      "OptimalLayout": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OptimalLayout",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OptimalLayout"
+      },
+      "PackagedCom": {
+        "SourcePath": "SOFTWARE\\Classes\\PackagedCom",
+        "TargetPath": "OSDATA\\SOFTWARE\\Classes\\PackagedCom"
+      },
+      "PCPKSPProperties": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\Properties",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\Properties"
+      },
+      "PCPKSPTbsAccess": {
+        "SourcePath": "Software\\Microsoft\\Tpm\\Access",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Tpm\\Access"
+      },
+      "PCPKSPUM1": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00010001",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00010001"
+      },
+      "PCPKSPUM3": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00000003",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00000003"
+      },
+      "PCPKSPUM6": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00000006",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft Platform Crypto Provider\\UM\\00000006"
+      },
+      "PersistedRegistryValueTest": {
+        "SourcePath": "SOFTWARE\\UnitTest\\PersistedRegistryValue",
+        "TargetPath": "OSDATA\\SOFTWARE\\UnitTest\\PersistedRegistryValue"
+      },
+      "PersonalizationCspKeys": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP"
+      },
+      "Phone": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Phone",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Phone"
+      },
+      "PhonePerSIMSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Phone\\PerSIMSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Phone\\PerSIMSettings"
+      },
+      "PhoneSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Phone\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Phone\\Settings"
+      },
+      "PhoneTest": {
+        "SourcePath": "Software\\Microsoft\\Phone\\Test",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Phone\\Test"
+      },
+      "PlayToReceiver": {
+        "SourcePath": "Software\\Microsoft\\PlayToReceiver",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\PlayToReceiver"
+      },
+      "PoliciesWindows": {
+        "SourcePath": "Software\\Policies\\Microsoft\\Windows",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\Windows"
+      },
+      "PoliciesWindowsSecurity": {
+        "SourcePath": "Software\\Policies\\Microsoft\\Windows Defender Security Center",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\Windows Defender Security Center",
+        "TargetSubKeyPath": "OSDATA\\Policies\\Microsoft\\Windows Defender Security Center"
+      },
+      "Power": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Power",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Power"
+      },
+      "PowerButton": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerButton",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerButton"
+      },
+      "PowerSettingsUserStatePath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power\\User\\PowerSchemes",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Power\\User\\PowerSchemes"
+      },
+      "PowerWosc": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power\\Sync\\Wosc",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Power\\Sync\\Wosc"
+      },
+      "PrefetcherServiceDataKey": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Prefetcher",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Prefetcher"
+      },
+      "PrintJobManagerEcpPpa": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PrintJobManager\\EcpPpa",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PrintJobManager\\EcpPpa"
+      },
+      "ProvisioningAutopilotPolicy": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Provisioning\\AutopilotPolicy",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Provisioning\\AutopilotPolicy"
+      },
+      "ProvisioningAutopilotPolicyManagerOrder": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Provisioning\\AutopilotPolicyManagerOrder",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Provisioning\\AutopilotPolicyManagerOrder"
+      },
+      "ProvisioningAutopilotSettings": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Provisioning\\AutopilotSettings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Provisioning\\AutopilotSettings"
+      },
+      "ProvisioningAutopilotTpmEnhancedLogging": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Provisioning\\AutopilotTpmEnhancedLogging",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Provisioning\\AutopilotTpmEnhancedLogging"
+      },
+      "QualcommRILDriver0ERI": {
+        "SourcePath": "Software\\Qualcomm\\RIL\\Driver0\\ERI",
+        "TargetPath": "OSDATA\\Software\\Qualcomm\\RIL\\Driver0\\ERI"
+      },
+      "RcsPresence": {
+        "SourcePath": "SOFTWARE\\Microsoft\\RcsPresence",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\RcsPresence"
+      },
+      "redirParameters": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Redir\\Parameters",
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Redir\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\Redir\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\Redir\\Parameters"
+      },
+      "ResourceAccount": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Policies\\AppRestrictions\\Resource\\Data",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Policies\\AppRestrictions\\Resource\\Data"
+      },
+      "RetailDemo": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\RetailDemo",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\RetailDemo"
+      },
+      "RmSvcRoot": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\RadioManagement",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\RadioManagement"
+      },
+      "SCMConfig": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\SCMConfig",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\System\\SCMConfig",
+        "TargetPath": "OSDATA\\System\\SCMConfig"
+      },
+      "SCMTracing": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Tracing\\SCM\\Regular",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\System\\SCMConfig\\Tracing",
+        "TargetPath": "OSDATA\\System\\SCMConfig\\Tracing"
+      },
+      "SecureDeviceClass": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\SecureDeviceClass",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\CurrentControlSet\\Control\\SecureDeviceClass",
+        "TargetPath": "DEVICES\\CurrentControlSet\\Control\\SecureDeviceClass"
+      },
+      "SedEncMgr": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\SedEncMgr",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\SedEncMgr"
+      },
+      "SEMgr": {
+        "SourcePath": "SOFTWARE\\Microsoft\\SEMgr",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\SEMgr"
+      },
+      "SensorDataRecordingApplication": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\Spectrum\\SensorDataRecordingApplication\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\Spectrum\\SensorDataRecordingApplication\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\Spectrum\\SensorDataRecordingApplication\\Parameters"
+      },
+      "SensorDriverRedirectSourceID": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SensorStreamingMiniDriver\\Parameters",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\SensorStreamingMiniDriver\\Parameters",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Services\\SensorStreamingMiniDriver\\Parameters"
+      },
+      "Session Manager": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"
+      },
+      "SettingsNetwork": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings\\Network",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings\\Network"
+      },
+      "SettingsNetworkPreferences": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings\\Network\\Preferences",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Settings\\Network\\Preferences"
+      },
+      "SharedAccessEpoch": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch"
+      },
+      "SharedAccessEpoch2": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch2",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch2"
+      },
+      "SharedAccessFirewallPolicy": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy"
+      },
+      "SharedPCConfiguration": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedPC",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedPC"
+      },
+      "ShellOOBE": {
+        "SourcePath": "Software\\Microsoft\\Shell\\OOBE",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Shell\\OOBE"
+      },
+      "ShellUpdateTelemetryID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\Shell\\Update\\TelemetryID",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\Shell\\Update\\TelemetryID"
+      },
+      "ShutdownPath": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shutdown",
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shutdown",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shutdown",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shutdown"
+      },
+      "SIH": {
+        "SourcePath": "SOFTWARE\\Microsoft\\sih",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\sih"
+      },
+      "SiufRegistryStateRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Siuf",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Siuf"
+      },
+      "SleepDiagOverride": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Power\\Sync\\Settings",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Power\\Sync\\Settings"
+      },
+      "SleepStudySettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power"
+      },
+      "SmsRouter": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SmsRouter\\State",
+        "TargetPath": "OSDATA\\System\\Services\\SmsRouter\\State"
+      },
+      "Spectrum": {
+        "SourcePath": "Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Spectrum",
+        "TargetPath": "OSDATA\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Spectrum"
+      },
+      "SrumExtensions": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Extensions",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Extensions"
+      },
+      "SrumTelemetry": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry"
+      },
+      "SrvnetParameters": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\SrvNet\\Parameters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\SrvNet\\Parameters"
+      },
+      "SrvParameters": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters"
+      },
+      "SSTelemetryID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Telemetry",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Telemetry",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Telemetry"
+      },
+      "StateRepositoryStatus": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateRepositoryStatus",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateRepositoryStatus"
+      },
+      "StoragePolicyID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy"
+      },
+      "StorageSenseParamsID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters"
+      },
+      "StructuredQuery": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StructuredQuery",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StructuredQuery"
+      },
+      "SuperWetTiming": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming"
+      },
+      "SystemColorProfileAssociations": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Class\\{4D36E96E-E325-11CE-BFC1-08002BE10318}",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Class\\{4D36E96E-E325-11CE-BFC1-08002BE10318}"
+      },
+      "SystemPlatformModem": {
+        "SourcePath": "System\\platform\\Modem",
+        "TargetPath": "OSDATA\\System\\platform\\Modem"
+      },
+      "TetheringSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\IcsSvc\\Settings",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IcsSvc\\Settings"
+      },
+      "TetheringUXPreferences": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WcmSvc\\Tethering",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\IcsSvc\\Settings\\UXPreferences"
+      },
+      "ThemeSettingsTree": {
+        "SourcePath": "Software\\Microsoft\\Themes",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Themes"
+      },
+      "ThermalLogging": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+        "TargetPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power"
+      },
+      "TimeZoneInformationSettings": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation",
+        "TargetNtPath": "\\Registry\\Machine\\OSBOOT\\ControlSetOverride\\TimeZoneInformation",
+        "TargetPath": "OSBOOT\\ControlSetOverride\\TimeZoneInformation"
+      },
+      "TipRootKey": {
+        "SourcePath": "SYSTEM\\Software\\Microsoft\\TIP",
+        "TargetPath": "OSDATA\\SYSTEM\\Software\\Microsoft\\TIP"
+      },
+      "TPMCoreProvisioningEKCertificates": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore"
+      },
+      "TPMCoreProvisioningEKCertificatesECC": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStoreECC",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStoreECC"
+      },
+      "TPMCoreProvisioningHealthCertStore": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\HealthCert\\Store",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\HealthCert\\Store"
+      },
+      "TPMCoreProvisioningIntermediateCACerts": {
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\IntermediateCACertStore",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\IntermediateCACertStore"
+      },
+      "TPMCoreProvisioningUnattendSettingsTPM": {
+        "SourcePath": "Software\\Microsoft\\Windows NT\\CurrentVersion\\UnattendSettings\\TPM",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows NT\\CurrentVersion\\UnattendSettings\\TPM"
+      },
+      "TpmRegAuthorizationFailureKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\AuthorizationFailure",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\AuthorizationFailure",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\System\\CurrentControlSet\\Services\\TPM\\AuthorizationFailure",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\AuthorizationFailure"
+      },
+      "TpmRegBlockedAdminOrdinalsLocalListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedCommands\\List",
+        "SourcePath": "System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedCommands\\List",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedCommands\\List"
+      },
+      "TpmRegBlockedAdminOrdinalsPolicyKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands",
+        "SourcePath": "Software\\Policies\\Microsoft\\TPM\\BlockedCommands",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands"
+      },
+      "TpmRegBlockedAdminOrdinalsPolicyListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands\\List",
+        "SourcePath": "Software\\Policies\\Microsoft\\TPM\\BlockedCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands\\List",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedCommands\\List"
+      },
+      "TpmRegBlockedAppContainerOrdinalsLocalListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedAppContainerCommands\\List",
+        "SourcePath": "System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedAppContainerCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedAppContainerCommands\\List",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedAppContainerCommands\\List"
+      },
+      "TpmRegBlockedAppContainerOrdinalsPolicyListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\TPM\\BlockedAppContainerCommands\\List",
+        "SourcePath": "Software\\Policies\\Microsoft\\TPM\\BlockedAppContainerCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedAppContainerCommands\\List",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedAppContainerCommands\\List"
+      },
+      "TpmRegBlockedUserOrdinalsLocalListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedUserCommands\\List",
+        "SourcePath": "System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedUserCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedUserCommands\\List",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\TPM\\BlockedUserCommands\\List"
+      },
+      "TpmRegBlockedUserOrdinalsPolicyListKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\TPM\\BlockedUserCommands\\List",
+        "SourcePath": "Software\\Policies\\Microsoft\\TPM\\BlockedUserCommands\\List",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedUserCommands\\List",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\TPM\\BlockedUserCommands\\List"
+      },
+      "TpmRegDebugKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\Debug",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\Debug",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\Debug",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\Debug"
+      },
+      "TpmRegDriverGroupPolicyData": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\TPM",
+        "SourcePath": "Software\\Policies\\Microsoft\\TPM",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Policies\\Microsoft\\TPM",
+        "TargetPath": "OSDATA\\Software\\Policies\\Microsoft\\TPM"
+      },
+      "TpmRegDriverPersistedData": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\WMI",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI"
+      },
+      "TpmRegDriverPersistedDataAdmin": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Admin",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Admin",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Admin",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Admin"
+      },
+      "TpmRegDriverPersistedDataEndorsement": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement"
+      },
+      "TpmRegDriverPersistedDataUser": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\WMI\\User",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\User",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\User",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\WMI\\User"
+      },
+      "TpmRegDriverTpm": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM"
+      },
+      "TpmRegKeyAttestationKeys": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\KeyAttestationKeys",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\KeyAttestationKeys",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\KeyAttestationKeys",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\KeyAttestationKeys"
+      },
+      "TpmRegPersistedEkCertStoreKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore\\Certificates",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore\\Certificates",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore\\Certificates",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Services\\TPM\\WMI\\Endorsement\\EKCertStore\\Certificates"
+      },
+      "TpmRegPlatformQuoteKeysKey": {
+        "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Services\\TPM\\PlatformQuoteKeys",
+        "SourcePath": "System\\CurrentControlSet\\Services\\TPM\\PlatformQuoteKeys",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\PlatformQuoteKeys",
+        "TargetPath": "OSBOOT\\System\\CurrentControlSet\\Services\\TPM\\PlatformQuoteKeys"
+      },
+      "UIXProductFeatures": {
+        "SourcePath": "Software\\Microsoft\\UIX\\ProductFeatures",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\UIX\\ProductFeatures"
+      },
+      "UpdateOrchestratorCurrentVersionRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator"
+      },
+      "UpdateOrchestratorRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsUpdate\\Orchestrator",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsUpdate\\Orchestrator"
+      },
+      "UPnPControlPoint": {
+        "SourcePath": "SOFTWARE\\Microsoft\\UPnP Control Point",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\UPnP Control Point"
+      },
+      "USB": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\USB",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\USB",
+        "TargetPath": "DEVICES\\USB"
+      },
+      "UsbFlags": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\UsbFlags",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\USB_UsbFlags",
+        "TargetPath": "DEVICES\\USB_UsbFlags"
+      },
+      "USBFN": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\USBFN",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\USB_USBFN",
+        "TargetPath": "DEVICES\\USB_USBFN"
+      },
+      "USBStor": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\USBStor",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\USBStor",
+        "TargetPath": "DEVICES\\USBStor"
+      },
+      "VailSnapshotsID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\VailSnapshots",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\VailSnapshots"
+      },
+      "VmSwitchParameters": {
+        "SourceNtPath": "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\VmsMp\\Parameters",
+        "SourcePath": "System\\CurrentControlSet\\Services\\VmsMp\\Parameters",
+        "TargetNtPath": "\\Registry\\Machine\\DEVICES\\Networking\\VirtualSwitch",
+        "TargetPath": "DEVICES\\Networking\\VirtualSwitch"
+      },
+      "VolumeLimit": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio\\VolumeLimit",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio\\VolumeLimit"
+      },
+      "W32TimeConfig": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\Config",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\Config"
+      },
+      "W32TimeNtpClient": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\NtpClient",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\NtpClient"
+      },
+      "W32TimeParameters": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\Parameters",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\Parameters"
+      },
+      "W32TimeSecureTimeLimitRunTime": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime"
+      },
+      "W32TimeSecureTimeLimits": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits",
+        "TargetPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits"
+      },
+      "WaaS": {
+        "SourcePath": "SYSTEM\\WaaS",
+        "TargetPath": "OSDATA\\SYSTEM\\WaaS"
+      },
+      "WaaSAssessment": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WaaSAssessment",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WaaSAssessment"
+      },
+      "WaaSAssessmentCache": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WaaSAssessment\\Cache",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WaaSAssessment\\Cache"
+      },
+      "WcmSvcPolicies": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc"
+      },
+      "WcmSvcRoot": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WcmSvc",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WcmSvc"
+      },
+      "WebSignInNav": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\Cryptography\\WebSignIn\\Navigation",
+        "TargetPath": "OSDATA\\System\\CurrentControlSet\\Control\\Cryptography\\WebSignIn\\Navigation"
+      },
+      "WIFINETMAN": {
+        "SourcePath": "Software\\Microsoft\\WcmSvc\\wifinetworkmanager",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\WcmSvc\\wifinetworkmanager"
+      },
+      "WIMMount": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WIMMount",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WIMMount"
+      },
+      "Win32ServiceStatePath": {
+        "SourcePath": "SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\SecurityTemplates\\ServiceState",
+        "TargetNtPath": "\\Registry\\Machine\\OSDATA\\System\\Services",
+        "TargetPath": "OSDATA\\System\\Services"
+      },
+      "WinBio": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WinBio",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WinBio"
+      },
+      "Windows Security Health": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows Security Health",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows Security Health",
+        "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows Security Health"
+      },
+      "WindowsDevicePortalCreds": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WebManagement\\Credentials",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WebManagement\\Credentials"
+      },
+      "WindowsDevicePortalService": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WebManagement\\Service",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WebManagement\\Service"
+      },
+      "WindowsMitigation": {
+        "SourcePath": "Software\\Microsoft\\WindowsMitigation",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\WindowsMitigation"
+      },
+      "WindowsStore": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsStore",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsStore"
+      },
+      "WindowsStoreWindowsUpdate": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsStore\\WindowsUpdate",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsStore\\WindowsUpdate"
+      },
+      "WindowsUpdate": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WindowsUpdate",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\WindowsUpdate"
+      },
+      "WindowsUpdateSlsPrograms": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\SLS\\Programs",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\SLS\\Programs"
+      },
+      "WindowsUpdateSlsProgramsWuMuDCat": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\SLS\\Programs\\WuMuDCat",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\SLS\\Programs\\WuMuDCat"
+      },
+      "WindowsUpdateUXRoot": {
+        "SourcePath": "Software\\Microsoft\\WindowsUpdate\\UX",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\WindowsUpdate\\UX"
+      },
+      "WINEVT": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT"
+      },
+      "WINEVTChannels": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels"
+      },
+      "WINEVTFilters": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Filters",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Filters"
+      },
+      "WINEVTPolicies": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Policies",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Policies"
+      },
+      "WINEVTPublishers": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Publishers",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Publishers"
+      },
+      "Wlpasvc": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Wlpasvc",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Wlpasvc"
+      },
+      "WOF": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\WOF",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\WOF"
+      },
+      "WPConnMgr": {
+        "SourcePath": "Software\\Microsoft\\Windows Phone\\ConnMgr",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows Phone\\ConnMgr"
+      },
+      "WriteCachingSetID": {
+        "SourcePath": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\WriteCachingSet",
+        "TargetPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\WriteCachingSet"
+      },
+      "WSearch": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows Search",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows Search"
+      },
+      "WSearchPolicies": {
+        "SourcePath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+        "TargetPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+      },
+      "WUCurrentVersion": {
+        "SourcePath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate"
+      },
+      "WwanSvc": {
+        "SourcePath": "SOFTWARE\\Microsoft\\WwanSvc",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\Cellular\\WwanSvc"
+      },
+      "XboxLive": {
+        "SourcePath": "SOFTWARE\\Microsoft\\XboxLive",
+        "TargetPath": "OSDATA\\SOFTWARE\\Microsoft\\XboxLive"
+      },
+      "{7746D80F-97E0-4E26-9543-26B41FC22F79}": {
+        "SourcePath": "System\\CurrentControlSet\\Control\\{7746D80F-97E0-4E26-9543-26B41FC22F79}",
+        "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\{7746D80F-97E0-4E26-9543-26B41FC22F79}",
+        "TargetPath": "OSBOOT\\{7746D80F-97E0-4E26-9543-26B41FC22F79}"
+      }
+    }
+  },
+  "KeyRedirectionLinks": {
+    "35": {
+      "CopyTreeSourceSubPath": "System\\CurrentControlSet\\Services\\WlanSvc\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\System\\CurrentControlSet\\Services\\WlanSvc\\Parameters"
+    },
+    "37": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Wlansvc\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Wlansvc\\Parameters"
+    },
+    "48": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\IcsSvc\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\IcsSvc\\Settings"
+    },
+    "49": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\WcmSvc",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\WcmSvc"
+    },
+    "50": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\WcmSvc\\Tethering",
+      "SkipDevMode": "0x1",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\IcsSvc\\Settings\\UXPreferences"
+    },
+    "AccessibilityLink": {
+      "KernelLink": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\System\\Accessibility",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\System\\Accessibility",
+      "TargetSubKeyPath": "OSBOOT\\System\\Accessibility"
+    },
+    "AndComposerTreeACL": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\Andromeda\\Composer",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Andromeda\\Composer"
+    },
+    "AppReadinessLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppReadiness",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppReadiness",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppReadiness",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppReadiness"
+    },
+    "CommonGlobUserSettingsLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\CommonGlobUserSettings",
+      "TargetSubKeyPath": "OSDATA\\CurrentControlSet\\Control\\CommonGlobUserSettings"
+    },
+    "ComputerName": {
+      "AlwaysEnabled": "0x1",
+      "KernelLink": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\ComputerName",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\ComputerName",
+      "TargetSubKeyPath": "OSBOOT\\SYSTEM\\CurrentControlSet\\Control\\ComputerName"
+    },
+    "CopyAppModelPackageRepository": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\PackageRepository"
+    },
+    "CopyAppxPackageVolumes": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageVolumes",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\PackageVolumes"
+    },
+    "DebugRegSvcParameters": {
+      "ReflectSecurityTreeSourceSubPath": "System\\CurrentControlSet\\Services\\debugregsvc\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\System\\CurrentControlSet\\Services\\debugregsvc\\Parameters"
+    },
+    "DeviceLockEnrollment": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\Enrollment",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\Enrollment"
+    },
+    "DnscacheDnsActiveIfs": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsActiveIfs",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsActiveIfs"
+    },
+    "DnscacheDnsConnections": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnections",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnections"
+    },
+    "DnscacheDnsConnectionsProxies": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnectionsProxies",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DnsConnectionsProxies"
+    },
+    "DnscacheInterfaceSpecificParameters": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters"
+    },
+    "DnscacheParameters": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters"
+    },
+    "DnscacheProbe": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\Probe",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\Probe"
+    },
+    "DnscacheTcpip6Interfaces": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\Interfaces",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Interfaces6"
+    },
+    "DnscacheTcpipInterfaces": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Interfaces"
+    },
+    "DnscacheTcpipParameters": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\TcpipParameters"
+    },
+    "DNSRegisteredAdapters": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DNSRegisteredAdapters",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DNSRegisteredAdapters"
+    },
+    "DusmSvcRoot": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\DusmSvc",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\DusmSvc"
+    },
+    "EdgePolicyLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Policies\\Microsoft\\Edge",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Policies\\Microsoft\\Edge",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Edge"
+    },
+    "EdgeUpdatePolicyLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Policies\\Microsoft\\EdgeUpdate",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Policies\\Microsoft\\EdgeUpdate",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\EdgeUpdate"
+    },
+    "HubOSLink": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Hub",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Hub"
+    },
+    "IFEOLink": {
+      "CopyTreeSourceSubPath": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options"
+    },
+    "ImsSvc": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\ImsSvc\\State",
+      "TargetSubKeyPath": "OSDATA\\System\\Services\\ImsSvc\\State"
+    },
+    "InputSettings": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\Input\\Settings",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Input\\Settings"
+    },
+    "InputSettingsCHS": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0804\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0804\\Settings"
+    },
+    "InputSettingsHKG": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0C04\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0C04\\Settings"
+    },
+    "InputSettingsJPN": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0411\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0411\\Settings"
+    },
+    "InputSettingsKOR": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0412\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0412\\Settings"
+    },
+    "InputSettingsTWN": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Input\\Locales\\loc_0404\\Settings",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Input\\Locales\\loc_0404\\Settings"
+    },
+    "MapsKeyLink": {
+      "ReflectSecurityTreeSourceSubPath": "System\\Maps",
+      "TargetSubKeyPath": "OSDATA\\System\\Maps"
+    },
+    "MUISettingsLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\MUI\\Settings",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SkipDevMode": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\MUI\\Settings",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\CurrentControlSet\\Control\\MUI\\Settings",
+      "TargetSubKeyPath": "OSDATA\\CurrentControlSet\\Control\\MUI\\Settings"
+    },
+    "MUIStringCacheSettingsLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\MUI\\StringCacheSettings",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SkipDevMode": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\MUI\\StringCacheSettings",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\CurrentControlSet\\Control\\MUI\\StringCacheSettings",
+      "TargetSubKeyPath": "OSDATA\\CurrentControlSet\\Control\\MUI\\StringCacheSettings"
+    },
+    "NetworkList": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList"
+    },
+    "NlaSvcRoot": {
+      "ReflectSecurityTreeSourceSubPath": "System\\CurrentControlSet\\Services\\NlaSvc",
+      "TargetSubKeyPath": "OSDATA\\System\\CurrentControlSet\\Services\\NlaSvc"
+    },
+    "NLSLanguageLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\NLS\\Language",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SkipDevMode": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\NLS\\Language",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSBOOT\\ControlSetOverride\\NLS\\Language",
+      "TargetSubKeyPath": "OSBOOT\\ControlSetOverride\\NLS\\Language"
+    },
+    "NLSLocaleLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\NLS\\Locale",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\NLS\\Locale",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\CurrentControlSet\\Control\\NLS\\Locale",
+      "TargetSubKeyPath": "OSDATA\\CurrentControlSet\\Control\\NLS\\Locale"
+    },
+    "OnOffHelperLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\OnOffHelper",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\OnOffHelper",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\OnOffHelper"
+    },
+    "OOBECompletedForOOBEHealth": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompletedForOOBEHealth",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\OOBECompletedForOOBEHealth"
+    },
+    "OOBEHealth": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\Health",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Windows\\CurrentVersion\\OOBE\\Health"
+    },
+    "RACLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Reliability Analysis",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Reliability Analysis",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Reliability Analysis"
+    },
+    "RmSvcRoot": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Control\\RadioManagement",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Control\\RadioManagement"
+    },
+    "SEMgr": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\SEMgr",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\SEMgr"
+    },
+    "SensorGroupsCopyTree": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows Media Foundation\\FrameServer\\SensorGroups",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\SensorGroups"
+    },
+    "SharedAccessFirewallPolicy": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy"
+    },
+    "ShellOobeTreeACL": {
+      "CopyTreeSourceSubPath": "Software\\Microsoft\\Shell\\Oobe",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Shell\\Oobe"
+    },
+    "SmsRouter": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\SmsRouter\\State",
+      "TargetSubKeyPath": "OSDATA\\System\\Services\\SmsRouter\\State"
+    },
+    "SoftwarePoliciesLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Policies",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Policies",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Policies",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Policies"
+    },
+    "SQMClientLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\SQMClient",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\SQMClient",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\SQMClient",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\SQMClient"
+    },
+    "StateSeparationBvt_DevMode": {
+      "SkipDevMode": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\StateSeparationBVT\\DevMode",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\StateSeparationBVT\\DevMode",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\StateSeparationBVT\\DevMode"
+    },
+    "StateSeparationBvt_NonDevMode": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\StateSeparationBVT\\NonDevMode",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\StateSeparationBVT\\NonDevMode",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\StateSeparationBVT\\NonDevMode"
+    },
+    "TAEFLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\TAEF",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\TAEF",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\TAEF",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\TAEF"
+    },
+    "Te.ServiceLink": {
+      "CopyTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\Te.Service",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Te.Service",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Te.Service",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\Te.Service"
+    },
+    "ThemeSettingsTreeACL": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\Themes",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\Themes"
+    },
+    "UPnpDevHostTreeACL": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\UPnP Device Host",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\UPnP Device Host"
+    },
+    "W32TimeConfig": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\Config",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\Config"
+    },
+    "W32TimeNtpClient": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\NtpClient",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\NtpClient"
+    },
+    "W32TimeParameters": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\Parameters",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\Parameters"
+    },
+    "W32TimeSecureTimeLimitRunTime": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime"
+    },
+    "W32TimeSecureTimeLimits": {
+      "ReflectSecurityTreeSourceSubPath": "SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits",
+      "TargetSubKeyPath": "OSDATA\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits"
+    },
+    "WcmSvcPolicies": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc"
+    },
+    "WERKeyLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting"
+    },
+    "WiFiCloudStore": {
+      "ReflectSecurityTreeSourceSubPath": "Software\\Microsoft\\WLANSVC\\ProfileSync",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\WLANSVC\\ProfileSync"
+    },
+    "WindowsDevicePortalCredsLink": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\WebManagement\\Credentials",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\WebManagement\\Credentials"
+    },
+    "WindowsDevicePortalServiceLink": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WebManagement\\Service",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WebManagement\\Service"
+    },
+    "WindowsSelfhostTreeACL": {
+      "ReflectSecurityTreeSourceSubPath": "SOFTWARE\\Microsoft\\WindowsSelfhost",
+      "TargetSubKeyPath": "OSDATA\\Software\\Microsoft\\WindowsSelfhost"
+    },
+    "WindowsUpdateLink": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate",
+      "DeleteTreeSourceSubPath": "0x1",
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate"
+    },
+    "WinPerf.1Link": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\WinPerf.1",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\WinPerf.1",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\WinPerf.1"
+    },
+    "WinPerfLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\WinPerf",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\WinPerf",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\WinPerf"
+    },
+    "WPRLink": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\Software\\Microsoft\\Windows Performance Toolkit",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Microsoft\\Windows Performance Toolkit",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows Performance Toolkit"
+    },
+    "WSearch": {
+      "CopyTreeSourceSubPath": "SOFTWARE\\Microsoft\\Windows Search",
+      "DeleteTreeSourceSubPath": "0x1",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Microsoft\\Windows Search"
+    },
+    "{014bf7f6-44ae-4499-95cd-21f799d918e2}Link": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\CLSID\\{014bf7f6-44ae-4499-95cd-21f799d918e2}",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\CLSID\\{014bf7f6-44ae-4499-95cd-21f799d918e2}",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\CLSID\\{014bf7f6-44ae-4499-95cd-21f799d918e2}"
+    },
+    "{0dd93517-40eb-4084-990c-718b747c02ee}Link": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\CLSID\\{0dd93517-40eb-4084-990c-718b747c02ee}",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\CLSID\\{0dd93517-40eb-4084-990c-718b747c02ee}",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\CLSID\\{0dd93517-40eb-4084-990c-718b747c02ee}"
+    },
+    "{406088d9-b583-4339-8293-6b33ab2a1b79}Link": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\CLSID\\{406088d9-b583-4339-8293-6b33ab2a1b79}",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\CLSID\\{406088d9-b583-4339-8293-6b33ab2a1b79}",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\CLSID\\{406088d9-b583-4339-8293-6b33ab2a1b79}"
+    },
+    "{a727ea32-7861-46cb-bab3-af7cd71cac43}Link": {
+      "SourceNtPath": "\\REGISTRY\\MACHINE\\SOFTWARE\\Classes\\AppID\\{a727ea32-7861-46cb-bab3-af7cd71cac43}",
+      "TargetNtPath": "\\REGISTRY\\MACHINE\\OSDATA\\SOFTWARE\\Classes\\AppID\\{a727ea32-7861-46cb-bab3-af7cd71cac43}",
+      "TargetSubKeyPath": "OSDATA\\SOFTWARE\\Classes\\AppID\\{a727ea32-7861-46cb-bab3-af7cd71cac43}"
+    }
+  }
+}

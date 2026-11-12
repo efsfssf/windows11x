@@ -1,0 +1,852 @@
+{
+  "schema_version": "2.0",
+  "report_name": "WCOS / Windows 11X — актуальный контекст проекта и результаты исследования",
+  "generated_on": "2026-11-05",
+  "language": "ru",
+  "purpose": "Постоянный технический контекст для дальнейших обсуждений WCOS: долгосрочная цель, приоритеты, подтвержденные результаты, гипотезы, риски и следующий шаг. Файл не является встроенной памятью ChatGPT; его необходимо прикрепить к проекту.",
+  "scope": {
+    "research_target": "Windows 10X Santorini build 20279 (10.0.20279.1002) и проект гибридной WCOS на базе 26100",
+    "sources": [
+      "Сообщения, скриншоты и вывод команд пользователя в этой беседе",
+      "Локально проверенные ZIP, JS, манифесты и бинарные файлы, перечисленные в source_assets",
+      "Ранее подготовленный отчёт статического анализа usermgr.dll"
+    ],
+    "status_labels": {
+      "confirmed": "Непосредственно подтверждено пользовательским запуском, регистрационным выводом или содержимым предоставленных файлов.",
+      "static_observation": "Содержится в файле, импортах, строках или дизассемблировании, но динамическая ветка исполнения не подтверждена.",
+      "hypothesis": "Рабочая гипотеза, требует дополнительного эксперимента.",
+      "not_tested": "Не проверено в реальном запуске.",
+      "failed": "Конкретная предпринятая попытка не достигла цели."
+    },
+    "limitations": [
+      "Достоверные результаты относятся главным образом к 20279; исходные бинарные файлы Windows 11 26100 для пофайлового сравнения пока не были предоставлены.",
+      "Некоторые адреса нативных функций перенесены из предыдущего отчёта; нет подтверждения трассировкой, что именно эти ветки вызвали наблюдаемый HRESULT.",
+      "Разметка конкретного VHDX и размещение BCD в нём пока не были полностью подтверждены; сведения о Factory OS нельзя автоматически переносить на Santorini."
+    ]
+  },
+  "project": {
+    "codename": "Windows 11X / WCOS",
+    "long_term_goal": "Создать Windows 11X как действительно современную Windows Core OS для ПК на базе согласованного набора системных компонентов ветки Windows 11 26100 (или более новой поддерживаемой ветки), с подлинной WCOS-архитектурой, а не визуально похожую облегчённую обычную Windows. После подтверждения core boot/state separation добавить UWP/WinUI, новую или оригинальную Santorini-оболочку, позже изолированный Win32.",
+    "non_negotiable_requirements": [
+      "Оригинальная оболочка Santorini (ModernUX/Composer), а не похожая тема, Launcher или визуальный макет.",
+      "Сохранить принцип State Separation и WCOS-компоненты разделения системного и изменяемого состояния (MainOS, OSData, EFI/BSP и фактические загрузочные тома).",
+      "По возможности не включать SysWOW64 и легаси Win32 в основной хост WCOS; Win32 — только через совместимую изолированную среду, если это осуществимо.",
+      "Поддержать нативные современные приложения UWP и перспективно WinUI 3; возможность и условия их работы нужно проверять отдельно.",
+      "Не разрушать исходную рабочую Windows 10X 20279 и её резервные копии."
+    ],
+    "intermediate_goal": "ВЫПОЛНЕНИЕ ПРИОСТАНОВЛЕНО: добиться загрузки оригинальной Windows 10X 20279 с реальным локальным пользователем и Santorini после OOBE без устаревшего MSA. Интернет всегда использовался; локальный пользователь пока не создан.",
+    "priority_change_2026_11_05": {
+      "decision": "Новый главный приоритет: Windows 11X Core — bootable система ветки 26100 с подлинным State Separation на ПК. Santorini, оболочка Factory OS, UWP/WinUI, Win32-контейнеры и OOBE 20279 отложены до проверки жизнеспособности основы.",
+      "why": "Устаревшие доступные ПК-WCOS (Windows 10X 20279, Factory OS 22000) не являются современной основой; перенос старого Composer или обход MSA не решает обновляемость WCOS.",
+      "primary_reference": "Factory OS 22000 — эталон исходной архитектуры и поведения (на ПК, Storage Spaces, State Separation), не основа, которую следует обновлять простой подменой DLL.",
+      "secondary_reference": "Windows 10X 20279 — эталон потребительской оболочки/UX и подробный исследованный кейс OOBE.",
+      "target_source": "Windows 11 IoT Enterprise LTSC 2024 / Windows 11 Enterprise LTSC 2024, build 26100, x64; выбираем как доступный набор современных PC-компонентов, но эта система сама по себе НЕ WCOS.",
+      "deferred": [
+        "Перенос Santorini/Composer",
+        "UWP-оболочка или Factory Composer",
+        "VAIL/Win32-контейнеры",
+        "Обход OOBE/создание пользователя на Windows 10X 20279"
+      ],
+      "avoid_false_success": "Не считать WCOS обычную Windows 11 без Explorer, с кастомным UWP Launcher, с созданными разделами MainOS/OSData или с простым редиректом записи; необходимо доказать загрузку и работу оригинального/эквивалентного системного механизма State Separation."
+    }
+  },
+  "platform_architecture": {
+    "confirmed_or_established": [
+      {
+        "item": "Windows 10X 20279 — WCOS/Santorini, а не классическая десктопная Windows",
+        "status": "confirmed",
+        "details": "OOBE запускается как пакет CloudExperienceHost; ModernUX поставляется как отдельный системный пакет."
+      },
+      {
+        "item": "State Separation",
+        "status": "confirmed",
+        "details": "В экспериментальных образах используются отделённые MainOS и OSData; в предыдущих инспекциях обнаружен Storage Spaces pool OSPool и виртуальные диски MainOSDisk, OSDataDisk."
+      },
+      {
+        "item": "Два специальных GPT GUID для разделов",
+        "status": "confirmed",
+        "details": {
+          "MainOS": "57434f53-8f45-405e-8a23-186d8a4330d3",
+          "OSData": "57434f53-23f2-44d5-a830-67bbdaa609f9"
+        }
+      },
+      {
+        "item": "Обычный Win32 cmd недоступен как стандартный путь из OOBE 20279",
+        "status": "confirmed",
+        "details": "Shift+F10 не запускает cmd; нельзя предполагать, что Windows Terminal или любое упакованное Win32-приложение запускается без надлежащей инфраструктуры."
+      }
+    ],
+    "not_proven": [
+      "Что современное ядро/системное основание 26100 способно загрузиться с той же State Separation, что и WCOS 20279.",
+      "Что классический Windows 11 26100 можно превратить в WCOS простой заменой Explorer или копированием ModernUX.",
+      "Что реальный Santorini Composer 20279 совместим с DWM, моделью окон, оболочечными брокерами, службой пользователей и API 26100.",
+      "Наличие рабочего VAIL/Win32-контейнера в конкретной однодисплейной сборке 20279.",
+      "Расположение BCD конкретного exp02 на виртуальном Virt_EFIESP (это документированный WCOS-подход в родственных продуктах, но не доказано для этого VHDX)."
+    ]
+  },
+  "reference_systems": {
+    "host": {
+      "os": "Основная Windows с установленным Hyper-V и PowerShell",
+      "hypervisor": "Hyper-V",
+      "hypervisor_vm_generation": 2,
+      "host_vm_management_service_vmms": "Running, Automatic (на момент проверки)",
+      "host_name_in_diagnostics": "FOG"
+    },
+    "virtual_machines_last_observed": [
+      {
+        "name": "10X-20279-clean-test",
+        "disk": "C:\\ProgramData\\Microsoft\\Windows\\Virtual Hard Disks\\10X-20279-clean-test.vhdx",
+        "secure_boot_last_observed": "On",
+        "checkpoints": 0,
+        "status": "Эталонный загружаемый OOBE; при последнем полном списке VM — Off",
+        "protect": true
+      },
+      {
+        "name": "10X-20279-offline-exp01",
+        "disk": "E:\\WCOS\\Work\\10X-20279-offline-exp01.vhdx",
+        "secure_boot_last_observed": "On",
+        "checkpoints": 0,
+        "status": "Минимально исправленная Navigation-Lite; загрузка рабочая, MSA сохраняется",
+        "protect": true
+      },
+      {
+        "name": "10X-20279-offline-exp02",
+        "disk": "E:\\WCOS\\Work\\10X-20279-offline-exp02.vhdx",
+        "secure_boot_last_observed": "Off",
+        "checkpoints": 0,
+        "status": "Основная диагностическая VM; после разблокировки VHDX снова успешно запускалась; текущее состояние VM неизвестно",
+        "protect": false,
+        "com1_named_pipe": "\\\\.\\pipe\\WCOS20279Exp02Dbg"
+      },
+      {
+        "name": "10X-20279-offline-exp03",
+        "disk": "E:\\WCOS\\Work\\10X-20279-offline-exp03.vhdx",
+        "secure_boot_last_observed": "On",
+        "checkpoints": 0,
+        "status": "OobeLocal / LocalAccountManager тест, OOBELOCAL ошибка",
+        "protect": false
+      },
+      {
+        "name": "10X-20279-rdx-test",
+        "disk": "E:\\WCOS\\Work\\10X-20279-rdx-test.vhdx",
+        "secure_boot_last_observed": "On",
+        "checkpoints": 0,
+        "status": "Retail Demo проба, 0x80070005",
+        "protect": false
+      },
+      {
+        "name": "FOS",
+        "disk": "D:\\FOS\\FactoryOS_win32_manufacturing_AMD64_UEFI_SpacesGPT_VM_E458DD63-B38D-4B06-98C4-DE12D138B9BC.avhdx",
+        "secure_boot_last_observed": "On",
+        "checkpoints": 1,
+        "status": "Factory OS 22000, не менять; использует differencing disk",
+        "protect": true
+      },
+      {
+        "name": "WCOS-20279",
+        "disk": "E:\\WCOS\\Work\\10X-20279-work.vhdx",
+        "secure_boot_last_observed": "Off",
+        "checkpoints": 0,
+        "status": "Исследовательская VM, не путать с эталоном",
+        "protect": true
+      },
+      {
+        "name": "WCOS-20279-Offline",
+        "disk": "E:\\WCOS\\Work\\10X-20279-inspect_CC02F48F-A72F-4387-B331-0F10478F29D1.avhdx",
+        "secure_boot_last_observed": "Off",
+        "checkpoints": 0,
+        "status": "Использует .avhdx; не редактировать родительский VHDX",
+        "protect": true
+      },
+      {
+        "name": "WCOS-20279-RollbackTest",
+        "disk": "E:\\WCOS\\Work\\10X-20279-rollback-test.vhdx",
+        "secure_boot_last_observed": "Off",
+        "checkpoints": 0,
+        "status": "Отдельная откатная VM",
+        "protect": true
+      }
+    ],
+    "local_paths_on_user_machine": {
+      "safe_baseline": "E:\\WCOS\\Backups\\10X-20279-offline-exp01-baseline.vhdx",
+      "offline_diagnostic_copies": [
+        "E:\\WCOS\\Work\\10X-20279-logscan.vhdx",
+        "E:\\WCOS\\Work\\10X-20279-regscan.vhdx"
+      ],
+      "offline_hives": [
+        "E:\\WCOS\\Logs\\LocalAccount-exp03\\Hive-1-SOFTWARE.hiv",
+        "E:\\WCOS\\Logs\\LocalAccount-exp03\\Hive-2-SYSTEM.hiv",
+        "E:\\WCOS\\Logs\\LocalAccount-exp03\\Hive-3-SOFTWARE.hiv"
+      ],
+      "notes": "Это пути на ПК пользователя; их наличие в других средах не предполагается."
+    }
+  },
+  "oobe": {
+    "package": {
+      "identity": "Microsoft.Windows.CloudExperienceHost",
+      "version": "10.0.20279.1002",
+      "family_suffix": "cw5n1h2txyewy",
+      "navigation_file_in_guest": "\\Windows\\SystemApps\\Microsoft.Windows.CloudExperienceHost_cw5n1h2txyewy\\data\\prod\\Navigation-Lite.json"
+    },
+    "confirmed_working": [
+      "Эталонная 20279 загружается, проходит экраны языка, региона, сети, EULA и доходит до старого Microsoft Account sign-in.",
+      "Интернет в тестах присутствовал: пользователь вручную включал сеть до тестов. Нельзя снова объяснять ошибку отсутствием соединения.",
+      "OOBE имеет JS-консоль по Ctrl+Shift+J (однострочные команды).",
+      "Оригинальный JS содержит WindowsCoreLocalAccountCreator.js и WindowsCoreRDXAccountCreator.js."
+    ],
+    "flows": {
+      "normal": [
+        "StartSelector",
+        "language/region/keyboard/network/EULA",
+        "OobeRetailDemoEntry",
+        "OobeIDPS/OobeMSA",
+        "дальнейшая настройка при успешной авторизации"
+      ],
+      "retail_entry": "OobeRetailDemoEntry.js проверяет флаги retailDemoEnabled и shouldSkipAccountAndServices(); альтернативный путь в документах OOBE существует, но сам по себе локального пользователя не создаёт.",
+      "oobe_local": "Содержит OobeLocalAccount UI (oobelocalaccount-main.html) и ссылку на LocalAccountManager; попытка активировать WinRT-класс провалилась."
+    },
+    "original_user_creation_javascript": {
+      "regular_method": "CloudExperienceHostAPI.UserManagementStatics.provisionNewCoreLocalAccountAsync(true /*isDeviceOwner*/)",
+      "rdx_method": "CloudExperienceHostAPI.UserManagementStatics.provisionNewCoreRDXLocalAccountAsync()",
+      "on_success": "JS устанавливает IUserFromId(userId), затем SignInIdentityProviders.local.",
+      "on_error": "JS логирует CreateAndSignInCoreLocalAccountFailed или CreateAndSignInCoreRDXAccountFailed."
+    },
+    "experiments": [
+      {
+        "name": "Ранняя масштабная подмена Navigation-Lite",
+        "result": "OOBE зависал до языка и гостевая ОС падала/перезагружалась",
+        "status": "failed",
+        "lesson": "Не менять сразу множество переходов, не трогать чистый образ."
+      },
+      {
+        "name": "exp01 минимальные изменения Navigation-Lite",
+        "result": "OOBE продолжал работать, но маршрут MSA оставался",
+        "status": "confirmed"
+      },
+      {
+        "name": "exp02 переход на WindowsCoreLocalAccountCreator",
+        "result": "Достигает нового маршрута, затем «Something went wrong OOBEOFFLINEACCOUNT»",
+        "status": "failed"
+      },
+      {
+        "name": "exp03 переход на OobeLocal / LocalAccountManager",
+        "result": "«Something went wrong OOBELOCAL»; попытка new LocalAccountManager() → 0x80040154 Class not registered",
+        "status": "failed"
+      },
+      {
+        "name": "RDX Retail Demo account",
+        "result": "provisionNewCoreRDXLocalAccountAsync() → 0x80070005 Access is denied",
+        "status": "failed"
+      },
+      {
+        "name": "Обычный локальный аккаунт, isDeviceOwner=true",
+        "result": "provisionNewCoreLocalAccountAsync(true) → 0x80070005",
+        "status": "failed"
+      },
+      {
+        "name": "Обычный локальный аккаунт, isDeviceOwner=false",
+        "result": "provisionNewCoreLocalAccountAsync(false) → 0x80070005",
+        "status": "failed",
+        "lesson": "Отказ не объясняется лишь назначением владельца устройства."
+      },
+      {
+        "name": "Ручное изменение SignInIdentityProviders.local",
+        "result": "Геттер показывает local=1, но OOBE не завершается и Windows-учётка не появляется",
+        "status": "failed"
+      },
+      {
+        "name": "Win + Win + Win + Win + Win для provisioning package",
+        "result": "Не открывает установку .ppkg на тестируемом OOBE",
+        "status": "failed"
+      },
+      {
+        "name": "Shift+F10 и попытки аудит-режима",
+        "result": "Не открывает привычный cmd/Win32 audit mode",
+        "status": "failed"
+      },
+      {
+        "name": "Проверка classic sysprep/unattend на MainOS",
+        "result": "Не найдены sysprep.exe, windeploy.exe, setupcl.exe, unattend.dll, msoobe.exe, Panther по проверенным путям",
+        "status": "confirmed"
+      }
+    ],
+    "telemetry": {
+      "event": "CreateAndSignInCoreLocalAccountFailed",
+      "number_signed": -2147024891,
+      "hresult": "0x80070005",
+      "hresult_name": "E_ACCESSDENIED",
+      "message": "Access is denied.",
+      "collection_method": "В OOBE JS-консоли временно перехватили CloudExperienceHost.Telemetry.logEvent и повторили кнопку Try again; получен один event.",
+      "status": "confirmed"
+    },
+    "runtime_queries": {
+      "getUserCountAsync": {
+        "value": 0,
+        "status": "confirmed"
+      },
+      "UserModel/UserModel": {
+        "kind_int32": 3,
+        "getInt32": 0,
+        "isManaged": true,
+        "interpretation": "По исходнику OobeCleanup.js значение 0 обрабатывается как Single User Model."
+      },
+      "SystemSetupInfo.outOfBoxExperienceState": {
+        "value": 1,
+        "interpretation": "OOBE ещё в процессе; completed=2."
+      },
+      "AOobeLocalAccount_feature_enabled": true,
+      "SignInIdentityProviders": {
+        "none": 0,
+        "local": 1
+      }
+    },
+    "app_capability_checks_in_oobe": [
+      {
+        "capability": "userSigninSupport",
+        "result": 4,
+        "meaning": "Allowed",
+        "status": "confirmed"
+      },
+      {
+        "capability": "cloudExperienceHost",
+        "result": 4,
+        "meaning": "Allowed",
+        "status": "confirmed"
+      },
+      {
+        "capability": "shellExperience",
+        "result": 1,
+        "meaning": "NotDeclaredByApp",
+        "status": "confirmed"
+      },
+      {
+        "capability": "userManagementSystem",
+        "result": 1,
+        "meaning": "NotDeclaredByApp",
+        "status": "confirmed"
+      }
+    ],
+    "caution": "checkAccess() в JS-контексте OOBE не гарантирует успешной проверки прав другого процесса или службы. Отсутствие userManagementSystem в манифесте CloudExperienceHost — наблюдение, но его связь с 0x80070005 не доказана."
+  },
+  "registry_and_services": {
+    "tested_offline_hives": [
+      "Hive-1-SOFTWARE.hiv",
+      "Hive-3-SOFTWARE.hiv",
+      "Hive-2-SYSTEM.hiv"
+    ],
+    "service_settings": {
+      "UserManager": {
+        "present": true,
+        "start": 2,
+        "start_description": "Automatic",
+        "type": 32
+      },
+      "ProfSvc": {
+        "present": true,
+        "start": 2,
+        "start_description": "Automatic",
+        "type": 32
+      },
+      "SamSs": {
+        "present": true,
+        "start": 2,
+        "start_description": "Automatic",
+        "type": 32
+      },
+      "TokenBroker": {
+        "present": true,
+        "start": 3,
+        "start_description": "Manual/on demand",
+        "type": 32
+      },
+      "StateRepository": {
+        "present": true,
+        "start": 2,
+        "start_description": "Automatic",
+        "type": 32
+      }
+    },
+    "user_manager_winrt_registration": {
+      "class": "Windows.System.Internal.UserManager",
+      "registry_key": "HKLM\\[offline SOFTWARE]\\Microsoft\\WindowsRuntime\\ActivatableClassId\\Windows.System.Internal.UserManager",
+      "ActivationType": "0x1",
+      "Server": "UserManager",
+      "TrustLevel": "0x0",
+      "server_key": "HKLM\\[offline SOFTWARE]\\Microsoft\\WindowsRuntime\\Server\\UserManager",
+      "Identity": "nt authority\\system",
+      "IdentityType": "0x1",
+      "ServerType": "0x2",
+      "ServiceName": "UserManager",
+      "permissions": "REG_BINARY SDDL/ACL дескриптор присутствует. Предыдущий анализ отметил разрешающие ACE для Everyone и ALL APPLICATION PACKAGES; это не доказывает разрешение на создание пользователя.",
+      "present_in_both_software_hives": true,
+      "status": "confirmed"
+    },
+    "user_manager_service": {
+      "system_key": "ControlSet001\\Services\\UserManager",
+      "service_dll": "%SystemRoot%\\System32\\usermgr.dll",
+      "image_path": "%SystemRoot%\\system32\\svchost.exe -k netsvcs -p",
+      "object_name": "LocalSystem",
+      "depend_on_service": [
+        "RpcSs",
+        "ProfSvc"
+      ],
+      "required_privileges": [
+        "SeTcbPrivilege",
+        "SeImpersonatePrivilege",
+        "SeAuditPrivilege",
+        "SeChangeNotifyPrivilege",
+        "SeBackupPrivilege",
+        "SeRestorePrivilege",
+        "SeAssignPrimaryTokenPrivilege",
+        "SeTakeOwnershipPrivilege",
+        "SeDebugPrivilege"
+      ],
+      "parameters": {
+        "DeviceAccessBrokerConsentRequired": 1,
+        "ServiceDllUnloadOnStop": 1,
+        "WindowsCoreUserModelEnforced": 1
+      },
+      "status": "confirmed",
+      "interpretation_limits": "Настройки служб в реестре не подтверждают фактический статус служб во время OOBE. Не менять WindowsCoreUserModelEnforced или DeviceAccessBrokerConsentRequired без динамического подтверждения причины отказа."
+    },
+    "local_account_manager": {
+      "activation_attempt": "new CloudExperienceHostBroker.Account.LocalAccountManager()",
+      "error": "0x80040154 REGDB_E_CLASSNOTREG",
+      "activation_records_found": "Не найдены для LocalAccountManager в проверенных Appx/WinRT ветках двух SOFTWARE, хотя некоторые другие broker-классы зарегистрированы.",
+      "cl_s_id": "{e4544aba-62bf-4c54-aab2-ec246342626c}",
+      "com_server_path_seen": "M:\\Windows\\System32\\CloudExperienceHostBroker.exe",
+      "status": "confirmed",
+      "interpretation_limits": "WinMD-метаданные или COM-ключ сами по себе не гарантируют рабочую WinRT-активацию LocalAccountManager."
+    }
+  },
+  "native_20279": {
+    "oobecoreadapters_dll": {
+      "source": "OOBE archive / oobecoreadapters.dll",
+      "bytes": 700416,
+      "observations": [
+        {
+          "virtual_address": "0x1800585CC",
+          "observation": "В предыдущем анализе найден путь проверки shellExperience или cloudExperienceHost с потенциальным E_ACCESSDENIED.",
+          "status": "static_observation"
+        },
+        {
+          "virtual_address": "0x180058A30",
+          "observation": "В предыдущем анализе найден путь с проверкой userSigninSupport и обращением к Windows.System.Internal.UserManager.",
+          "status": "static_observation"
+        }
+      ],
+      "important_gap": "Не установлено, какая функция и какая ветка реально возвратила HRESULT при provisionNewCoreLocalAccountAsync."
+    },
+    "usermgr_dll": {
+      "source": "WCOS-20279-usermgr.zip / usermgr.dll",
+      "bytes": 1568768,
+      "sha256_of_extracted_dll": "90b418efc15e4cce7eeb43edcdf4b4372cd3874ac416ecb098a9f1b6a8cc2533",
+      "architecture": "PE32+ x64",
+      "preferred_image_base": "0x180000000",
+      "named_export": "ServiceMain (RVA 0x30BA0)",
+      "observed_names": [
+        "Windows.System.Internal.UserManager",
+        "Windows.System.Internal.WCOS.WCOSUserManager",
+        "WindowsCoreUserModelEnforced",
+        "LegacyUserManager.dll",
+        "userSigninSupport",
+        "shellExperience"
+      ],
+      "static_code_paths": [
+        {
+          "address": "0x18002A108",
+          "observation": "Функция читает WindowsCoreUserModelEnforced из реестра и формирует булев результат."
+        },
+        {
+          "address": "0x180029F03",
+          "observation": "Вызов проверки режима; далее путь с WCOS.WCOSUserManager (0x180029F1B)."
+        },
+        {
+          "address": "0x18004B7D4",
+          "observation": "После проверки userSigninSupport возможен возврат 0x80070005."
+        },
+        {
+          "address": "0x18004C225",
+          "observation": "После проверки userSigninSupport возможен возврат 0x80070005."
+        }
+      ],
+      "status": "static_observation",
+      "important_gap": "Не доказано, что 0x80070005 возник на этих адресах; нужна трассировка реального вызова или детальное сопоставление функций WinRT."
+    },
+    "broker_components": {
+      "source": "WCOS-20279-native-broker.zip",
+      "previously_inspected": [
+        "CloudExperienceHostBroker.exe",
+        "CloudExperienceHostUser.dll",
+        "CloudExperienceHostCommon.dll",
+        "CloudDomainJoinUserManagement.dll"
+      ],
+      "specific_observation": "В предыдущем исследовании не найдено строки LocalAccountManager в CloudExperienceHostBroker.exe, но это не доказывает отсутствия реализации, поскольку имя может не присутствовать строкой.",
+      "status": "static_observation"
+    }
+  },
+  "santorini_20279": {
+    "source_archive": "ModernUX-20279-20261104-013300.zip",
+    "package_name": "ModernUXProduct",
+    "package_version": "1000.20279.1002.0",
+    "entry_executable": "ModernUXShellApp.exe",
+    "entry_point": "ModernUX.App",
+    "executable_bytes": 5406720,
+    "manifest_dependencies": [
+      {
+        "name": "Microsoft.UI.Xaml.2.4",
+        "min_version": "2.4.0.0",
+        "interpretation": "WinUI 2.4, не WinUI 3."
+      },
+      {
+        "name": "Microsoft.VCLibs.140.00",
+        "min_version": "14.0.0.0"
+      }
+    ],
+    "app_services": [
+      "ComposableShell.ComposerHintsAppService",
+      "com.microsoft.launchoobeapp"
+    ],
+    "important_capabilities_verified_in_manifest": [
+      "shellExperienceComposer",
+      "shellExperience",
+      "windowManagementSystem",
+      "userManagementSystem",
+      "userSigninSupport",
+      "systemDialog",
+      "visualElementsSystem",
+      "shellDisplayManagement",
+      "systemRegistrar",
+      "packageManagement",
+      "packageQuery",
+      "inputInjection",
+      "inputInjectionBrokered",
+      "cloudStore",
+      "activitySystem"
+    ],
+    "metadata_and_resources_present": [
+      "windowsinternal.shell.winmd",
+      "DefaultSettings.xml",
+      "resources.pri",
+      "Cortana.Search.winmd",
+      "Cortana.Internal.Search.winmd",
+      "Assets",
+      "cache/Local/WCOS/*"
+    ],
+    "direct_imported_non_api_set_modules": [
+      "combase.dll",
+      "MFSENSORGROUP.dll",
+      "msvcp_win.dll",
+      "ntdll.dll",
+      "OLEAUT32.dll",
+      "UpdateAPI.dll",
+      "wincorlib.DLL"
+    ],
+    "direct_imported_api_set_examples": [
+      "api-ms-win-core-winrt-string-l1-1-0.dll",
+      "api-ms-win-core-winrt-l1-1-0.dll",
+      "api-ms-win-core-winrt-error-l1-1-0.dll",
+      "api-ms-win-appmodel-unlock-l1-1-0.dll",
+      "api-ms-win-core-winrt-error-l1-1-1.dll",
+      "ext-ms-win-session-usermgr-l1-1-0.dll"
+    ],
+    "total_direct_import_library_names_in_exe": 54,
+    "static_findings": [
+      "Пакет выглядит как системная AppX/WinRT-оболочка, а не как независимая пользовательская программа.",
+      "У пакета есть привилегированные capabilities, которые невозможно автоматически сохранить простой установкой на обычную Windows 11.",
+      "Присутствует AppService ComposerHints и внутренняя Windows Shell WinMD метаинформация.",
+      "Экспорт содержит ModernUXProduct, но не полный набор всех системных DLL, требуемых Composer/окнами/сессией."
+    ],
+    "not_proven": [
+      "Что приложение запускается как shell на Windows 11 build 26100.",
+      "Что его привилегированные WinRT-контракты работают в 26100.",
+      "Что все runtime-зависимости выявлены: прямые импорты PE не включают отложенные, динамические, WinRT-активации, AppServices и брокеров.",
+      "Что наличие Windows.UI.Xaml 2.4 само по себе блокирует запуск: это зависит от окружения и доступных фреймворков."
+    ]
+  },
+  "hyper_v_and_debugging": {
+    "win_dbg_host": {
+      "installed": true,
+      "version_observed": "1.2610.1001.0",
+      "guest_windbg_required": false
+    },
+    "exp02_debug_configuration": {
+      "vm_generation": 2,
+      "com_port": 1,
+      "named_pipe": "\\\\.\\pipe\\WCOS20279Exp02Dbg",
+      "secure_boot": "Off on exp02 only",
+      "guest_bcd_kernel_debug_enabled": false,
+      "guest_bcd_location_known": false,
+      "actual_kernel_debug_connection_established": false,
+      "status": "Отладочный канал Hyper-V настроен, но BCD гостя не изменён и WinDbg не подключён к загруженному ядру."
+    },
+    "vhd_incident": {
+      "symptoms": [
+        "Mount-VHD на exp02 возвращал ошибку ObjectNotFound",
+        "Get-VHD на exp02 возвращал ошибку ObjectNotFound, хотя файл существовал и VM была Off",
+        "На других двух образах Get-VHD работал",
+        "При попытке запуска Hyper-V сообщал, что файл занят другим процессом"
+      ],
+      "checks": [
+        {
+          "name": "Test-VHD exp02",
+          "result": true
+        },
+        {
+          "name": "Test-VHD exp01",
+          "result": true
+        },
+        {
+          "name": "Get-DiskImage exp02 после неудачного Mount-VHD",
+          "result": "Attached=True"
+        },
+        {
+          "name": "Get-Disk for mounted image",
+          "result": "Диск по ранее зарегистрированному номеру 3 не найден"
+        }
+      ],
+      "recovery": "Dismount-DiskImage отключил образ, Attached=False; Get-VHD снова работал и пользователь подтвердил успешный старт exp02.",
+      "not_proven": "Не установлен окончательный первичный источник блокировки: возможен частичный mount или несовпадение виртуального устройства в системе хранения.",
+      "safety": "Не монтировать на хосте VHDX одновременно с работой VM; не использовать -Force, Repair-VHD, Optimize-VHD, Set-VHD без доказанной необходимости."
+    },
+    "bcd_and_winpe": {
+      "bcd_location_confirmed": false,
+      "virt_efiesp_documentation": "В документации для некоторых WCOS/Factory OS описан виртуальный Virt_EFIESP; для нашего VHDX нужно отдельное доказательство.",
+      "windows_10x_iso": "У Windows 10X 20279 нет обычного пользовательского установочного ISO. Не путать это с внешней WinPE, которая является отдельной средой и сама по себе не решает вопрос доступности WCOS Storage Spaces.",
+      "possible_future_method": "Если вернёмся к live debugging: исследовать BCD и фактический путь загрузки в изолированной диагностической копии, включать debug только в гостевом BCD через явно заданный /store, затем подключать WinDbg к уже настроенному named pipe."
+    }
+  },
+  "new_research_direction": {
+    "priority": "deferred",
+    "title": "Карта зависимостей Santorini 20279 и оценка переносимости на ядро/компоненты Windows 26100",
+    "work_items": [
+      {
+        "id": "S1",
+        "task": "Разобрать ModernUXShellApp.exe: прямые и delay imports, API set references, WinRT runtimeclass names, AppService endpoints, activation factories и manifests.",
+        "inputs_available": [
+          "ModernUX-20279-20261104-013300.zip"
+        ],
+        "deliverable": "Машинно-читаемый реестр зависимостей по точным файлам/классам/контрактам и критичности.",
+        "acceptance": "Разделены обычные публичные API, внутренние API и привилегированные зависимости."
+      },
+      {
+        "id": "S2",
+        "task": "Найти компоненты Composer за пределами пакета ModernUX: shell broker, composable shell, оконный менеджер, системные полномочия и регистрация.",
+        "inputs_available": [
+          "OOBE-20279-20261104-012934.zip",
+          "WCOS-20279-native-broker.zip"
+        ],
+        "missing_inputs": "Возможно потребуется отдельно извлечь системные DLL/WinMD/реестр из исходной WCOS 20279.",
+        "deliverable": "Граф зависимостей оригинальной оболочки; список обязательных и необязательных компонентов."
+      },
+      {
+        "id": "S3",
+        "task": "Получить репрезентативные файлы 26100 и сравнить доступные классы, DLL, WinRT контракты, привилегии, AppX развертывание, модель сеансов и графическую архитектуру.",
+        "missing_inputs": "Системный образ или экспорт файлов/реестра Windows 11 26100 пока не предоставлен в текущем исследовании.",
+        "deliverable": "Матрица совместимости: присутствует / заменён / отсутствует / требуется адаптация."
+      },
+      {
+        "id": "S4",
+        "task": "Отдельно доказать bootable WCOS-like storage на 26100 (State Separation, службы, загрузчик, GPT, системный реестр).",
+        "deliverable": "Минимальный воспроизводимый boot proof без Santorini, или документированное техническое препятствие.",
+        "acceptance": "26100 загружается в выбранной модели разделения состояния; не путать с обычной 26100 и установленной поверх оболочкой."
+      },
+      {
+        "id": "S5",
+        "task": "После прохождения S1-S4 выполнять минимальные контролируемые интеграционные тесты Santorini, сохранять эталон и фиксировать каждую ошибку отдельно.",
+        "deliverable": "Рабочий прототип или точное перечисление недостающих компонентов/контрактов."
+      }
+    ],
+    "first_action_for_next_assistant": "АРХИВ: карта ModernUX уже готова. ТЕКУЩЕЕ действие — получить 26100 и снять инвентарь для сравнения Factory OS 22000, см. current_strategy_2026_11_05.",
+    "first_gate_decision": "Определить, является ли перенос Santorini на 26100 реалистичным как системная интеграция, и что нужно для неё кроме самого ModernUXProduct.",
+    "status": "Исторический план анализа Santorini; временно отложен и НЕ является текущим следующим шагом."
+  },
+  "avoid_repeating": [
+    "Не предлагать снова включить Интернет в OOBE: все названные проверки уже выполнялись с Интернетом.",
+    "Не повторять provisionNewCoreLocalAccountAsync(true/false) и RDX без новой гипотезы/измерительного инструмента: все вернули 0x80070005.",
+    "Не считать, что ручной setSignInIdentityProvider(local) создаёт пользователя.",
+    "Не предлагать Shift+F10, Ctrl+Shift+F3, sysprep/unattend, Win×5 .ppkg без новых данных: это уже проверялось.",
+    "Не считать локальный Windows Terminal обычным UWP без Win32-зависимостей и не предполагать запуск cmd в основной WCOS без контейнера.",
+    "Не отключать WindowsCoreUserModelEnforced, DeviceAccessBrokerConsentRequired и не переписывать priviliged manifests для попытки убрать 0x80070005 без цепочки доказательств.",
+    "Не назначать буквы MainOS/OSData и не менять GPT-тип разделов на исходном/рабочем VHDX; только на явно расходной копии и с восстановлением типа.",
+    "Не изменять родительский VHDX при наличии цепочек AVHDX, не включать автоматические checkpoints.",
+    "Не запускать bcdedit /debug on на хосте без /store: это может поменять загрузку основной Windows.",
+    "Не обещать, что WinDbg уже подключён: COM pipe настроен, но guest BCD debug не включён."
+  ],
+  "key_open_questions": [
+    "Есть ли доступный согласованный набор WCOS-ориентированных системных пакетов для 26100 x64 PC?",
+    "Как связаны ядро, загрузка, Storage Spaces, разделение файлов/реестра и servicing в Factory OS 22000 и какие аналоги есть в 26100?",
+    "Каков минимальный критерий stop/go перед попыткой загрузки WCOS Core 26100?",
+    "Можно ли сохранить настоящую State Separation на 26100 без закрытого image composition Microsoft?"
+  ],
+  "source_assets": [
+    {
+      "name": "OOBE-20279-20261104-012934.zip",
+      "purpose": "Экспорт CloudExperienceHost/OOBE, oobecoreadapters.dll, манифестов и связанных WinMD/JS",
+      "sha256": "da2d6d85817783033bf9f1262da4cd4efa74f02d12c5afede1ce64106c3d3edf",
+      "bytes": 2163648,
+      "available_in_original_chat": true,
+      "zip_members_including_directories": 468
+    },
+    {
+      "name": "ModernUX-20279-20261104-013300.zip",
+      "purpose": "Экспорт пакета ModernUXProduct, включая ModernUXShellApp.exe и AppxManifest.xml",
+      "sha256": "efa9cead3be20b10dcce1b5c2cc05beef620a2544243d48cf83bb7a94dd3aa93",
+      "bytes": 8374979,
+      "available_in_original_chat": true,
+      "zip_members_including_directories": 94
+    },
+    {
+      "name": "WCOS-20279-native-broker.zip",
+      "purpose": "Экспорт диагностических нативных компонентов OOBE broker",
+      "sha256": "d761f17dadf51a808b56202359f1f46693f2d59545791252298a628da4db3754",
+      "bytes": 688195,
+      "available_in_original_chat": true,
+      "zip_members_including_directories": 4
+    },
+    {
+      "name": "WCOS-20279-usermgr.zip",
+      "purpose": "Оригинальная usermgr.dll Windows 10X 20279",
+      "sha256": "e11c91a083d648275658079c0710285f4ebe9d55e9e80d8f8ac1449c06ae1164",
+      "bytes": 573698,
+      "available_in_original_chat": true,
+      "zip_members_including_directories": 1
+    },
+    {
+      "name": "WCOS-20279-usermgr-analysis.txt",
+      "purpose": "Отчёт прежнего статического анализа usermgr.dll",
+      "sha256": "6a27dc0bb130ba2749e6daca7a634ecd658e53929cbae8d36de52bebabcd0bde",
+      "bytes": 3325,
+      "available_in_original_chat": true
+    },
+    {
+      "name": "Navigation-Lite.json",
+      "purpose": "Оригинальная схема переходов OOBE",
+      "sha256": "dddbb6d3af254fe7e2cc7d77c8b93165bf70a84dc38125bc2f43fed00a7c239f",
+      "bytes": 22101,
+      "available_in_original_chat": true
+    },
+    {
+      "name": "Navigation-Lite-offline-exp01-minimal.json",
+      "purpose": "Экспериментальная схема OOBE exp01",
+      "sha256": "715ba1d361d40d83450dbfaffb1003a327c2b932f55016a96673881bffe85a24",
+      "bytes": 22411,
+      "available_in_original_chat": true
+    },
+    {
+      "name": "Navigation-Lite-offline-exp02-diagnostic.json",
+      "purpose": "Экспериментальная схема OOBE exp02",
+      "sha256": "341be5e79092ce68ba97e947504b1f31efa83c2899d436bca037468e54159939",
+      "bytes": 21908,
+      "available_in_original_chat": true
+    },
+    {
+      "name": "Navigation-Lite-offline-exp03-broker.json",
+      "purpose": "Экспериментальная схема OOBE exp03",
+      "sha256": "e9244ff2289ebabb236766a61b755450d6dd881a05b616f1567476d24737b88f",
+      "bytes": 22056,
+      "available_in_original_chat": true
+    },
+    {
+      "name": "registration-report-v2.txt",
+      "purpose": "Отчёт о регистрации LocalAccountManager",
+      "sha256": "a5f60db778c511994ee1df37e83ee2ef65cda5b5686a6717a83f4250c1212b0b",
+      "bytes": 4004,
+      "available_in_original_chat": true
+    },
+    {
+      "file": "Windows11X-Core-26100-research.md",
+      "role": "Итоги исследования архитектуры 26100 и критерии доказательства WCOS"
+    },
+    {
+      "file": "Collect-WCOS-Core-26100.ps1",
+      "role": "Read-only inventory 26100, пока нет отчета конкретной 26100"
+    },
+    {
+      "file": "WCOS-20279-ModernUX-dependency-map.json",
+      "role": "Детальная статическая карта ModernUX 20279 — отложенный проект оболочки"
+    },
+    {
+      "file": "WCOS-20279-ModernUX-dependency-report.md",
+      "role": "Краткая русская сводка по зависимости ModernUX — отложенная задача"
+    }
+  ],
+  "handoff_instructions_for_next_ai": {
+    "language": "Русский",
+    "working_style": "Предлагать один проверяемый эксперимент за раз, отличать факт от гипотезы, предупреждать об изменяющих командах; по возможности избегать больших образов и лишних копий.",
+    "first_response_suggestion": "В первую очередь обсуждать доступный ISO/WIM 26100 и безопасную read-only inventory в сравнении с Factory OS 22000. Не предлагать новый VHDX, подмену ядра, установку Santorini, обход OOBE или повторную диагностику ранее проверенных методов без нового основания.",
+    "critical_warning": "Не считать пройденный OOBE или существование локального аккаунта доказанными. User count = 0; локальный аккаунт до сих пор не создан.",
+    "do_not_assume_success": "Пока нет оригинальной WCOS build 26100 для ПК и нет доказанной реализации State Separation на обычной 26100. IoT LTSC/Validation OS/Xbox SystemOS сами по себе не являются готовой заменой Factory OS. Профиль 20279 не создан."
+  },
+  "current_strategy_2026_11_05": {
+    "primary_question": "Возможно ли получить настоящую современную WCOS на x64 ПК на базе Windows 11 26100, и какой набор компонентов для этого нужен?",
+    "preferred_research_route": "Исследовать Factory OS 22000 и ее build/boot/state/servicing модель; независимо изучить в 26100 доступные аналоги. Сначала статическая матрица совместимости, затем только минимальный безопасный boot PoC.",
+    "not_a_working_recipe": true,
+    "branch_a": "Если 26100 содержит совместимые WCOS-части и они доступны для полноценного image composition — пробовать согласованную 26100 WCOS-компоновку.",
+    "branch_b": "Если отсутствуют закрытые компоненты WCOS или несовместимы ABI/boot/servicing — отдельно оценить самостоятельную реализацию похожей модели на Windows NT, но честно отличать её от оригинальной WCOS.",
+    "no_precommit_to_validation_os": "Validation OS 26100 — современный небольшой образ Windows на другой компоновке, не подтвержденная WCOS и не обязательная основа. Использовать только как экспериментальный источник/эталон минимальной ОС при наличии конкретной выгоды.",
+    "candidate_source": "Windows 11 IoT Enterprise LTSC 2024 x64 26100; Enterprise LTSC 2024 той же ветки тоже приемлема. Публичная поддержка IoT LTSC до 2034 относится к оригинальному продукту, не к радикально измененной Windows 11X.",
+    "direct_dll_swap_prohibited_as_strategy": "Нельзя считать перенос ntoskrnl.exe/драйверов Factory OS 22000 -> 26100 реалистичным по умолчанию; требуется согласованная связка kernel/HAL/boot/registry/storage/security/servicing.",
+    "shell_roadmap": "Сначала без графической оболочки; затем совместимый диагностический shell, при необходимости UWP-приложение, но Factory Composer 22000 на 26100 совместимым не признан; оригинальная Santorini 20279 потом.",
+    "core_acceptance_criteria": [
+      "Проходит загрузка целостного набора системных компонентов 26100 в Hyper-V Generation 2",
+      "Доказан механизм State Separation, а не только разделы с названиями MainOS и OSData",
+      "MainOS/неизменяемые зоны защищены, изменяемое системное состояние (включая критичные ветки реестра) корректно отделено",
+      "Корректно работают Storage Spaces/тома и загрузочная цепочка для выбранной компоновки (если сохранение оригинальной WCOS)",
+      "Состояние OSData сохраняется после перезагрузки, откат/восстановление возможны",
+      "Проверен путь обновления/обслуживания без разрушения State Separation"
+    ],
+    "first_proof_not_done": "Никакой загрузочной WCOS 26100 и ее оригинальной схемы State Separation пока не собрано и не испытано.",
+    "step_order": [
+      "Получить проверенный официальный исходный build 26100 x64 (желательно IoT Enterprise LTSC 2024) в форме ISO/WIM или извлеченной Windows; не модифицировать сразу",
+      "Снять read-only inventory Windows 26100 (наличие системных файлов, драйверов, Storage Spaces, WinRT/registry, ядро, DISM/packages) имеющимся Collect-WCOS-Core-26100.ps1",
+      "Снять сопоставимый read-only inventory Factory OS 22000 из безопасно доступной копии (учесть текущие differencing disks; не редактировать работающие родители)",
+      "Составить матрицу component->role->versions->dependency->candidate replacement: boot, storage, state, hives, servicing, security",
+      "Определить минимальный системный эксперимент и условия stop/go до создания новых VHDX",
+      "После согласованного старта проверить по критериям реальную State Separation; только после этого shell/UWP"
+    ]
+  },
+  "reference_evidence_and_uncertainties_2026_11_05": {
+    "confirmed_by_project": [
+      "Factory OS 22000 VHDX существует у пользователя; это исследовательский образ, фактическая детальная инвентаризация его компонентов в текущей фазе не проведена.",
+      "Windows 10X 20279 штатно загружается до OOBE в Hyper-V, создание локальной учетной записи через проверенные WinRT API возвращает 0x80070005.",
+      "Внутри ModernUX 20279 использованы приватные ComposableShell API и вызов RtlIsStateSeparationEnabled; это не доказывает их доступность в 26100.",
+      "Прямые PE импорты ModernUX (54 основных и 2 delay), XAML и manifest проанализированы; 26100 еще не сравнена напрямую."
+    ],
+    "documented_public_architecture": [
+      "Factory OS имеет функции STATESEPARATION_ON, STORAGESPACES_LAYOUT, UEFI_VM, SERVICING_STACK и режимы console/shell boot в WSK.",
+      "Документация Factory OS описывает отделение MainOS/OSData и связанные с этим ограничения файлов и реестра.",
+      "RtlIsStateSeparationEnabled — API для определения режима; наличие экспортированной функции в 26100 НЕ доказывает что этот режим доступен или включен.",
+      "Win11 Validation OS — минимальная специализированная Windows с иной компоновкой, не документированная как готовая PC-WCOS.",
+      "Сведения о ветке Xbox SystemOS 26100 можно использовать как ориентир современности WCOS-семейства; Xbox-образы и драйверы аппаратно и платформенно специализированы."
+    ],
+    "archival_build_context": [
+      "Windows 10X Santorini: 20279.",
+      "Доступная пользователю Factory OS для ПК: 22000.1 Cobalt.",
+      "Holographic 23H1: 22621 Nickel; наличие дальнейших обновлений безопасности не равно переходу основной ветки.",
+      "Существуют исследовательские сведения о Xbox SystemOS ветки 26100. Это не доказывает общую версию GameOS/GameCore и не дает свободный образ PC WCOS 26100."
+    ],
+    "unknowns": [
+      "Существует ли доступный/лицензионный полный набор WCOS image packages для PC на 26100.",
+      "Какие компоненты State Separation в обычной 26100 полные, какие лишь совместимые заглушки/API и какие отсутствуют.",
+      "Возможность модификации реестра и загрузки без сохранения согласованного servicing stack.",
+      "Совместимость Factory Composer/оболочки Windows 10X с 26100.",
+      "Возможность подлинной WCOS с отключением SysWOW64 и классического Win32 host (не подтверждено)."
+    ]
+  },
+  "working_rules_2026_11_05": {
+    "language": "Русский, предметные команды, один контролируемый эксперимент за раз.",
+    "data_integrity": "Сохранять clean-test, exp01 baseline и Factory OS исходный образ; не менять .avhdx/parents при действующей differencing chain; выключать VM перед любым доступом к VHDX.",
+    "no_repeat": [
+      "Не повторять сетевые пробы OOBE: интернет был всегда",
+      "Не предлагать Ctrl+Shift+F3/Sysprep/unattend как новый способ без новых данных",
+      "Не повторять Win пять раз / .ppkg, OobeLocal и user owner=true/false без новой гипотезы",
+      "Не предлагать запуск cmd/WinDbg в гостевой Windows 10X вне VAIL; UWP Terminal не эквивалент системной командной строке"
+    ],
+    "open_defects": "OOBE/0x80070005 остается нерешенным; отладочный COM1 в exp02 задан, но BCD гостя не настроен и WinDbg не был подключен.",
+    "vhd_note": "В exp02 после серии mount было состояние Attached=True при отсутствии Get-Disk; Hyper-V сообщал о занятом файле. После Dismount-DiskImage и проверки пользователь подтвердил повторный запуск. Не повторять без нужды.",
+    "new_26100_test": "Нужен фактический install.wim/ESD/ISO или инвентарь Windows 11 26100. Пока не утверждать совместимость на основе только общедоступных источников."
+  },
+  "current_task": "Обновить постоянный контекст проекта в проектных материалах. Сначала инвентаризация исходников 26100 и Factory OS 22000, затем проверка технической реализуемости.",
+  "current_priority": "Windows 11X Core 26100: Feasibility настоящей State Separation на новой ветке; не оболочка."
+}

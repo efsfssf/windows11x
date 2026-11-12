@@ -1,0 +1,11 @@
+WINDOWS 11X / НАСТОЯЩАЯ WCOS 26100 — ПЕРЕНОС КОНТЕКСТА, 2026-11-05
+
+Я прикладываю полный приватный архив исследования. ПРОЧИТАЙ ПЕРВЫМ `START_HERE_RU.md` и `notes/INFERENCES_VS_FACTS.md`, затем `derived/COMPLETE_HANDOFF_CURRENT.json`. Вложенный старый `Windows11X-WCOS-2026-11-05-COMPLETE-HANDOFF.zip` содержит ещё 78 файлов прежних оригинальных исследований; старые статусные выводы в нём уже частично устарели — ориентируйся на новый handoff.
+
+ЦЕЛЬ: реальная загружаемая WCOS из 26100 на PC/Hyper-V Gen2, State Separation MainOS/OSData, постоянный реестр, сервисинг. НЕ просто Windows 11 с четырьмя разделами и НЕ перенос 22000 DLL/driver без проверки.
+
+ПОСЛЕДНЕЕ: BCD FactoryOS 22000 (14 объектов) проанализирован, `MAINOS`, отдельные osdatadevice/bspdevice; bcdedit /store показывает device=unknown на основной Windows. Изучены SYSTEM/SOFTWARE/OSDATA/OSBOOT/DEVICES hives; runtime доказал persistence OSDATA и Data, исчезновение SOFTWARE тестового значения; auto redirect test НЕ подтвердился; XRo блокирует попытку записи MainOS, но причина не изолирована. Сравнены smss, FirstBootTasks, winload, kernel 22000/26100; совпадение строк/import names — не proof of boot. Первый 26100 WCOS PoC ещё НЕ создан. Субъективная оценка исследования ~70%.
+
+ТЕКУЩИЙ IP FOS-SS-Test 172.18.69.72 (старый 172.18.72.222 не использовать). Пароль не в архиве. Следующая команда: только-читающий preflight на основной Windows 11 для WIM 26100 index2, места E:, и имени Hyper-V Windows11X-26100-PoC01; см. `notes/NEXT_SAFE_ACTION.md`. Потом ТОЛЬКО отдельный VHDX/VM с планом отката.
+
+Отвечай по-русски, по одному безопасному шагу, не выпускай десятки промежуточных отчётов. Не меняй оригинал FOS, клон FOS-SS-Test или исходные 20279/WIM. Доверяй raw evidence и SHA256 больше резюме.

@@ -1,0 +1,22 @@
+PE,RVA,Function,Verified role
+winload26100.9444,0x19D5FB,LdrpLoadImports,new import starts with loader flag 0x04000000
+winload26100.9444,0x19D85B,LdrpLoadImage call,passes import record flags
+winload26100.9444,0x19DCDA,BlLdrAllocateDataTableEntry,writes flags at entry+0x68
+kernel26100.9457,0xC695BC,MiInitializeLoadedModuleList,constructs kernel entry from boot entry
+kernel26100.9457,0xAAD99D,MiConstructLoaderEntry,copies common prefix including Flags+0x68
+kernel26100.9457,0x705B9F,Phase1Initialization,enumerates images after Phase1InitializationIoReady
+kernel26100.9457,0x7F6614,MiFreeBootDriverInitializationCode,skip when Flags&0x40000000
+kernel26100.9457,0xA53389,MiFreeDriverInitialization,additional skip Flags&0x800
+kernel26100.9457,0xA536FA,MiSnapDriverRange,tests dependency bit 0x04000000
+kernel26100.9457,0xA53999,MiSnapDriverRange,tests first DWORD of section name INIT
+kernel26100.9457,0xA53411,MiFreeDriverInitialization,passes selected PTE range to freeing routine
+kernel26100.9457,0x94C81A,IopLoadDriver,ordinary driver initialization cleanup
+kernel26100.9457,0xC6A11B,MmDiscardDriverSection,separate address-directed selection
+kernel26100.9457,0x88220E,NtCreateWnfStateName,late permanent-registration call path
+kernel26100.9457,0x881E24,ExpWnfRegisterPermanentName,calls root helper without boot-only gate
+kernel26100.9457,0xB0F978,ExpWnfGetNameStoreRegistryRoot cold,requires newly created registry key
+kernel26100.9457,0xB0F996,Phase2 IAT call,callback before cache publication
+kernel26100.9457,0xB0F9C5,WNF root cache,cmpxchg publishes after callback
+kernel26100.9457,0x881A9D,ExpWnfAllocateNextPersistentNameSequence,root call before sequence-number lock
+kernel26100.9457,0x881AD4,sequence-number lock,lock does not cover prior root callback
+kernel26100.9457,0x881F77,NtCreateWnfStateName,decrements KTHREAD.KernelApcDisable

@@ -1,0 +1,539 @@
+{
+  "comparison_date": "2026-11-06",
+  "archive_sha256": {
+    "WCOS-FullRegistry-22000.zip": "7333fffab2c838d53c9f029251e4af3f8f4cf8a029e70a342b6a19df44354177",
+    "WCOS-FullRegistry-26100.zip": "8bc73fddb85ff403f72c761eb34c540033c203050728c99b6feaf0125951ab66"
+  },
+  "source_counts": {
+    "22000.DEVICES.reg": {
+      "keys": 2407,
+      "values": 6017
+    },
+    "22000.OSBOOT.reg": {
+      "keys": 132,
+      "values": 452
+    },
+    "22000.SYSTEM.reg": {
+      "keys": 32177,
+      "values": 105919
+    },
+    "26100.SYSTEM.reg": {
+      "keys": 38070,
+      "values": 117241
+    }
+  },
+  "keyset_overlap": {
+    "system": {
+      "A": 32177,
+      "B": 38070,
+      "intersection": 12433,
+      "Aonly": 19744,
+      "Bonly": 25637,
+      "identical_shared_keys": 10880
+    }
+  },
+  "subtree_counts": {
+    "SYSTEM\\CurrentControlSet\\Control\\StateSeparation": {
+      "F_SYSTEM": {
+        "keys": 672,
+        "values": 1415
+      },
+      "W_SYSTEM": {
+        "keys": 2,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\ControlSet001\\Control\\StateSeparation": {
+      "F_SYSTEM": {
+        "keys": 672,
+        "values": 1415
+      },
+      "W_SYSTEM": {
+        "keys": 2,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\RedirectionMap\\Keys": {
+      "F_SYSTEM": {
+        "keys": 466,
+        "values": 1054
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\RedirectionMap\\Files": {
+      "F_SYSTEM": {
+        "keys": 63,
+        "values": 138
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\RedirectionMap\\KeyRedirectionLinks": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\FeatureManagement": {
+      "F_SYSTEM": {
+        "keys": 6,
+        "values": 3
+      },
+      "W_SYSTEM": {
+        "keys": 1929,
+        "values": 5666
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\ControlSet001\\Control\\FeatureManagement": {
+      "F_SYSTEM": {
+        "keys": 6,
+        "values": 3
+      },
+      "W_SYSTEM": {
+        "keys": 1929,
+        "values": 5666
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+      "F_SYSTEM": {
+        "keys": 37,
+        "values": 171
+      },
+      "W_SYSTEM": {
+        "keys": 27,
+        "values": 150
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\ControlSet001\\Control\\Session Manager": {
+      "F_SYSTEM": {
+        "keys": 37,
+        "values": 171
+      },
+      "W_SYSTEM": {
+        "keys": 27,
+        "values": 150
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Services\\XRo": {
+      "F_SYSTEM": {
+        "keys": 10,
+        "values": 118
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\ControlSet001\\Services\\XRo": {
+      "F_SYSTEM": {
+        "keys": 10,
+        "values": 118
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\DriverDatabase": {
+      "F_SYSTEM": {
+        "keys": 19365,
+        "values": 61680
+      },
+      "W_SYSTEM": {
+        "keys": 13559,
+        "values": 29613
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Enum": {
+      "F_SYSTEM": {
+        "keys": 16,
+        "values": 14
+      },
+      "W_SYSTEM": {
+        "keys": 367,
+        "values": 1420
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\ControlSet001\\Enum": {
+      "F_SYSTEM": {
+        "keys": 16,
+        "values": 14
+      },
+      "W_SYSTEM": {
+        "keys": 367,
+        "values": 1420
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\HardwareConfig": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 13,
+        "values": 154
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "SYSTEM\\CurrentControlSet\\Control\\Nsi": {
+      "F_SYSTEM": {
+        "keys": 3,
+        "values": 4
+      },
+      "W_SYSTEM": {
+        "keys": 61,
+        "values": 15
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "OSBOOT\\ControlSetOverride": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 8,
+        "values": 13
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "OSBOOT\\ControlSetOverride\\FeatureManagement": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 2,
+        "values": 1
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "OSBOOT\\ControlSetOverride\\Session Manager": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 2,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 0,
+        "values": 0
+      }
+    },
+    "DEVICES\\ControlSet001": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 941,
+        "values": 2740
+      }
+    },
+    "DEVICES\\CurrentControlSet": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 941,
+        "values": 2740
+      }
+    },
+    "DEVICES\\ControlSet001\\Enum": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 548,
+        "values": 2451
+      }
+    },
+    "DEVICES\\CurrentControlSet\\Enum": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 548,
+        "values": 2451
+      }
+    },
+    "DEVICES\\Networking": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 412,
+        "values": 290
+      }
+    },
+    "DEVICES\\DriverDatabase": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 2,
+        "values": 2
+      }
+    },
+    "DEVICES\\HardwareConfig": {
+      "F_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "W_SYSTEM": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_OSBOOT": {
+        "keys": 0,
+        "values": 0
+      },
+      "F_DEVICES": {
+        "keys": 13,
+        "values": 154
+      }
+    }
+  },
+  "state_separation_rules": {
+    "registry_rule_records": 465,
+    "files_rule_records": 62,
+    "key_redirection_link_children": 81,
+    "registry_target_counts": {
+      "OSDATA": 404,
+      "OSBOOT": 40,
+      "DEVICES": 19,
+      "other": 2
+    }
+  },
+  "service_counts": {
+    "Factory_22000": {
+      "service_subkeys": 449,
+      "boot_start_services": 55
+    },
+    "Windows_26100": {
+      "service_subkeys": 718,
+      "boot_start_services": 97
+    }
+  },
+  "pnp": {
+    "Factory_Devices_ControlSet001_Enum_keys": 548,
+    "Factory_SYSTEM_CurrentControlSet_Enum_keys": 16,
+    "Win26100_SYSTEM_CurrentControlSet_Enum_keys": 367,
+    "shared_relative_descendant_paths": 167,
+    "shared_equal_value_sets": 123
+  },
+  "conclusions": {
+    "WCOS_26100_boot_with_StateSeparation": "not proven",
+    "XRo_26100": "absent in experimental registry",
+    "osboot_26100": "absent in experimental registry",
+    "winload_exception_cause": "not determined"
+  }
+}

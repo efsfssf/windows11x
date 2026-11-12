@@ -1,0 +1,96 @@
+{
+  "snapshot": "2026-11-12T00:18+03:00",
+  "project": "Windows11X / authentic PC WCOS on NT 26100",
+  "scope": "Research handoff; source-derived observed vs static vs inferred; not a boot installer",
+  "current_goal": "test newly generated dual V6+embeddedV7 base schema for preserved State Separation host on isolated Hyper-V VM with rollback; avoid repeating V6-only TraceSmoke",
+  "new_schema": {
+    "source_build": "26100.9278",
+    "source_sha256": "391a2818fdef14f4a9b6e6ce2a7e7f01d04f943de9ef543ec683927cfe480889",
+    "modified_sha256": "75fb8f895ea030c60f435863971eeb025798abdc306958b593dbe6eb185c0bbd",
+    "guest_location": "C:\\Users\\fog\\Downloads\\wcos_new_apiset_26100",
+    "file": "ApiSetSchema-Windows11X-26100-OFFLINE-UNSIGNED.dll",
+    "included_in_this_handoff": false,
+    "office_result": "OFFLINE FORMAT CHECK PASS",
+    "signature": "HashMismatch",
+    "installed": false,
+    "boot_tested": false,
+    "contracts": [
+      {
+        "name": "ext-ms-win-ntos-stateseparation-l1-1-0",
+        "host": "statesepext.sys",
+        "v7_host_index": 286
+      },
+      {
+        "name": "ext-ms-win-core-stateseparationext-l1-1-0",
+        "host": "onecorestateseparationext.dll",
+        "v7_host_index": 287
+      }
+    ]
+  },
+  "reference_system": {
+    "build": "22000.1",
+    "bcd": {
+      "main": "M:",
+      "osdata": "O:",
+      "bsp": "B:"
+    },
+    "osdataroot": "\\OSDataRoot -> \\Device\\OSDataDevice -> \\ArcName\\multi(0)disk(0)rdisk(4)partition(1) -> \\Device\\Harddisk7\\Partition1 -> \\Device\\HarddiskVolume9 -> O:",
+    "xro_volumes": [
+      "M:",
+      "B:"
+    ],
+    "registry_map": {
+      "file_rules": 62,
+      "key_rules_runtime_map": 459,
+      "key_redirection_links": 81
+    }
+  },
+  "new_system": {
+    "kernel": "26100.9457",
+    "winload": "26100.9444",
+    "schema": "26100.9278",
+    "current_osdata_root": "\\OSDataRoot -> \\Device\\OSDataDevice -> \\ArcName\\multi(0)disk(0)rdisk(0)partition(3)",
+    "current_bcd_device": "C:",
+    "osdatadevice_in_bcd": false,
+    "postboot_poc": "20/20 2026-11-11 audit, NOT WCOS",
+    "core_evidence": "2/100",
+    "core_gates": "0/7"
+  },
+  "smart_ai_2026_11_11": {
+    "phase0": {
+      "22000_call_rva": "0xB0B60B",
+      "26100_call_rva": "0xC294EE"
+    },
+    "phase1": {
+      "22000_call_rva": "0xB10280",
+      "26100_call_rva": "0xC6DC8E"
+    },
+    "phase2": {
+      "22000_call_rva": "0x7797B5",
+      "26100_call_rva": "0xB0F996"
+    },
+    "imports": 26,
+    "limited_same": 4,
+    "inconclusive": 22,
+    "status_not_supported_allowed": true,
+    "new_dependency_flag": "0x04000000",
+    "init_retention_normal_cleanup": true,
+    "full_abi_compatible": null
+  },
+  "open": [
+    "new dual V6/V7 image acceptance under boot policy scenario1",
+    "runtime composed namespace Host mapping for two State Separation contracts",
+    "trusted compatible 26100 State Separation hosts",
+    "kernel IAT/actual Phase execution",
+    "early OSBOOT/DEVICES/OSDATA backing, guard producers",
+    "CM scratch serialization and 22 NT APIs semantics",
+    "MainOS RO, OSData persistence, servicing/recovery"
+  ],
+  "context_read_order": [
+    "00-START-HERE-RU.md",
+    "01-MASTER-HANDOFF-RU.md",
+    "02-TECHNICAL-AGENTS-AND-REVISION-DETAILS.md",
+    "live-logs/USER-OBSERVED-WINDBG-BCD-REGISTRY-2026-11-12.md",
+    "04-NEXT-STEP-AND-NO-REPEAT.md"
+  ]
+}

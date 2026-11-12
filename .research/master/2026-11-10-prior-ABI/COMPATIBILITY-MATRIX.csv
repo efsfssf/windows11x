@@ -1,0 +1,20 @@
+﻿ID,Criterion,Verdict,Evidence_or_condition,PE_RVA_or_source,Detail
+V01,AMD64 and 26 named NT imports,VERIFIED,26/26 direct exports in kernel9457,F IAT 0x5000..0x50C8; K exports,evidence/imports-26.csv
+V02,Phase0 ABI,VERIFIED,two BOOLEAN; NTSTATUS,F 0x8090; K 0xC294EE,ABI-STRUCTURES.md
+V03,Phase1 ABI,VERIFIED,one BOOLEAN; NTSTATUS,F 0x8190; K 0xC6DC8E,ABI-STRUCTURES.md
+V04,Phase2 ABI,VERIFIED,BOOLEAN plus two PCUNICODE_STRING,F 0x8360; K 0xB0F996,ABI-STRUCTURES.md
+V05,Normal boot Phase0 before Phase1,VERIFIED,common parent calls in order; Phase2 demand creation,K 0x705B66 / 0x705B91; 0xB0F978,evidence/kernel-order-and-storage.asm
+V06,Used public structure layouts,VERIFIED,Unicode OA IO key info basic file info SD UUID,F helper graph; K Rtl bodies and WNF descriptors,ABI-STRUCTURES.md
+V07,Native 26100 State Separation code,VERIFIED,policy maps OSData DEVICES OSBOOT branches,K 0x94DD10 / 0xC18A18 / 0xC54610; W 0x9846 / 0x98E0,DEPENDENCIES.md
+V08,Factory configuration inventory,VERIFIED,62 Files 459 Keys 81 Links; two KernelLink rules,provided JSON; not live state,evidence/factory-config-crosscheck.json
+V09,XRo NT names,VERIFIED,62/62 names exist; not full FLTMGR/runtime ABI,XRo22000 import directory; K9457 exports,evidence/component-pe-inventory.json
+I01,Current original base selects State Host,INCOMPATIBLE,condition not satisfied: SEALED target has no Host,schema26100 family647/version710,INCOMPATIBLE.md
+I02,Ordinary successful DriverEntry deployment,INCOMPATIBLE,entry returns STATUS_UNSUCCESSFUL,F 0x8010 -> 0x8078,INCOMPATIBLE.md
+U01,All NT API semantics equivalent across generations,UNKNOWN,kernel22000 missing; not replaced by kernel26100.1742,archive inventory and current API analysis,NT-API-SEMANTICS.md
+U02,Phase2 code survives all callbacks,UNKNOWN,INIT callee and demand PAGE caller; retention unknown,F INIT 0x8360; K PAGE 0xB0F996,UNKNOWN.md
+U03,Concurrency IRQL context,UNKNOWN,shared scratch; external serialization and IRQL not proven,F 0x3060/0x3068; K 0xB0F9C5,UNKNOWN.md
+U04,Early correct OSData OSBOOT OSDATA DEVICES backend,UNKNOWN,code present; active hives/backing/topology not provided,K 0xC18A18; W hive-loading branch,DEPENDENCIES.md
+U05,Full XRo SSBoot user-mode dependency compatibility,UNKNOWN,FLTMGR/ntdll9457 and callbacks not fully audited,extracted22000 payloads,UNKNOWN.md
+U06,MainOS write protection and persistence,UNKNOWN,inventory and component presence do not prove enforcement,Factory runtime inventory limitations,UNKNOWN.md
+U07,Coherent supported 26100 package and servicing set,UNKNOWN,archive has22000 packages and mixed earlier26100 PE,MUM and PE identities,DEPENDENCIES.md
+U08,Trusted selected Host path,UNKNOWN,no coherent accepted target base/Host set supplied,API Set audit; no boot changes,UNKNOWN.md

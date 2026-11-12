@@ -1,0 +1,744 @@
+{
+  "input": "/mnt/data/wcos_new_apiset_26100/ApiSetSchema-Windows11X-26100-OFFLINE-UNSIGNED.dll",
+  "sha256": "75fb8f895ea030c60f435863971eeb025798abdc306958b593dbe6eb185c0bbd",
+  "format_scope": "inspected 26100 v6+embedded7 profile; ASCII l1 ordinary queries only",
+  "structure": {
+    "section": {
+      "raw": "0x2000",
+      "rva": "0x3000",
+      "virtual_size": "0x29CE0"
+    },
+    "namespace_size": {
+      "value": "0x29CE0",
+      "source": {
+        "namespace_offset": "0x4",
+        "embedded_offset": null,
+        "file_offset": "0x2004",
+        "rva": "0x3004",
+        "size": "0x4",
+        "bytes": "e09c0200"
+      }
+    },
+    "embedded_size": {
+      "value": "0x29CE0",
+      "source": {
+        "namespace_offset": "0x20",
+        "embedded_offset": "0x4",
+        "file_offset": "0x2020",
+        "rva": "0x3020",
+        "size": "0x4",
+        "bytes": "e09c0200"
+      }
+    },
+    "embedded_flags": {
+      "value": "0x8",
+      "source": {
+        "namespace_offset": "0x1E",
+        "embedded_offset": "0x2",
+        "file_offset": "0x201E",
+        "rva": "0x301E",
+        "size": "0x1",
+        "bytes": "08"
+      }
+    },
+    "bias": {
+      "value": "0x1C",
+      "source": {
+        "namespace_offset": "0x2E",
+        "embedded_offset": "0x12",
+        "file_offset": "0x202E",
+        "rva": "0x302E",
+        "size": "0x2",
+        "bytes": "1c00"
+      }
+    },
+    "string_pool": [
+      "0xC8F0",
+      "0x1F35C"
+    ],
+    "tables": {
+      "family": {
+        "descriptor": {
+          "namespace_offset": "0x48",
+          "embedded_offset": "0x2C",
+          "file_offset": "0x2048",
+          "rva": "0x3048",
+          "size": "0xC",
+          "bytes": "5cf30100790300000c021f25"
+        },
+        "count": 889,
+        "stride": 12,
+        "flags": "0x2",
+        "hash_factors": [
+          31,
+          37
+        ],
+        "records": [
+          "0x1F35C",
+          "0x21D08"
+        ],
+        "hash_index": [
+          "0x21D08",
+          "0x238D0"
+        ]
+      },
+      "alias": {
+        "descriptor": {
+          "namespace_offset": "0x54",
+          "embedded_offset": "0x38",
+          "file_offset": "0x2054",
+          "rva": "0x3054",
+          "size": "0xC",
+          "bytes": "d0380200040000000c001f25"
+        },
+        "count": 4,
+        "stride": 12,
+        "flags": "0x0",
+        "hash_factors": [
+          31,
+          37
+        ],
+        "records": [
+          "0x238D0",
+          "0x23900"
+        ],
+        "hash_index": [
+          "0x23900",
+          "0x23920"
+        ]
+      },
+      "version": {
+        "descriptor": {
+          "namespace_offset": "0x60",
+          "embedded_offset": "0x44",
+          "file_offset": "0x2060",
+          "rva": "0x3060",
+          "size": "0xC",
+          "bytes": "20390200d80300000c001f25"
+        },
+        "count": 984,
+        "stride": 12,
+        "flags": "0x0",
+        "hash_factors": [
+          31,
+          37
+        ],
+        "records": [
+          "0x23920",
+          "0x26740"
+        ],
+        "hash_index": [
+          "0x26740",
+          "0x28600"
+        ]
+      },
+      "auxiliary": {
+        "descriptor": {
+          "namespace_offset": "0x6C",
+          "embedded_offset": "0x50",
+          "file_offset": "0x206C",
+          "rva": "0x306C",
+          "size": "0xC",
+          "bytes": "008602000000000004001f25"
+        },
+        "count": 0,
+        "stride": 4,
+        "flags": "0x0",
+        "hash_factors": [
+          31,
+          37
+        ],
+        "records": [
+          "0x28600",
+          "0x28600"
+        ],
+        "hash_index": [
+          "0x28600",
+          "0x28600"
+        ]
+      },
+      "host": {
+        "descriptor": {
+          "namespace_offset": "0x78",
+          "embedded_offset": "0x5C",
+          "file_offset": "0x2078",
+          "rva": "0x3078",
+          "size": "0xC",
+          "bytes": "00860200200100000c001f25"
+        },
+        "count": 288,
+        "stride": 12,
+        "flags": "0x0",
+        "hash_factors": [
+          31,
+          37
+        ],
+        "records": [
+          "0x28600",
+          "0x29380"
+        ],
+        "hash_index": [
+          "0x29380",
+          "0x29C80"
+        ]
+      }
+    },
+    "importers": {
+      "start": "0x29C80",
+      "end": "0x29CE0",
+      "count": 6,
+      "stride": 16,
+      "descriptor": {
+        "namespace_offset": "0x84",
+        "embedded_offset": "0x68",
+        "file_offset": "0x2084",
+        "rva": "0x3084",
+        "size": "0xC",
+        "bytes": "809c02006000000006001000"
+      }
+    },
+    "bounds_and_index_checks": "PASS"
+  },
+  "contracts": [
+    {
+      "query": "ext-ms-win-ntos-stateseparation-l1-1-0",
+      "legacy_crosscheck": {
+        "index": 710,
+        "record": {
+          "namespace_offset": "0x4328",
+          "embedded_offset": "0x430C",
+          "file_offset": "0x6328",
+          "rva": "0x7328",
+          "size": "0x18",
+          "bytes": "01000000b49e01004c00000048000000c894000001000000"
+        },
+        "flags": 1,
+        "name": {
+          "text": "ext-ms-win-ntos-stateseparation-l1-1-0",
+          "source": {
+            "namespace_offset": "0x19EB4",
+            "embedded_offset": "0x19E98",
+            "file_offset": "0x1BEB4",
+            "rva": "0x1CEB4",
+            "size": "0x4C",
+            "bytes": "6500780074002d006d0073002d00770069006e002d006e0074006f0073002d0073007400610074006500730065007000610072006100740069006f006e002d006c0031002d0031002d003000"
+          }
+        },
+        "values": [
+          {
+            "record": {
+              "namespace_offset": "0x94C8",
+              "embedded_offset": "0x94AC",
+              "file_offset": "0xB4C8",
+              "rva": "0xC4C8",
+              "size": "0x14",
+              "bytes": "00000000000000000000000004f301001e000000"
+            },
+            "flags": 0,
+            "importer": "",
+            "host": "statesepext.sys",
+            "host_source": {
+              "namespace_offset": "0x1F304",
+              "embedded_offset": "0x1F2E8",
+              "file_offset": "0x21304",
+              "rva": "0x22304",
+              "size": "0x1E",
+              "bytes": "730074006100740065007300650070006500780074002e00730079007300"
+            }
+          }
+        ]
+      },
+      "family": {
+        "index": 647,
+        "primary_hash": "0x340E2871",
+        "secondary_hash": "0xA0C11B91",
+        "primary_text": "ext-win-ntos-stateseparation",
+        "secondary_text": "ext-win-ntos-stateseparation",
+        "candidates": [
+          {
+            "slot": 172,
+            "source": {
+              "namespace_offset": "0x22268",
+              "embedded_offset": "0x2224C",
+              "file_offset": "0x24268",
+              "rva": "0x25268",
+              "size": "0x8",
+              "bytes": "71280e3487020000"
+            },
+            "record_index": 647,
+            "second_hash_match": true
+          }
+        ],
+        "record": {
+          "namespace_offset": "0x211B0",
+          "embedded_offset": "0x21194",
+          "file_offset": "0x231B0",
+          "rva": "0x241B0",
+          "size": "0xC",
+          "bytes": "911bc1a01e01ffff00001200"
+        },
+        "fields": {
+          "default_host": {
+            "value": 286,
+            "source": {
+              "namespace_offset": "0x211B4",
+              "embedded_offset": "0x21198",
+              "file_offset": "0x231B4",
+              "rva": "0x241B4",
+              "size": "0x2",
+              "bytes": "1e01"
+            }
+          },
+          "importer_head": {
+            "value": 65535,
+            "source": {
+              "namespace_offset": "0x211B6",
+              "embedded_offset": "0x2119A",
+              "file_offset": "0x231B6",
+              "rva": "0x241B6",
+              "size": "0x2",
+              "bytes": "ffff"
+            }
+          },
+          "importer_count": {
+            "value": 0,
+            "source": {
+              "namespace_offset": "0x211B8",
+              "embedded_offset": "0x2119C",
+              "file_offset": "0x231B8",
+              "rva": "0x241B8",
+              "size": "0x2",
+              "bytes": "0000"
+            }
+          },
+          "flags": {
+            "value": "0x12",
+            "source": {
+              "namespace_offset": "0x211BA",
+              "embedded_offset": "0x2119E",
+              "file_offset": "0x231BA",
+              "rva": "0x241BA",
+              "size": "0x1",
+              "bytes": "12"
+            }
+          }
+        }
+      },
+      "version": {
+        "index": 710,
+        "primary_hash": "0x6925D5D5",
+        "secondary_hash": "0xA8AC711B",
+        "primary_text": "ext-win-ntos-stateseparation-1",
+        "secondary_text": "ext-win-ntos-stateseparation-1",
+        "candidates": [
+          {
+            "slot": 396,
+            "source": {
+              "namespace_offset": "0x273A0",
+              "embedded_offset": "0x27384",
+              "file_offset": "0x293A0",
+              "rva": "0x2A3A0",
+              "size": "0x8",
+              "bytes": "d5d52569c6020000"
+            },
+            "record_index": 710,
+            "second_hash_match": true
+          }
+        ],
+        "record": {
+          "namespace_offset": "0x25A68",
+          "embedded_offset": "0x25A4C",
+          "file_offset": "0x27A68",
+          "rva": "0x28A68",
+          "size": "0xC",
+          "bytes": "1b71aca88702000001000100"
+        },
+        "fields": {
+          "family_index": {
+            "value": 647,
+            "source": {
+              "namespace_offset": "0x25A6C",
+              "embedded_offset": "0x25A50",
+              "file_offset": "0x27A6C",
+              "rva": "0x28A6C",
+              "size": "0x2",
+              "bytes": "8702"
+            }
+          },
+          "major": {
+            "value": 1,
+            "source": {
+              "namespace_offset": "0x25A70",
+              "embedded_offset": "0x25A54",
+              "file_offset": "0x27A70",
+              "rva": "0x28A70",
+              "size": "0x1",
+              "bytes": "01"
+            }
+          },
+          "revision": {
+            "value": 0,
+            "source": {
+              "namespace_offset": "0x25A71",
+              "embedded_offset": "0x25A55",
+              "file_offset": "0x27A71",
+              "rva": "0x28A71",
+              "size": "0x1",
+              "bytes": "00"
+            }
+          },
+          "flags": {
+            "value": "0x1",
+            "source": {
+              "namespace_offset": "0x25A72",
+              "embedded_offset": "0x25A56",
+              "file_offset": "0x27A72",
+              "rva": "0x28A72",
+              "size": "0x1",
+              "bytes": "01"
+            }
+          }
+        }
+      },
+      "sealed": true,
+      "family_version_indices": [
+        710
+      ],
+      "default_host": {
+        "index": 286,
+        "record": {
+          "namespace_offset": "0x29368",
+          "embedded_offset": "0x2934C",
+          "file_offset": "0x2B368",
+          "rva": "0x2C368",
+          "size": "0xC",
+          "bytes": "6f4a68a5142a01000f00ff00"
+        },
+        "pool_offset": {
+          "value": "0x12A14",
+          "source": {
+            "namespace_offset": "0x2936C",
+            "embedded_offset": "0x29350",
+            "file_offset": "0x2B36C",
+            "rva": "0x2C36C",
+            "size": "0x4",
+            "bytes": "142a0100"
+          }
+        },
+        "chars": {
+          "value": 15,
+          "source": {
+            "namespace_offset": "0x29370",
+            "embedded_offset": "0x29354",
+            "file_offset": "0x2B370",
+            "rva": "0x2C370",
+            "size": "0x2",
+            "bytes": "0f00"
+          }
+        },
+        "level": {
+          "value": 255,
+          "source": {
+            "namespace_offset": "0x29372",
+            "embedded_offset": "0x29356",
+            "file_offset": "0x2B372",
+            "rva": "0x2C372",
+            "size": "0x1",
+            "bytes": "ff"
+          }
+        },
+        "string": {
+          "text": "statesepext.sys",
+          "source": {
+            "namespace_offset": "0x1F304",
+            "embedded_offset": "0x1F2E8",
+            "file_offset": "0x21304",
+            "rva": "0x22304",
+            "size": "0x1E",
+            "bytes": "730074006100740065007300650070006500780074002e00730079007300"
+          }
+        }
+      },
+      "default_absent": false,
+      "importer_specific_values": [],
+      "importer_query": null,
+      "modeled_result": {
+        "status": "STATUS_SUCCESS",
+        "marker": 1,
+        "host": "statesepext.sys",
+        "length": 30,
+        "buffer": "see string source"
+      }
+    },
+    {
+      "query": "ext-ms-win-core-stateseparationext-l1-1-0",
+      "legacy_crosscheck": {
+        "index": 500,
+        "record": {
+          "namespace_offset": "0x2F78",
+          "embedded_offset": "0x2F5C",
+          "file_offset": "0x4F78",
+          "rva": "0x5F78",
+          "size": "0x18",
+          "bytes": "01000000d05d0100520000004e0000004c84000001000000"
+        },
+        "flags": 1,
+        "name": {
+          "text": "ext-ms-win-core-stateseparationext-l1-1-0",
+          "source": {
+            "namespace_offset": "0x15DD0",
+            "embedded_offset": "0x15DB4",
+            "file_offset": "0x17DD0",
+            "rva": "0x18DD0",
+            "size": "0x52",
+            "bytes": "6500780074002d006d0073002d00770069006e002d0063006f00720065002d0073007400610074006500730065007000610072006100740069006f006e006500780074002d006c0031002d0031002d003000"
+          }
+        },
+        "values": [
+          {
+            "record": {
+              "namespace_offset": "0x844C",
+              "embedded_offset": "0x8430",
+              "file_offset": "0xA44C",
+              "rva": "0xB44C",
+              "size": "0x14",
+              "bytes": "00000000000000000000000022f301003a000000"
+            },
+            "flags": 0,
+            "importer": "",
+            "host": "onecorestateseparationext.dll",
+            "host_source": {
+              "namespace_offset": "0x1F322",
+              "embedded_offset": "0x1F306",
+              "file_offset": "0x21322",
+              "rva": "0x22322",
+              "size": "0x3A",
+              "bytes": "6f006e00650063006f007200650073007400610074006500730065007000610072006100740069006f006e006500780074002e0064006c006c00"
+            }
+          }
+        ]
+      },
+      "family": {
+        "index": 447,
+        "primary_hash": "0x65C8AC7B",
+        "secondary_hash": "0xB6B2A6C7",
+        "primary_text": "ext-win-core-stateseparationext",
+        "secondary_text": "ext-win-core-stateseparationext",
+        "candidates": [
+          {
+            "slot": 359,
+            "source": {
+              "namespace_offset": "0x22840",
+              "embedded_offset": "0x22824",
+              "file_offset": "0x24840",
+              "rva": "0x25840",
+              "size": "0x8",
+              "bytes": "7bacc865bf010000"
+            },
+            "record_index": 447,
+            "second_hash_match": true
+          }
+        ],
+        "record": {
+          "namespace_offset": "0x20850",
+          "embedded_offset": "0x20834",
+          "file_offset": "0x22850",
+          "rva": "0x23850",
+          "size": "0xC",
+          "bytes": "c7a6b2b61f01ffff00001200"
+        },
+        "fields": {
+          "default_host": {
+            "value": 287,
+            "source": {
+              "namespace_offset": "0x20854",
+              "embedded_offset": "0x20838",
+              "file_offset": "0x22854",
+              "rva": "0x23854",
+              "size": "0x2",
+              "bytes": "1f01"
+            }
+          },
+          "importer_head": {
+            "value": 65535,
+            "source": {
+              "namespace_offset": "0x20856",
+              "embedded_offset": "0x2083A",
+              "file_offset": "0x22856",
+              "rva": "0x23856",
+              "size": "0x2",
+              "bytes": "ffff"
+            }
+          },
+          "importer_count": {
+            "value": 0,
+            "source": {
+              "namespace_offset": "0x20858",
+              "embedded_offset": "0x2083C",
+              "file_offset": "0x22858",
+              "rva": "0x23858",
+              "size": "0x2",
+              "bytes": "0000"
+            }
+          },
+          "flags": {
+            "value": "0x12",
+            "source": {
+              "namespace_offset": "0x2085A",
+              "embedded_offset": "0x2083E",
+              "file_offset": "0x2285A",
+              "rva": "0x2385A",
+              "size": "0x1",
+              "bytes": "12"
+            }
+          }
+        }
+      },
+      "version": {
+        "index": 500,
+        "primary_hash": "0x164F7F5F",
+        "secondary_hash": "0x15DE4E1",
+        "primary_text": "ext-win-core-stateseparationext-1",
+        "secondary_text": "ext-win-core-stateseparationext-1",
+        "candidates": [
+          {
+            "slot": 88,
+            "source": {
+              "namespace_offset": "0x26A00",
+              "embedded_offset": "0x269E4",
+              "file_offset": "0x28A00",
+              "rva": "0x29A00",
+              "size": "0x8",
+              "bytes": "5f7f4f16f4010000"
+            },
+            "record_index": 500,
+            "second_hash_match": true
+          }
+        ],
+        "record": {
+          "namespace_offset": "0x25090",
+          "embedded_offset": "0x25074",
+          "file_offset": "0x27090",
+          "rva": "0x28090",
+          "size": "0xC",
+          "bytes": "e1e45d01bf01000001000100"
+        },
+        "fields": {
+          "family_index": {
+            "value": 447,
+            "source": {
+              "namespace_offset": "0x25094",
+              "embedded_offset": "0x25078",
+              "file_offset": "0x27094",
+              "rva": "0x28094",
+              "size": "0x2",
+              "bytes": "bf01"
+            }
+          },
+          "major": {
+            "value": 1,
+            "source": {
+              "namespace_offset": "0x25098",
+              "embedded_offset": "0x2507C",
+              "file_offset": "0x27098",
+              "rva": "0x28098",
+              "size": "0x1",
+              "bytes": "01"
+            }
+          },
+          "revision": {
+            "value": 0,
+            "source": {
+              "namespace_offset": "0x25099",
+              "embedded_offset": "0x2507D",
+              "file_offset": "0x27099",
+              "rva": "0x28099",
+              "size": "0x1",
+              "bytes": "00"
+            }
+          },
+          "flags": {
+            "value": "0x1",
+            "source": {
+              "namespace_offset": "0x2509A",
+              "embedded_offset": "0x2507E",
+              "file_offset": "0x2709A",
+              "rva": "0x2809A",
+              "size": "0x1",
+              "bytes": "01"
+            }
+          }
+        }
+      },
+      "sealed": true,
+      "family_version_indices": [
+        500
+      ],
+      "default_host": {
+        "index": 287,
+        "record": {
+          "namespace_offset": "0x29374",
+          "embedded_offset": "0x29358",
+          "file_offset": "0x2B374",
+          "rva": "0x2C374",
+          "size": "0xC",
+          "bytes": "3d10a731322a01001d00ff00"
+        },
+        "pool_offset": {
+          "value": "0x12A32",
+          "source": {
+            "namespace_offset": "0x29378",
+            "embedded_offset": "0x2935C",
+            "file_offset": "0x2B378",
+            "rva": "0x2C378",
+            "size": "0x4",
+            "bytes": "322a0100"
+          }
+        },
+        "chars": {
+          "value": 29,
+          "source": {
+            "namespace_offset": "0x2937C",
+            "embedded_offset": "0x29360",
+            "file_offset": "0x2B37C",
+            "rva": "0x2C37C",
+            "size": "0x2",
+            "bytes": "1d00"
+          }
+        },
+        "level": {
+          "value": 255,
+          "source": {
+            "namespace_offset": "0x2937E",
+            "embedded_offset": "0x29362",
+            "file_offset": "0x2B37E",
+            "rva": "0x2C37E",
+            "size": "0x1",
+            "bytes": "ff"
+          }
+        },
+        "string": {
+          "text": "onecorestateseparationext.dll",
+          "source": {
+            "namespace_offset": "0x1F322",
+            "embedded_offset": "0x1F306",
+            "file_offset": "0x21322",
+            "rva": "0x22322",
+            "size": "0x3A",
+            "bytes": "6f006e00650063006f007200650073007400610074006500730065007000610072006100740069006f006e006500780074002e0064006c006c00"
+          }
+        }
+      },
+      "default_absent": false,
+      "importer_specific_values": [],
+      "importer_query": null,
+      "modeled_result": {
+        "status": "STATUS_SUCCESS",
+        "marker": 1,
+        "host": "onecorestateseparationext.dll",
+        "length": 58,
+        "buffer": "see string source"
+      }
+    }
+  ]
+}

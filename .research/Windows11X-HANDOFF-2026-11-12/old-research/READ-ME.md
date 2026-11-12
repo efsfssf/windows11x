@@ -1,0 +1,1 @@
+Исторический текст стороннего ИИ содержит опровергнутые утверждения о `Namespace[0x1C]` как HashMultiplier, namespace-level SEALED, `Value.Flags=2`. Для фактов использовать `reports/api-rootcause/MISCONCEPTIONS.md` и `reports/api-v7/SEALED-SEMANTICS.md`, а не этот документ.

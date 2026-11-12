@@ -1,0 +1,46 @@
+{
+  "status": "OFFLINE ONLY; NOT TRUSTED FOR BOOT",
+  "source_sha256": "391a2818fdef14f4a9b6e6ce2a7e7f01d04f943de9ef543ec683927cfe480889",
+  "modified_sha256": "75fb8f895ea030c60f435863971eeb025798abdc306958b593dbe6eb185c0bbd",
+  "pe_bytes": 194016,
+  "namespace_old_bytes": 171104,
+  "namespace_new_bytes": 171232,
+  "legacy_contracts_unchanged": 982,
+  "legacy_contracts_total": 984,
+  "v7_version_records_preserved": 984,
+  "v7_host_records_original": 286,
+  "v7_host_records_new": 288,
+  "v7_pool_old_bytes": 76308,
+  "v7_pool_new_bytes": 76396,
+  "new_host_bindings": [
+    {
+      "contract": "ext-ms-win-ntos-stateseparation-l1-1-0",
+      "host": "statesepext.sys",
+      "sealed": true,
+      "v7_family_index": 647,
+      "v7_host_index": 286,
+      "legacy_v6_host": "statesepext.sys"
+    },
+    {
+      "contract": "ext-ms-win-core-stateseparationext-l1-1-0",
+      "host": "onecorestateseparationext.dll",
+      "sealed": true,
+      "v7_family_index": 447,
+      "v7_host_index": 287,
+      "legacy_v6_host": "onecorestateseparationext.dll"
+    }
+  ],
+  "unmodified_control_contracts": [
+    "ext-ms-win-ntos-trace-l1-1-0",
+    "ext-ms-win-ntos-tm-l1-1-0",
+    "ext-ms-win-kernel32-errorhandling-l1-1-0"
+  ],
+  "limitations": [
+    "Not boot-tested",
+    "Modified original Microsoft PE no longer retains valid original signature",
+    "No trusted 26100 state separation SYS/DLL host in package",
+    "Host ABI early-load and protection unproven",
+    "No VM changes performed",
+    "Do not overwrite system ApiSetSchema.dll"
+  ]
+}

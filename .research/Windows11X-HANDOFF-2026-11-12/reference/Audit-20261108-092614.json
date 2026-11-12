@@ -1,0 +1,727 @@
+﻿{
+    "AuditVersion":  "1.0.0",
+    "Created":  "2026-11-08T09:23:32.0564540+03:00",
+    "Build":  "26100",
+    "BootTime":  "2026-11-08T09:12:43.6437480+03:00",
+    "Scope":  "READ-ONLY live inspection; UNKNOWN never means success; staged and manually loaded hives are not boot hives",
+    "GenuineWCOSProven":  false,
+    "CoreScore":  {
+                      "Earned":  2,
+                      "Max":  100,
+                      "Percent":  2,
+                      "Description":  "Evidence checklist coverage, NOT actual WCOS completion percent"
+                  },
+    "PoCScore":  {
+                     "Earned":  16,
+                     "Max":  20,
+                     "Percent":  80,
+                     "Description":  "Post-boot PoC readiness, NOT State Separation"
+                 },
+    "CriticalGates":  {
+                          "Required":  [
+                                           "CORE-APISET-NT",
+                                           "CORE-KERNEL-BINDING",
+                                           "CORE-HIVES-EARLY",
+                                           "CORE-MAINOS-RO",
+                                           "CORE-OSDATA-MUTABLE",
+                                           "CORE-SERVICING",
+                                           "CORE-RECOVERY"
+                                       ],
+                          "Passed":  [
+
+                                     ],
+                          "AllProven":  false
+                      },
+    "Alerts":  [
+                   "КРИТИЧЕСКИЙ БЛОКЕР: NT State Separation API Set не привязан к statesepext.sys.",
+                   "КРИТИЧЕСКИЙ БЛОКЕР: user-mode State Separation API Set не имеет onecorestateseparationext.dll.",
+                   "SYSTEM и SOFTWARE по HiveList находятся на одном основном томе: раздельные копии на D: не используются как boot hives.",
+                   "XRo не обнаружен как работающий фильтр; защита MainOS не доказана."
+               ],
+    "Checks":  [
+                   {
+                       "ID":  "ENV-BUILD",
+                       "Section":  "Среда",
+                       "Title":  "Целевая ветка Windows 26100",
+                       "Status":  "PASS",
+                       "Note":  "Текущая сборка: 26100",
+                       "Next":  "Не смешивать результаты разных веток.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "ENV-X64",
+                       "Section":  "Среда",
+                       "Title":  "64-битная Windows",
+                       "Status":  "PASS",
+                       "Note":  "64-bit OS: True; 64-bit PowerShell: True",
+                       "Next":  "Скрипт поддерживает 32-битную PowerShell, но для диагностики предпочти 64-битную.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "REG-POLICY",
+                       "Section":  "Реестр",
+                       "Title":  "Значение StateSeparation Policy\\Enabled",
+                       "Status":  "INFO",
+                       "Note":  "Текущее значение: отсутствует; не менять только ради оценки.",
+                       "Next":  "Без доказанной привязки ядра включение политики небезопасно.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-REG-KEYMAP",
+                       "Section":  "Реестр WCOS",
+                       "Title":  "Системная карта перенаправления ключей",
+                       "Status":  "FAIL",
+                       "Note":  "Непосредственных записей: -1; эталон Factory OS 22000: 459 (465 потомков).",
+                       "Next":  "Наличие записей не доказывает, что они реально срабатывают.",
+                       "Score":  "Core",
+                       "Weight":  4,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-REG-FILEMAP",
+                       "Section":  "Реестр WCOS",
+                       "Title":  "Системная карта перенаправления файлов",
+                       "Status":  "FAIL",
+                       "Note":  "Непосредственных записей: -1; эталон Factory OS 22000: 62.",
+                       "Next":  "Файловое перенаправление требует отдельной runtime-проверки.",
+                       "Score":  "Core",
+                       "Weight":  4,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-REG-LINKMAP",
+                       "Section":  "Реестр WCOS",
+                       "Title":  "KeyRedirectionLinks (не тестовые REG_LINK)",
+                       "Status":  "FAIL",
+                       "Note":  "Непосредственных записей: -1; эталон Factory OS 22000: 81.",
+                       "Next":  "Не подменять штатную карту тестовыми ссылками SOFTWARE.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-HIVES-MAIN",
+                       "Section":  "Ульи",
+                       "Title":  "SYSTEM и SOFTWARE не сосредоточены на одном MainOS",
+                       "Status":  "FAIL",
+                       "Note":  "SYSTEM: \\Device\\HarddiskVolume3\\Windows\\System32\\config\\SYSTEM\u0000; SOFTWARE: \\Device\\HarddiskVolume3\\Windows\\System32\\config\\SOFTWARE\u0000",
+                       "Next":  "Размещение в разных томах тоже не является доказательством ранней State Separation.",
+                       "Score":  "Core",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "HIVE-OSDATA",
+                       "Section":  "Ульи",
+                       "Title":  "Доступен HKLM\\OSDATA",
+                       "Status":  "FAIL",
+                       "Note":  "HKLM: False; HiveList: запись не найдена",
+                       "Next":  "В HiveList могут отсутствовать даже действующие специальные ульи. Наличие HKLM не доказывает фазу загрузки.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "HIVE-OSBOOT",
+                       "Section":  "Ульи",
+                       "Title":  "Доступен HKLM\\OSBOOT",
+                       "Status":  "FAIL",
+                       "Note":  "HKLM: False; HiveList: запись не найдена",
+                       "Next":  "В HiveList могут отсутствовать даже действующие специальные ульи. Наличие HKLM не доказывает фазу загрузки.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "HIVE-DEVICES",
+                       "Section":  "Ульи",
+                       "Title":  "Доступен HKLM\\DEVICES",
+                       "Status":  "FAIL",
+                       "Note":  "HKLM: False; HiveList: запись не найдена",
+                       "Next":  "В HiveList могут отсутствовать даже действующие специальные ульи. Наличие HKLM не доказывает фазу загрузки.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-HIVES-EARLY",
+                       "Section":  "Ульи",
+                       "Title":  "OSDATA/OSBOOT/DEVICES подключены ДО запуска служб",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Требуется boot trace/WinDbg или иное независимое наблюдение. Действующий REG LOAD по планировщику не подходит.",
+                       "Next":  "Фиксировать этап и происхождение каждого улья в boot-трассе.",
+                       "Score":  "Core",
+                       "Weight":  10,
+                       "Earned":  0,
+                       "Evidence":  "requires-boot-trace"
+                   },
+                   {
+                       "ID":  "CORE-REG-RUNTIME",
+                       "Section":  "Реестр WCOS",
+                       "Title":  "Нативные правила перенаправления работают на boot/runtime",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Тестовые символические ссылки доказывают лишь REG_LINK после подключения OSDATA.",
+                       "Next":  "Нужно отдельное доказательство работы штатных RedirectionMap.",
+                       "Score":  "Core",
+                       "Weight":  3,
+                       "Earned":  0,
+                       "Evidence":  "requires-runtime-proof"
+                   },
+                   {
+                       "ID":  "POC-HIVE-COPIES",
+                       "Section":  "PoC",
+                       "Title":  "Пять сохранённых системных ульев на OSData",
+                       "Status":  "PASS",
+                       "Note":  "Файлов найдено: 5/5; отсутствуют: .",
+                       "Next":  "Это резервные копии; они не становятся boot-active автоматически.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-DATA-VOLUME",
+                       "Section":  "PoC",
+                       "Title":  "Доступен диск D:",
+                       "Status":  "PASS",
+                       "Note":  "Метка: WCOS-OSData-STAGING; FS: NTFS.",
+                       "Next":  "Наличие D: недостаточно для WCOS.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-STORAGE-SEPARATE",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "MainOS и OSData на разных дисках",
+                       "Status":  "PASS",
+                       "Note":  "DiskNumber C: 0, D: 1.",
+                       "Next":  "Раздельный диск — только топология, не защита тома.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-STORAGE-SPACES",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "Storage Spaces (runtime-обнаружение)",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Найдено virtual disks: 0. Не подтверждает правильную WCOS-конфигурацию томов.",
+                       "Next":  "Нужна сверка конкретной разметки/boot volumes с выбранной Factory-архитектурой.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-OSDATA-FILE",
+                       "Section":  "PoC",
+                       "Title":  "Отдельный файл OSDATA на D:",
+                       "Status":  "PASS",
+                       "Note":  "Путь: D:\\Windows\\System32\\Config\\OSDATA",
+                       "Next":  "Не путать файл с фактической регистрацией в boot loader.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-OSDATA-MOUNT",
+                       "Section":  "PoC",
+                       "Title":  "OSDATA доступен через HKLM\\WCOS_OSDATA",
+                       "Status":  "FAIL",
+                       "Note":  "Проверено без загрузки/выгрузки улья.",
+                       "Next":  "Это отдельный ручной/постзагрузочный улей, не штатный HKLM\\OSDATA.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-MOUNT-TASK",
+                       "Section":  "PoC",
+                       "Title":  "Задание монтирования при старте от SYSTEM",
+                       "Status":  "PASS",
+                       "Note":  "Найдено: True; корректный boot-триггер/SYSTEM: True",
+                       "Next":  "Задание стартует после службы планировщика, не в early boot.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-POSTBOOT",
+                       "Section":  "PoC",
+                       "Title":  "Автоподключение успешно после текущего boot",
+                       "Status":  "FAIL",
+                       "Note":  "Последний запуск после boot: True; код: 267009; hive mounted: False",
+                       "Next":  "Если запуск ещё идёт, повторить аудит позже; 267009 означает Running.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-LINK32",
+                       "Section":  "PoC",
+                       "Title":  "32-битный REG_LINK → OSDATA (без NUL)",
+                       "Status":  "PASS",
+                       "Note":  "Link32: \\Registry\\Machine\\WCOS_OSDATA\\LinkTarget; query exit: 0",
+                       "Next":  "Только тестовый ключ, не штатная карта WCOS.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-LINK64",
+                       "Section":  "PoC",
+                       "Title":  "64-битный REG_LINK → OSDATA (без NUL)",
+                       "Status":  "PASS",
+                       "Note":  "Link64: \\Registry\\Machine\\WCOS_OSDATA\\LinkTarget; query exit: 0",
+                       "Next":  "Проверка строгого типа REG_LINK защищает от ложного успеха обычного ключа.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-WRITE32",
+                       "Section":  "PoC",
+                       "Title":  "Тестовая запись через x86 ранее попала в OSDATA",
+                       "Status":  "PASS",
+                       "Note":  "Сохранённое значение: WrittenThroughMainOSPath",
+                       "Next":  "Это не повторная запись и не автоматическая State Separation.",
+                       "Score":  "PoC",
+                       "Weight":  1,
+                       "Earned":  1,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-WRITE64",
+                       "Section":  "PoC",
+                       "Title":  "Тестовая запись через x64 ранее попала в OSDATA",
+                       "Status":  "PASS",
+                       "Note":  "Сохранённое значение: WrittenThrough64BitLink",
+                       "Next":  "Это не раннее перенаправление.",
+                       "Score":  "PoC",
+                       "Weight":  1,
+                       "Earned":  1,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "POC-CROSS-BOOT",
+                       "Section":  "PoC",
+                       "Title":  "Сравнение значений между двумя разными загрузками",
+                       "Status":  "PASS",
+                       "Note":  "Два последовательных аудита подтвердили сохранение значений через reboot.",
+                       "Next":  "Отсутствие PASS до первого повторного запуска — не ошибка.",
+                       "Score":  "PoC",
+                       "Weight":  2,
+                       "Earned":  2,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "APISET-HASH",
+                       "Section":  "API Set",
+                       "Title":  "Сверка apisetschema.dll с исследованным образцом",
+                       "Status":  "WARN",
+                       "Note":  "SHA256: 391A2818FDEF14F4A9B6E6CE2A7E7F01D04F943DE9EF543EC683927CFE480889; эталон исследования: AEAAEA67B6C57B4D85CC1D7B724F2EC8FE57AA3210C7AEE78B3F40E231FD70F1",
+                       "Next":  "Другая хэш-сумма может означать обновление сборки; это не автоматически повреждение.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-APISET-NT",
+                       "Section":  "API Set",
+                       "Title":  "ext-ms-win-ntos-stateseparation-l1-1-0",
+                       "Status":  "BLOCKED",
+                       "Note":  "EntryFlags=1, SEALED=True, hosts=[]",
+                       "Next":  "SEALED относится к записи, а не заголовку. Хост не равен доказанной kernel IAT binding.",
+                       "Score":  "Core",
+                       "Weight":  4,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-APISET-USER",
+                       "Section":  "API Set",
+                       "Title":  "ext-ms-win-core-stateseparationext-l1-1-0",
+                       "Status":  "BLOCKED",
+                       "Note":  "EntryFlags=1, SEALED=True, hosts=[]",
+                       "Next":  "SEALED относится к записи, а не заголовку. Хост не равен доказанной kernel IAT binding.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-APISET-CONTROL",
+                       "Section":  "API Set",
+                       "Title":  "ext-ms-win-ntos-kcminitcfg-l1-1-0",
+                       "Status":  "PASS",
+                       "Note":  "EntryFlags=1, SEALED=True, hosts=[cmimcext.sys]",
+                       "Next":  "SEALED относится к записи, а не заголовку. Хост не равен доказанной kernel IAT binding.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "APISET-HEADER",
+                       "Section":  "API Set",
+                       "Title":  "Формат и количество контрактов",
+                       "Status":  "INFO",
+                       "Note":  "Version=6, NamespaceFlags=0, Entries=984; 22000=945, исследованная 26100=974.",
+                       "Next":  "Значение NamespaceFlags=0 не отменяет SEALED у отдельных контрактов.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "EXT-FILE",
+                       "Section":  "Ядро",
+                       "Title":  "Наличие statesepext.sys в системном наборе",
+                       "Status":  "INFO",
+                       "Note":  "Exists=False, Signature=not-found. Файл без совместимой boot chain — не готовая подсистема.",
+                       "Next":  "Не копировать версию 22000 в 26100 и не пытаться загружать как обычный драйвер.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-KERNEL-BINDING",
+                       "Section":  "Ядро",
+                       "Title":  "Phase0/1/2 ядра реально привязаны к State Separation extension",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Требуется WinDbg. Исследованный 26100: DefaultAddProfileSource, STATUS_NOT_SUPPORTED; текущая система автоматически НЕ проверяется.",
+                       "Next":  "Получить живые адреса трёх IAT и исполняемые return codes; только после подготовки подписанной совместимой реализации.",
+                       "Score":  "Core",
+                       "Weight":  16,
+                       "Earned":  0,
+                       "Evidence":  "requires-WinDbg"
+                   },
+                   {
+                       "ID":  "CORE-KERNEL-POLICY",
+                       "Section":  "Ядро",
+                       "Title":  "Политика активна ПРИ доказанной kernel binding",
+                       "Status":  "BLOCKED",
+                       "Note":  "Enabled=; API Set NT host=False; без WinDbg нельзя повысить статус до PASS.",
+                       "Next":  "Не включать Policy\\Enabled=1 ради прохождения аудита.",
+                       "Score":  "Core",
+                       "Weight":  3,
+                       "Earned":  0,
+                       "Evidence":  "requires-WinDbg"
+                   },
+                   {
+                       "ID":  "CORE-XRO-SERVICE",
+                       "Section":  "MainOS",
+                       "Title":  "Зарегистрирован boot-start фильтр XRo",
+                       "Status":  "FAIL",
+                       "Note":  "Start=; Factory OS 22000 использовал Start=0.",
+                       "Next":  "Установка Start=0 без совместимого драйвера опасна.",
+                       "Score":  "Core",
+                       "Weight":  3,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-XRO-RUNTIME",
+                       "Section":  "MainOS",
+                       "Title":  "XRo фактически присутствует в fltmc",
+                       "Status":  "FAIL",
+                       "Note":  "fltmc exit=0; XRoLoaded=False",
+                       "Next":  "Наличие фильтра не доказывает защиту конкретного тома; нужна проверка instances и политика.",
+                       "Score":  "Core",
+                       "Weight":  4,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-XRO-REGISTRY",
+                       "Section":  "MainOS",
+                       "Title":  "Включён фильтр перенаправления реестра XRo",
+                       "Status":  "FAIL",
+                       "Note":  "RegistryFilterEnabled=",
+                       "Next":  "Это конфигурация, а не проверка фактического исполнения.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-MAINOS-RO",
+                       "Section":  "MainOS",
+                       "Title":  "MainOS защищён от runtime-записи",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Аудит принципиально не создаёт и не удаляет файлы в MainOS. Disk.IsReadOnly и метка тома не являются доказательствами WCOS.",
+                       "Next":  "Требуются заранее согласованный безопасный тест на снимке VM или независимая runtime-трасса; не выполнять из этого скрипта.",
+                       "Score":  "Core",
+                       "Weight":  12,
+                       "Earned":  0,
+                       "Evidence":  "requires-external-runtime-proof"
+                   },
+                   {
+                       "ID":  "CORE-OSDATA-MUTABLE",
+                       "Section":  "MainOS",
+                       "Title":  "Обычная запись состояния уходит в OSData, а не в MainOS",
+                       "Status":  "UNKNOWN",
+                       "Note":  "REG_LINK PoC относится только к двум тестовым ключам, не к штатным путям OS.",
+                       "Next":  "Подтвердить штатные редиректы на загрузочном/сервисном пути и сохранность после reboot.",
+                       "Score":  "Core",
+                       "Weight":  5,
+                       "Earned":  0,
+                       "Evidence":  "requires-external-runtime-proof"
+                   },
+                   {
+                       "ID":  "CORE-BOOT-OSDATA",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "Текущая запись BCD имеет osdatadevice",
+                       "Status":  "FAIL",
+                       "Note":  "osdatadevice present=False; только {current}, не альтернативная запись.",
+                       "Next":  "Наличие элемента BCD не доказывает его фактическое использование State Separation.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-BOOT-BSP",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "Текущая запись BCD имеет bspdevice",
+                       "Status":  "FAIL",
+                       "Note":  "bspdevice present=False",
+                       "Next":  "Зависит от реального выбранного WCOS-разделения.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-BOOT-SSBOOT",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "SSBoot + SetupExecute присутствуют согласованно",
+                       "Status":  "FAIL",
+                       "Note":  "SSBoot exe: False; SetupExecute: ",
+                       "Next":  "Успешная ранняя инициализация SSBoot всё ещё требует boot-трассы.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-BOOT-PHASE",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "Ранний mount и редиректы до потребителей состояния",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Не измеряется после загрузки; требуется boot loader/SMSS трасса.",
+                       "Next":  "Отдельно проверить OSDataRoot, OSBOOT, DEVICES, boot order и фактические backing files.",
+                       "Score":  "Core",
+                       "Weight":  4,
+                       "Earned":  0,
+                       "Evidence":  "requires-boot-trace"
+                   },
+                   {
+                       "ID":  "BOOT-WINLOAD-HASH",
+                       "Section":  "Загрузка и тома",
+                       "Title":  "Проверка версии исследованного winload.efi",
+                       "Status":  "WARN",
+                       "Note":  "SHA256: 1C1A978448B8E0FC2284C13D6E55FDE8BF9827DCA432CDC8A9BE66C2E729ADDA",
+                       "Next":  "Несовпадение с исследованным 26100.1742 обычно означает изменение версии — нужно повторить анализ.",
+                       "Score":  "Context",
+                       "Weight":  0,
+                       "Earned":  0,
+                       "Evidence":  "local"
+                   },
+                   {
+                       "ID":  "CORE-SERVICING",
+                       "Section":  "Обслуживание",
+                       "Title":  "Обновление компонентов не разрушает State Separation",
+                       "Status":  "UNKNOWN",
+                       "Note":  "DISM, обновления и Repair не запускаются в режиме аудита.",
+                       "Next":  "Нужны отдельные протоколы успешного обновления/rollback с неизменной архитектурой и persistent state.",
+                       "Score":  "Core",
+                       "Weight":  6,
+                       "Earned":  0,
+                       "Evidence":  "requires-servicing-proof"
+                   },
+                   {
+                       "ID":  "CORE-RECOVERY",
+                       "Section":  "Обслуживание",
+                       "Title":  "WinRE/BCD/образ восстанавливаются без потери state",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Проверка восстановления была бы потенциально разрушительной; здесь не выполняется.",
+                       "Next":  "Нужен воспроизводимый тест восстановления на копии VHDX или контрольной точке PoC01.",
+                       "Score":  "Core",
+                       "Weight":  6,
+                       "Earned":  0,
+                       "Evidence":  "requires-recovery-proof"
+                   },
+                   {
+                       "ID":  "CORE-UPDATE-PERSIST",
+                       "Section":  "Обслуживание",
+                       "Title":  "OSData сохраняется при обновлении и обслуживании",
+                       "Status":  "UNKNOWN",
+                       "Note":  "Перезагрузка после задания планировщика не равна servicing.",
+                       "Next":  "Документировать до/после изменения ветки и сравнить system/root state.",
+                       "Score":  "Core",
+                       "Weight":  2,
+                       "Earned":  0,
+                       "Evidence":  "requires-servicing-proof"
+                   }
+               ],
+    "Observations":  {
+                         "OSVersion":  "10.0.26100",
+                         "BootTime":  "2026-11-08T09:12:43.6437480+03:00",
+                         "Build":  "26100",
+                         "PowerShell64Bit":  true,
+                         "OS64Bit":  true,
+                         "PolicyEnabled":  null,
+                         "KeyRules":  -1,
+                         "FileRules":  -1,
+                         "RedirectLinkRules":  -1,
+                         "HiveList":  {
+                                          "SYSTEM":  "\\Device\\HarddiskVolume3\\Windows\\System32\\config\\SYSTEM\u0000",
+                                          "SOFTWARE":  "\\Device\\HarddiskVolume3\\Windows\\System32\\config\\SOFTWARE\u0000",
+                                          "SAM":  "\\Device\\HarddiskVolume3\\Windows\\System32\\config\\SAM\u0000",
+                                          "SECURITY":  "\\Device\\HarddiskVolume3\\Windows\\System32\\config\\SECURITY\u0000",
+                                          "OSDATA":  "",
+                                          "OSBOOT":  "",
+                                          "DEVICES":  ""
+                                      },
+                         "HKLM_OSDATA":  false,
+                         "HKLM_OSBOOT":  false,
+                         "HKLM_DEVICES":  false,
+                         "StagingHivesPresent":  [
+                                                     "SYSTEM",
+                                                     "SOFTWARE",
+                                                     "SAM",
+                                                     "SECURITY",
+                                                     "DEFAULT"
+                                                 ],
+                         "OSDataVolumeLabel":  "WCOS-OSData-STAGING",
+                         "SeparatePhysicalDisk":  true,
+                         "VirtualDisksCount":  0,
+                         "OSDataHiveFilePresent":  true,
+                         "OSDataHiveMounted":  false,
+                         "Task":  {
+                                      "State":  "Running",
+                                      "LastRun":  "2026-11-08T09:14:42.0000000+03:00",
+                                      "Code":  267009
+                                  },
+                         "TestValues":  {
+                                            "Origin":  "StoredOnOSData",
+                                            "RoutedWrite32":  "WrittenThroughMainOSPath",
+                                            "RoutedWrite64":  "WrittenThrough64BitLink",
+                                            "BootTest32":  "PersistedFrom32Bit",
+                                            "BootTest64":  "PersistedFrom64Bit"
+                                        },
+                         "Link32":  "\\Registry\\Machine\\WCOS_OSDATA\\LinkTarget",
+                         "Link64":  "\\Registry\\Machine\\WCOS_OSDATA\\LinkTarget",
+                         "APISetHash":  "391A2818FDEF14F4A9B6E6CE2A7E7F01D04F943DE9EF543EC683927CFE480889",
+                         "APISet":  {
+                                        "Path":  "C:\\Windows\\System32\\apisetschema.dll",
+                                        "Version":  6,
+                                        "NamespaceFlags":  0,
+                                        "Count":  984,
+                                        "Contracts":  [
+                                                          {
+                                                              "Name":  "ext-ms-win-core-stateseparationext-l1-1-0",
+                                                              "EntryFlags":  1,
+                                                              "Sealed":  true,
+                                                              "Hosts":  [
+                                                                            ""
+                                                                        ]
+                                                          },
+                                                          {
+                                                              "Name":  "ext-ms-win-ntos-kcminitcfg-l1-1-0",
+                                                              "EntryFlags":  1,
+                                                              "Sealed":  true,
+                                                              "Hosts":  [
+                                                                            "cmimcext.sys"
+                                                                        ]
+                                                          },
+                                                          {
+                                                              "Name":  "ext-ms-win-ntos-stateseparation-l1-1-0",
+                                                              "EntryFlags":  1,
+                                                              "Sealed":  true,
+                                                              "Hosts":  [
+                                                                            ""
+                                                                        ]
+                                                          }
+                                                      ]
+                                    },
+                         "XRo":  {
+                                     "Start":  null,
+                                     "RegistryFilterEnabled":  null,
+                                     "FilterListed":  false
+                                 },
+                         "BCD":  {
+                                     "ExitCode":  0,
+                                     "SelectedOsDataDevice":  false,
+                                     "SelectedBspDevice":  false
+                                 },
+                         "SessionManager":  {
+                                                "SetupExecute":  [
+                                                                     null
+                                                                 ],
+                                                "BootExecute":  [
+                                                                    "autocheck autochk *"
+                                                                ],
+                                                "SSBootFile":  false
+                                            },
+                         "WinloadHash":  "1C1A978448B8E0FC2284C13D6E55FDE8BF9827DCA432CDC8A9BE66C2E729ADDA",
+                         "APISetNTTargetPresent":  false,
+                         "APISetUserTargetPresent":  false,
+                         "ValidPoCLinks":  true,
+                         "CrossBootPersistence":  true,
+                         "MainOSSameSystemAndSoftwareVolume":  true,
+                         "CriticalGateCount":  7,
+                         "CriticalGatesPassed":  0
+                     },
+    "Delta":  [
+                  "POC-OSDATA-MOUNT: PASS -\u003e FAIL",
+                  "POC-POSTBOOT: PASS -\u003e FAIL",
+                  "APISET-HASH: PASS -\u003e WARN",
+                  "BOOT-WINLOAD-HASH: PASS -\u003e WARN",
+                  "PoC evidence: 20 -\u003e 16"
+              ],
+    "ResearchReference":  {
+                              "Reference":  "Factory OS 22000.1 (not a drop-in binary source)",
+                              "DirectKeyRules":  459,
+                              "AllKeyRuleDescendants":  465,
+                              "FileRules":  62,
+                              "KeyLinkDescendants":  81,
+                              "FactoryHasSeparateHives":  [
+                                                              "OSDATA",
+                                                              "OSBOOT",
+                                                              "DEVICES"
+                                                          ],
+                              "NT26100PhaseBindingsInPreviousResearch":  "DefaultAddProfileSource / 0xC00000BB (all three); historical WinDbg finding, NOT live tested here",
+                              "FactoryPhaseBindingsInPreviousResearch":  "statesepext.sys; historical WinDbg finding, NOT live tested here",
+                              "APISet26100KnownSHA256":  "AEAAEA67B6C57B4D85CC1D7B724F2EC8FE57AA3210C7AEE78B3F40E231FD70F1",
+                              "Winload26100KnownSHA256":  "5B47DA9E127DFD76689E0CF60D3C14149F42E93656D45843F141DC43F2B7D4A5"
+                          }
+}
