@@ -7,9 +7,11 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
-  <script src="research-data.js" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script src="research-data.js?v=2" defer></script>
+  <script src="content-defaults.js?v=2" defer></script>
+  <script src="editor.js?v=2" defer></script>
+  <script src="app.js?v=2" defer></script>
 </head>
 <body>
   <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -35,21 +37,21 @@
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="#overview" aria-label="Windows 11X — обзор">
         <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
-        <span class="brand-text"><strong>Windows <em>11X</em></strong><small>Исследовательский атлас</small></span>
+        <span class="brand-text"><strong id="brandTitle">Windows 11X</strong><small id="brandSubtitle">Исследовательский атлас</small></span>
       </a>
       <div class="sidebar-rule"></div>
       <p class="nav-label">РАЗДЕЛЫ</p>
       <nav aria-label="Основная навигация">
-        <a href="#overview" data-nav="overview"><svg><use href="#i-grid"/></svg>Обзор</a>
-        <a href="#plan" data-nav="plan"><svg><use href="#i-list"/></svg>Большой план<span class="nav-number">08</span></a>
-        <a href="#architecture" data-nav="architecture"><svg><use href="#i-layers"/></svg>Как устроено</a>
-        <a href="#timeline" data-nav="timeline"><svg><use href="#i-clock"/></svg>Хронология</a>
-        <a href="#library" data-nav="library"><svg><use href="#i-book"/></svg>Исследования</a>
-        <a href="#glossary" data-nav="glossary"><svg><use href="#i-help"/></svg>Словарь</a>
+        <a href="#overview" data-nav="overview"><svg><use href="#i-grid"/></svg><span data-nav-label="overview">Обзор</span></a>
+        <a href="#plan" data-nav="plan"><svg><use href="#i-list"/></svg><span data-nav-label="plan">Большой план</span><span class="nav-number">08</span></a>
+        <a href="#architecture" data-nav="architecture"><svg><use href="#i-layers"/></svg><span data-nav-label="architecture">Как устроено</span></a>
+        <a href="#timeline" data-nav="timeline"><svg><use href="#i-clock"/></svg><span data-nav-label="timeline">Хронология</span></a>
+        <a href="#library" data-nav="library"><svg><use href="#i-book"/></svg><span data-nav-label="library">Исследования</span></a>
+        <a href="#glossary" data-nav="glossary"><svg><use href="#i-help"/></svg><span data-nav-label="glossary">Словарь</span></a>
       </nav>
       <div class="sidebar-bottom">
-        <div class="sidebar-status"><span class="pulse-dot"></span><span><strong>Последняя точка</strong><small>12 ноября 2026 · dual V6+V7</small></span></div>
-        <p>Проектный сайт работает локально. Отметки и заметки сохраняются в этом браузере.</p>
+        <div class="sidebar-status"><span class="pulse-dot"></span><span><strong>Последняя точка</strong><small id="latestPoint">12 ноября 2026 · dual V6+V7</small></span></div>
+        <p id="accessNotice">Режим просмотра. Подключение к серверу…</p>
       </div>
     </aside>
 
@@ -59,11 +61,12 @@
         <div class="crumb"><span class="crumb-root">Windows 11X</span><span class="crumb-sep">/</span><strong id="crumbCurrent">Обзор</strong></div>
         <div class="top-actions">
           <button class="search-trigger" id="globalSearch"><svg><use href="#i-search"/></svg><span>Найти исследование</span><kbd>Ctrl K</kbd></button>
-          <span class="top-date">Срез знаний · 12.11.2026</span>
-        </div>
+          <span id="snapshotDate" class="top-date">Срез знаний · 12.11.2026</span>
+        <button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
       </header>
+      <div class="sync-bar"><span id="syncStatus" role="status">Подключение…</span><button id="retrySave" hidden>Повторить сохранение</button><button id="reloadData" hidden>Загрузить актуальные данные</button><button id="downloadBackup">Скачать полную копию</button><button id="migrateLocal" class="owner-only">Перенести старый локальный план</button><label class="owner-only backup-upload">Восстановить копию<input type="file" id="restoreBackup" accept="application/json,.json" hidden></label></div>
       <main id="view" tabindex="-1"></main>
-      <footer class="site-footer"><span>Windows 11X · рабочий атлас проекта</span><span>Факты, гипотезы и планы разделены по уровню доказательств.</span></footer>
+      <footer class="site-footer"><span id="footerTitle">Windows 11X · рабочий атлас проекта</span><span id="footerNote">Факты, гипотезы и планы разделены по уровню доказательств.</span></footer>
     </div>
   </div>
 
@@ -84,13 +87,29 @@
         <p id="taskDescription"></p>
         <div class="proof-box"><strong>Что считать результатом</strong><p id="taskProof"></p></div>
         <label class="field-label" for="taskNote">Моя заметка / ответ другого ИИ</label>
-        <textarea id="taskNote" rows="9" placeholder="Например: что проверили, в какой VM и где лежит лог. Заметка сохраняется локально."></textarea>
-        <div class="task-panel-footer"><span id="noteSaved">Заметки хранятся в этом браузере</span><button class="button button-dark" id="taskToggle">Отметить выполненным</button></div>
+        <textarea id="taskNote" rows="9" placeholder="Например: что проверили, в какой VM и где лежит лог. Заметка сохраняется на сервере после входа."></textarea>
+        <div class="task-panel-footer"><span id="noteSaved">Общие заметки проекта</span><button class="button button-dark" id="taskToggle">Отметить выполненным</button></div>
         <button class="task-delete" id="taskDelete" type="button" hidden>Удалить мой шаг</button>
       </div>
     </section>
   </div>
 
+  <div class="overlay" id="loginOverlay" hidden>
+    <button class="overlay-shade" data-close-login aria-label="Закрыть вход"></button>
+    <section class="login-panel" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <header class="reader-header"><h2 id="loginTitle">Вход владельца</h2><button class="icon-button" data-close-login aria-label="Закрыть">×</button></header>
+      <form id="loginForm" class="login-form"><p>Войдите, чтобы изменять общий план и содержимое сайта.</p><label>Логин<input id="loginUsername" name="username" autocomplete="username" value="admin" required></label><label>Пароль<input id="loginPassword" name="password" type="password" autocomplete="current-password" required></label><p id="loginError" class="form-error" role="alert"></p><button id="loginSubmit" class="button button-dark" type="submit">Войти</button></form>
+    </section>
+  </div>
+  <div class="overlay" id="editorOverlay" hidden>
+    <button class="overlay-shade" data-close-editor aria-label="Закрыть редактор"></button>
+    <section class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+      <header class="reader-header"><div><p class="eyebrow">УПРАВЛЕНИЕ СОДЕРЖИМЫМ</p><h2 id="editorTitle">Редактор сайта</h2></div><button class="icon-button" data-close-editor aria-label="Закрыть">×</button></header>
+      <div class="editor-toolbar"><select id="editorSection" aria-label="Раздел редактора"><option value="site">Оформление и навигация</option><option value="metadata">Дата и артефакт</option><option value="texts">Тексты страниц</option><option value="overviewBlocks">Карточки обзора</option><option value="myths">Частые неверные выводы</option><option value="gates">Этапы и задачи</option><option value="days">Хронология</option><option value="architecture">Архитектура</option><option value="terms">Словарь</option><option value="research">Исследования</option></select><select id="editorTextPage" aria-label="Страница текстов" hidden><option value="overview">Обзор</option><option value="plan">План</option><option value="gate">Этапы</option><option value="taskrow">Строка задачи</option><option value="common">Дополнительные тексты</option><option value="architecture">Архитектура</option><option value="timeline">Хронология</option><option value="library">Исследования</option><option value="glossary">Словарь</option></select></div>
+      <div id="editorFields" class="editor-fields"></div>
+      <div class="editor-footer"><span>Изменения увидят все посетители.</span><button type="button" class="button button-light" data-download-backup>Скачать копию</button><button type="button" class="button button-light" data-reload-atlas>Загрузить с сервера</button><button type="button" class="button button-light" data-close-editor>Отмена</button><button type="button" class="button button-dark" id="editorSave">Сохранить на сервере</button></div>
+    </section>
+  </div>
   <input type="file" id="importInput" accept="application/json,.json" hidden>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

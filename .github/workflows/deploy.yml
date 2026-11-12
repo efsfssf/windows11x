@@ -13,6 +13,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Check UI and server access
+        run: |
+          node --check app.js
+          node --check editor.js
+          node scripts/smoke-ui.js
+          php -l api/index.php
+          php -l scripts/configure-admin.php
+          python3 scripts/test-api.py
+
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -26,3 +39,10 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/.github/**
+            **/.research/**
+            **/scripts/smoke-ui.js
+            **/scripts/test-api.py
+            **/scripts/build_research.py
+            **/windows11x-private/**
+            **/.env*
+            **/README.md

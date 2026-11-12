@@ -82,3 +82,39 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:500px){.next-sprint{display:block;padding:20px}.sprint-index{margin-bottom:12px}.sprint-status{margin-top:12px}}
 .gate-map{display:flex;align-items:center;gap:8px;margin:-5px 0 22px;overflow-x:auto;padding-bottom:3px}.gate-map div{flex:1;min-width:125px;background:#fff;border:1px solid #e2e8e3;border-radius:11px;padding:12px 13px;min-height:78px}.gate-map div.active{background:#e4f4eb;border-color:#b5d9c4}.gate-map div span,.gate-map div strong,.gate-map div small{display:block}.gate-map div span{font-size:8px;font-weight:800;letter-spacing:.1em;color:#8aa198}.gate-map div strong{font-size:11px;line-height:1.2;margin-top:7px}.gate-map div small{font-size:9px;color:#7f9290;margin-top:3px}.gate-map>b{font-size:17px;font-weight:400;color:#a6bcb2;flex:none}
 .source-link{border:0;background:none;padding:0;margin-top:14px;cursor:pointer}
+/* Shared editor and account controls. */
+[hidden] { display:none !important; }
+body:not(.is-editor) .owner-only { display:none !important; }
+.sync-bar { display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:10px 32px;background:#fff;border-bottom:1px solid #e2e7e8;font-size:12px;color:#627179; }
+.sync-bar button,.backup-upload { border:0;background:none;color:#237b68;cursor:pointer;text-decoration:underline;font:inherit; }
+.sync-bar #syncStatus { margin-right:auto; }
+.login-panel { position:relative;margin:auto;width:min(440px,calc(100vw - 28px));background:#fff;border-radius:18px;box-shadow:0 24px 90px #0004;max-height:90dvh;overflow:auto; }
+#loginOverlay,#editorOverlay { display:flex;align-items:center;justify-content:center;padding:18px; }
+.login-form { display:grid;gap:18px;padding:24px; }
+.login-form label,.editor-field { display:grid;gap:7px;font-size:13px;font-weight:600;color:#34484e; }
+.login-form input,.editor-field input,.editor-field textarea,.editor-field select,.editor-toolbar select,.editor-select-row select { width:100%;padding:11px 12px;border:1px solid #cad5d6;border-radius:8px;background:#fff;font:inherit;color:#193137; }
+.editor-field textarea { resize:vertical;line-height:1.55; }
+.editor-field input[readonly] { background:#eef2f3;color:#65747a; }
+.form-error { color:#b43c3c;min-height:1em; }
+.editor-panel { position:relative;width:min(1000px,calc(100vw - 28px));max-height:94dvh;display:flex;flex-direction:column;background:#f7f9f9;border-radius:18px;box-shadow:0 24px 90px #0004;overflow:hidden; }
+.editor-toolbar { display:flex;gap:12px;padding:16px 24px;border-bottom:1px solid #dce4e4; }
+.editor-toolbar select { flex:1;min-width:0; }
+.editor-fields { overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px; }
+.editor-footer { display:flex;align-items:center;gap:12px;padding:16px 24px;border-top:1px solid #dce4e4;background:#fff; }
+.editor-footer span { margin-right:auto;font-size:12px;color:#64767b; }
+.editor-array { border:1px solid #d2dede;border-radius:10px;padding:14px;min-width:0; }
+.editor-array legend { font-weight:700;padding:0 8px; }
+.editor-item { background:#fff;border:1px solid #dce4e4;border-radius:8px;padding:14px;margin-bottom:10px; }
+.editor-item summary { cursor:pointer;font-weight:600;overflow-wrap:anywhere; }
+.editor-item[open] { display:flex;flex-direction:column;gap:14px; }
+.editor-item[open] summary { margin-bottom:14px; }
+.editor-checkbox { display:flex;align-items:center;gap:8px;font-size:13px; }
+.editor-select-row,.editor-row-actions { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+.editor-select-row select { flex:1;min-width:150px; }
+.editor-row-actions button,.editor-select-row>button:not(.button) { padding:7px 10px;border:1px solid #cad5d6;border-radius:6px;background:white;cursor:pointer; }
+.status-pill.complete { color:#247358;background:#dff1e7; }
+.task-check:disabled { cursor:default;opacity:.7; }
+@media(max-width:800px){.sync-bar{padding:10px 16px}.top-actions{flex-wrap:wrap;justify-content:flex-end;gap:6px}.top-date{display:none}.editor-toolbar,.editor-fields,.editor-footer{padding:14px}.editor-footer{flex-wrap:wrap}.editor-footer span{width:100%}.editor-panel{max-height:96dvh}.editor-toolbar{flex-wrap:wrap}.top-actions .button{font-size:12px;padding:7px 10px}}
+.gate-map { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
+.arch-flow { grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); }
+.volume-grid,.phase-grid,.correction-grid { grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); }
