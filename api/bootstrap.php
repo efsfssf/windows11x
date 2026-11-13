@@ -132,7 +132,11 @@ set_exception_handler(function(Throwable $e): void {
     if (!is_dir($privateDir) && !mkdir($privateDir,0700,true) && !is_dir($privateDir)) throw new RuntimeException('Private directory unavailable');
     $privateDir = realpath($privateDir);
     if (!$privateDir || $privateDir===$webRoot || str_starts_with($privateDir,$webRoot.DIRECTORY_SEPARATOR)) throw new RuntimeException('Private directory must be outside web root');
-    $config = is_file($privateDir.'/config.php') ? require $privateDir.'/config.php' : [];
+    $configFile=$privateDir.'/config.php';
+    // Credential rotation must not wait for OPcache's timestamp refresh interval.
+    clearstatcache(true,$configFile);
+    if (is_file($configFile) && function_exists('opcache_invalidate')) opcache_invalidate($configFile,true);
+    $config = is_file($configFile) ? require $configFile : [];
     $passwordHash = getenv('ATLAS_ADMIN_PASSWORD_HASH') ?: ($config['password_hash']??'');
     $username = getenv('ATLAS_ADMIN_USER') ?: ($config['username']??'admin');
     $configured = is_string($passwordHash) && !empty(password_get_info($passwordHash)['algo']);
