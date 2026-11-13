@@ -1,8 +1,9 @@
 /* Live context, OAuth connection management and conflict-aware refresh. */
 const aiPrompt='Используй подключение Windows11X. Перед каждым новым исследовательским выводом и советом о галочке вызывай get_project_context, сообщай revision и время чтения. Нужные первоисточники читай через get_research, включая все страницы. Если чтение не удалось, прямо скажи, что актуальность не подтверждена. Для галочки указывай точный taskId, этап, название, критерий proof и доказательство. Сохраняй результаты через add_comment или save_research с датой исследования, источником и уровнем доказательства. Изменяй отметку через set_task_status только при выполненном критерии. Перед записью читай свежую revision; после конфликта перечитай данные и пересмотри изменение. Сообщай версию успешного сохранения. Гипотезы и OFFLINE_TEST не приравнивай к RUNTIME.';
+function aiSiteUrl(path){const url=new URL(path,location.href);if(!['localhost','127.0.0.1','[::1]'].includes(url.hostname))url.protocol='https:';return url.href;}
 async function openAiPanel(){
  showModal('aiOverlay');document.getElementById('aiClose').focus();
- document.getElementById('aiMcpUrl').value=new URL('api/mcp.php',location.href).href;
+ document.getElementById('aiMcpUrl').value=aiSiteUrl('api/mcp.php');
  document.getElementById('aiPrompt').value=aiPrompt;
  document.getElementById('aiConnectionsSection').hidden=!auth.editor;
  document.getElementById('aiConnections').textContent='Загрузка…';
@@ -17,7 +18,7 @@ async function loadAiConnections(){
 document.addEventListener('click',async event=>{
  if(event.target.closest('#aiButton'))await openAiPanel();
  if(event.target.closest('[data-close-ai]')){hideModal('aiOverlay');document.getElementById('aiButton').focus();}
- if(event.target.closest('#copyAiPrompt')){await copyText(aiPrompt+'\n\nMCP: '+new URL('api/mcp.php',location.href).href+'\nБез MCP можно прочитать '+new URL('ai-context.php',location.href).href+' и полные тексты '+new URL('ai-context.php?full=1',location.href).href);toast('Инструкция для ИИ скопирована');}
+ if(event.target.closest('#copyAiPrompt')){await copyText(aiPrompt+'\n\nMCP: '+aiSiteUrl('api/mcp.php')+'\nБез MCP можно прочитать '+aiSiteUrl('ai-context.php')+' и полные тексты '+aiSiteUrl('ai-context.php?full=1'));toast('Инструкция для ИИ скопирована');}
  if(event.target.closest('#copyLiveContext')){
   try{const response=await fetch('ai-context.php',{cache:'no-store'});if(!response.ok)throw Error('Не удалось получить актуальный контекст');const text=await response.text();await copyText(text);toast('Контекст с сервера скопирован · версия '+response.headers.get('X-Atlas-Revision'));}catch(error){toast(error.message);}
  }
