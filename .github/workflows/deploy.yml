@@ -46,7 +46,11 @@ jobs:
             **/scripts/smoke-ui.js
             **/scripts/test-api.py
             **/scripts/test-mcp.py
+            **/scripts/check-live.py
             **/scripts/build_research.py
             **/windows11x-private/**
             **/.env*
             **/README.md
+
+      - name: Verify published AI endpoints
+        run: python3 scripts/check-live.py
