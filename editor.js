@@ -29,7 +29,7 @@ async function initializeAtlas(){
   const [session,data]=await Promise.all([api('session'),api('data')]);auth=session;serverRevision=data.revision;
   if(data.content)useContent(data.content);
   state=normalizePlan(data.state);serverReady=true;
-  render();setSync('Данные загружены');
+  render();setSync('Данные загружены · версия '+serverRevision);if(typeof openLinkedTask==='function')openLinkedTask();
  }catch(error){setSync('Нет связи с сервером');document.getElementById('accessNotice').textContent=error.message;render();}
 }
 function updateChrome(){
@@ -171,9 +171,9 @@ document.getElementById('restoreBackup').addEventListener('change',async event=>
 window.addEventListener('beforeunload',event=>{if(pendingSave||saving||commentBusy||commentDrafts.size||(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline)){event.preventDefault();event.returnValue='';}});
 
 document.addEventListener('keydown',event=>{
- const overlay=['loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
+ const overlay=['aiOverlay','loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
  if(!overlay)return;
- if(event.key==='Escape'&&(overlay.id==='loginOverlay'||overlay.id==='editorOverlay')){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal('loginOverlay');}
+ if(event.key==='Escape'&&['aiOverlay','loginOverlay','editorOverlay'].includes(overlay.id)){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal(overlay.id);}
  if(event.key==='Tab'){
   const fields=[...overlay.querySelectorAll('button,input,textarea,select,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);
   if(!fields.length)return;const first=fields[0],last=fields.at(-1);

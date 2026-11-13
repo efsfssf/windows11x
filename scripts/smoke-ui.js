@@ -21,16 +21,16 @@ const sandbox = {
     addEventListener() {},
     createElement() {return {click() {}, remove() {}, select() {}, value: ''};},
   },
-  location: {hash: ''},
+  location: {hash: '',href:'https://dandomi.tech/'},
   localStorage: {getItem() {return null;}, setItem() {}},
   sessionStorage: {getItem() {return null;}, setItem() {}, removeItem() {}},
-  setTimeout() {return 1;}, clearTimeout() {},
+  setTimeout() {return 1;}, clearTimeout() {}, setInterval() {return 1;},
   confirm() {return true;},
   scrollTo() {}, addEventListener() {},
   structuredClone,
   fetch() {return Promise.reject(new Error("Test offline"));},
   Blob,
-  URL: {createObjectURL(blob) {sandbox.exportedBlob = blob; return 'blob:smoke';}, revokeObjectURL() {}},
+  URL: class extends URL {static createObjectURL(blob) {sandbox.exportedBlob = blob; return 'blob:smoke';} static revokeObjectURL() {}},
   navigator: {clipboard: {writeText(text) {sandbox.copiedText = text; return Promise.resolve();}}},
 };
 sandbox.window = sandbox;
@@ -40,6 +40,7 @@ vm.runInContext(fs.readFileSync(path.join(root, 'content-defaults.js'), 'utf8'),
 vm.runInContext(fs.readFileSync(path.join(root, 'editor.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'comments.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'app.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'ai.js'), 'utf8'), sandbox);
 function check(ok, message) { if (!ok) throw new Error(message); }
 const views = {
   overview: 'Настоящая Core OS', plan: 'Большой маршрут проекта',
@@ -117,6 +118,16 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   check(vm.runInContext('renderPlan()',sandbox).includes('gate-new'),'A new stage was not rendered');
   vm.runInContext("state.custom=[{id:'custom-test',gate:'G0',title:'Editable custom task',description:'',proof:'',done:false,custom:true}];openEditor();",sandbox);
   check(vm.runInContext("editorDraft.gates[0].tasks.some(t=>t.id==='custom-test')",sandbox),'Custom task is missing from editor');
+  vm.runInContext("editorDraft=null;commentDrafts.clear();pendingSave=false;saving=false;commentBusy=false;saveBlocked=false;serverRevision=4;",sandbox);
+  const liveContent=structuredClone(sandbox.WCOS_DEFAULTS);liveContent.research=sandbox.WCOS_RESEARCH;liveContent.site.name='Обновлено ИИ';
+  sandbox.liveResponse={revision:5,content:liveContent,state:{version:1,done:{},notes:{},comments:{},custom:[]}};
+  vm.runInContext("api=async(action)=>action==='version'?{revision:5}:liveResponse",sandbox);
+  await vm.runInContext('refreshAtlasIfChanged()',sandbox);
+  check(vm.runInContext("serverRevision===5&&content.site.name==='Обновлено ИИ'",sandbox),'AI update did not refresh the open page');
+  vm.runInContext("pendingSave=true;api=async()=>({revision:6})",sandbox);
+  await vm.runInContext('refreshAtlasIfChanged()',sandbox);
+  check(vm.runInContext('saveBlocked&&pendingSave&&serverRevision===5',sandbox),'Live refresh lost an unsaved draft');
+  check(!element('reloadData').hidden,'Conflict did not offer loading current data');
   vm.runInContext("TERMS=[];ARCH.nt=[];DAYS=[];GATES=[];RESEARCH=[];renderArchitecture();renderTimeline();renderGlossary();renderPlan();renderLibrary();",sandbox);
   console.log('PASS: 6 views, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
 }).catch(error => {console.error(error); process.exitCode = 1;});

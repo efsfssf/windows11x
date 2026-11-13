@@ -22,10 +22,12 @@ jobs:
           node --check app.js
           node --check editor.js
           node --check comments.js
+          node --check ai.js
           node scripts/smoke-ui.js
-          php -l api/index.php
+          for file in api/*.php ai-context.php; do php -l "$file" || exit 1; done
           php -l scripts/configure-admin.php
           python3 scripts/test-api.py
+          python3 scripts/test-mcp.py
 
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -43,6 +45,7 @@ jobs:
             **/.research/**
             **/scripts/smoke-ui.js
             **/scripts/test-api.py
+            **/scripts/test-mcp.py
             **/scripts/build_research.py
             **/windows11x-private/**
             **/.env*

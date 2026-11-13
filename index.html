@@ -7,12 +7,14 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="alternate" type="text/plain" href="ai-context.php" title="Актуальный контекст для ИИ">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=3" defer></script>
-  <script src="comments.js?v=3" defer></script>
-  <script src="app.js?v=3" defer></script>
+  <script src="editor.js?v=4" defer></script>
+  <script src="comments.js?v=4" defer></script>
+  <script src="app.js?v=4" defer></script>
+  <script src="ai.js?v=4" defer></script>
 </head>
 <body>
   <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +65,7 @@
         <div class="top-actions">
           <button class="search-trigger" id="globalSearch"><svg><use href="#i-search"/></svg><span>Найти исследование</span><kbd>Ctrl K</kbd></button>
           <span id="snapshotDate" class="top-date">Срез знаний · 12.11.2026</span>
-        <button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
+        <button class="button button-light" id="aiButton">Для ИИ</button><button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
       </header>
       <div class="sync-bar"><span id="syncStatus" role="status">Подключение…</span><button id="retrySave" hidden>Повторить сохранение</button><button id="reloadData" hidden>Загрузить актуальные данные</button><button id="downloadBackup">Скачать полную копию</button><button id="migrateLocal" class="owner-only">Перенести старый локальный план</button><label class="owner-only backup-upload">Восстановить копию<input type="file" id="restoreBackup" accept="application/json,.json" hidden></label></div>
       <main id="view" tabindex="-1"></main>
@@ -118,6 +120,26 @@
       <div class="editor-toolbar"><select id="editorSection" aria-label="Раздел редактора"><option value="site">Оформление и навигация</option><option value="metadata">Дата и артефакт</option><option value="texts">Тексты страниц</option><option value="overviewBlocks">Карточки обзора</option><option value="myths">Частые неверные выводы</option><option value="gates">Этапы и задачи</option><option value="days">Хронология</option><option value="architecture">Архитектура</option><option value="terms">Словарь</option><option value="research">Исследования</option></select><select id="editorTextPage" aria-label="Страница текстов" hidden><option value="overview">Обзор</option><option value="plan">План</option><option value="gate">Этапы</option><option value="taskrow">Строка задачи</option><option value="common">Дополнительные тексты</option><option value="architecture">Архитектура</option><option value="timeline">Хронология</option><option value="library">Исследования</option><option value="glossary">Словарь</option></select></div>
       <div id="editorFields" class="editor-fields"></div>
       <div class="editor-footer"><span>Изменения увидят все посетители.</span><button type="button" class="button button-light" data-download-backup>Скачать копию</button><button type="button" class="button button-light" data-reload-atlas>Загрузить с сервера</button><button type="button" class="button button-light" data-close-editor>Отмена</button><button type="button" class="button button-dark" id="editorSave">Сохранить на сервере</button></div>
+    </section>
+  </div>
+  <div class="overlay" id="aiOverlay" hidden>
+    <button class="overlay-shade" data-close-ai aria-label="Закрыть"></button>
+    <section class="ai-panel" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
+      <header class="reader-header"><div><p class="eyebrow">ЖИВОЙ ИСТОЧНИК ПРОЕКТА</p><h2 id="aiTitle">Подключение ИИ</h2></div><button id="aiClose" class="icon-button" data-close-ai aria-label="Закрыть">×</button></header>
+      <div class="ai-panel-body">
+        <h3>Читать актуальные данные</h3>
+        <p>Дайте ИИ <a href="ai-context.php" target="_blank" rel="noopener">ссылку на контекст</a>. Здесь весь план, комментарии, тексты сайта и каталог исследований. <a href="ai-context.php?full=1" target="_blank" rel="noopener">Полная версия</a> включает тексты всех исследований.</p>
+        <button id="copyLiveContext" class="button button-light" type="button">Скопировать свежий контекст</button>
+        <h3>Читать и записывать через MCP</h3>
+        <p>В ChatGPT откройте «Плагины» → «+» → «Добавить пользовательский MCP-сервер». Назовите его Windows11X, вставьте адрес ниже, выберите OAuth и динамическую регистрацию (DCR), если такой выбор есть. Установите плагин и подключите его к беседе через @. В других клиентах используйте удалённый MCP с OAuth.</p>
+        <label class="editor-field">Адрес MCP<input id="aiMcpUrl" readonly></label>
+        <p>Разрешите подключение через вход владельца на этом сайте. После этого ИИ сможет добавлять задачи, комментарии, исследования и события, уточнять задачи и менять галочки с объяснением. Без разрешения доступно только чтение.</p>
+        <h3>Инструкция для разговора</h3>
+        <label class="editor-field">Скопируйте её в инструкции проекта или отправьте ИИ<textarea id="aiPrompt" rows="7" readonly></textarea></label>
+        <button id="copyAiPrompt" class="button button-dark" type="button">Скопировать инструкцию и ссылки</button>
+        <p class="ai-note">ИИ получает свежие данные при вызове инструмента. Подключение не обеспечивает постоянного наблюдения: перед выводами нужно новое чтение. Версия данных позволяет проверить актуальность; устаревшая запись будет отклонена. Галочки требуют доказательств по критерию задачи.</p>
+        <section id="aiConnectionsSection" hidden><h3>Разрешённые подключения</h3><div id="aiConnections"></div></section>
+      </div>
     </section>
   </div>
   <input type="file" id="importInput" accept="application/json,.json" hidden>
