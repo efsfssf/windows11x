@@ -1,6 +1,2 @@
-RewriteEngine On
 # Forward bearer headers on PHP/CGI hosting.
-RewriteCond %{HTTP:Authorization} ^(.+)$
-RewriteRule ^ - [E=HTTP_AUTHORIZATION:%1]
-RewriteRule ^\.well-known/oauth-authorization-server/?$ api/oauth.php?action=metadata [END]
-RewriteRule ^\.well-known/oauth-protected-resource(?:/api/mcp\.php)?/?$ api/oauth.php?action=resource [END]
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1

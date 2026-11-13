@@ -135,6 +135,10 @@ with tempfile.TemporaryDirectory(prefix='windows11x-mcp-') as tmp:
         metadata = viewer.request('/api/oauth.php?action=metadata')[1]
         check(metadata['issuer'] == origin and metadata['code_challenge_methods_supported'] == ['S256'], 'OAuth issuer/PKCE metadata')
         check(viewer.request('/api/oauth.php?action=resource')[1]['resource'] == resource, 'Wrong OAuth audience')
+        with urllib.request.urlopen(origin + '/.well-known/oauth-authorization-server', timeout=10) as response:
+            check(json.load(response)['issuer'] == origin, 'Well-known authorization metadata without rewrites')
+        with urllib.request.urlopen(origin + '/.well-known/oauth-protected-resource/api/mcp.php', timeout=10) as response:
+            check(json.load(response)['resource'] == resource, 'Well-known resource metadata without rewrites')
         status, registration = viewer.request('/api/oauth.php?action=register', {'client_name': 'Test ИИ', 'redirect_uris': ['https://client.example/callback'], 'token_endpoint_auth_method': 'none'})
         check(status == 201, 'Dynamic client registration')
         client_id = registration['client_id']

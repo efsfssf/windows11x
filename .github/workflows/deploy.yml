@@ -24,7 +24,7 @@ jobs:
           node --check comments.js
           node --check ai.js
           node scripts/smoke-ui.js
-          for file in api/*.php ai-context.php; do php -l "$file" || exit 1; done
+          for file in api/*.php ai-context.php .well-known/*/*.php .well-known/*/api/*.php; do php -l "$file" || exit 1; done
           php -l scripts/configure-admin.php
           python3 scripts/test-api.py
           python3 scripts/test-mcp.py
