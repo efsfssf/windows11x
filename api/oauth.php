@@ -76,7 +76,7 @@ if ($method==='POST') {
     header('Location: '.$p['redirect_uri'].(str_contains($p['redirect_uri'],'?')?'&':'?').http_build_query($out),true,303);exit;
 }
 $nonce=bin2hex(random_bytes(16));
-header("Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'nonce-$nonce'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+header("Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'nonce-$nonce'; connect-src 'self'; form-action 'self' https://chatgpt.com; frame-ancestors 'none'; base-uri 'none'");
 header('Referrer-Policy: no-referrer');header('X-Frame-Options: DENY');header('Content-Type: text/html; charset=utf-8');
 function h(string $s): string{return htmlspecialchars($s,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');}
 ?><!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Подключение ИИ · Windows11X</title><link rel="stylesheet" href="../styles.css?v=4"><body class="oauth-page"><main class="oauth-card"><p class="eyebrow">Windows11X · доступ ИИ</p><h1>Подключить <?=h($client['client_name'])?>?</h1><p>Адрес возврата: <code><?=h($p['redirect_uri'])?></code></p><p><?=in_array('atlas:write',$scopes,true)?'Разрешение: читать проект, добавлять исследования и комментарии, изменять задачи и отметки.':'Разрешение: только читать проект.'?> Доступ можно отозвать на сайте кнопкой «Для ИИ».</p>
