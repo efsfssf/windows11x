@@ -8,7 +8,8 @@ function element(id) {
   if (!elements.has(id)) elements.set(id, {
     id, innerHTML: '', textContent: '', value: '', hidden: false,
     style: {}, classList: {add() {}, remove() {}, toggle() {}},
-    addEventListener() {}, focus() {}, click() {}, dataset: {}, setAttribute() {},
+    addEventListener() {}, focus() {}, click() {}, dataset: {}, attributes: {},
+    setAttribute(key,value) {this.attributes[key]=value;}, getAttribute(key) {return this.attributes[key]??null;},
   });
   return elements.get(id);
 }
@@ -138,6 +139,23 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   vm.runInContext("pendingSave=true",sandbox);
   await vm.runInContext("restoreServerSnapshot('b-1794680000-1-aaaaaaaaaaaaaaaa',1)",sandbox);
   check(vm.runInContext('pendingSave&&!backupsBusy',sandbox),'Restore bypassed unsaved draft guard');
+  vm.runInContext('setMobileMenu(true)',sandbox);
+  check(!element('mobileMenuBackdrop').hidden&&element('menuButton').getAttribute('aria-expanded')==='true','Mobile menu did not open');
+  vm.runInContext('setMobileMenu(false)',sandbox);
+  check(element('mobileMenuBackdrop').hidden&&element('menuButton').getAttribute('aria-expanded')==='false','Mobile menu did not close');
+  check(vm.runInContext("researchFolderFor({path:'library/ai/nested/file.md'})==='library/ai/nested'&&researchFolderFor({path:'new.md'})==='library'",sandbox),'Research folder defaults');
+  sandbox.folderFiles=[{id:'server-new',path:'library/ai/new.md',content:'# New',format:'md',title:'New',date:'2026-11-14'},{id:'server-other',path:first.path,content:'Updated from server',format:first.format,title:'File title',date:'2026-11-14'}];
+  vm.runInContext("saveBlocked=false;pendingSave=false;editorSection='research';openEditor();researchFolderDraft='library/ai';api=async(action)=>{if(action!=='scan-research&folder=library%2Fai')throw new Error('Wrong folder request');return {files:folderFiles,count:2,folder:'library/ai',warnings:[]}}",sandbox);
+  const originalTitle=vm.runInContext('editorDraft.research[0].title',sandbox);
+  await vm.runInContext('loadResearchFolder()',sandbox);
+  check(vm.runInContext('editorDraft.research.length===87&&content.research.length===86',sandbox),'Folder loading did not remain a draft');
+  check(vm.runInContext('editorDraft.research[0].title',sandbox)===originalTitle&&vm.runInContext("editorDraft.research[0].content==='Updated from server'",sandbox),'Folder loading lost owner metadata or stale text');
+  await vm.runInContext('loadResearchFolder()',sandbox);
+  check(vm.runInContext('editorDraft.research.length===87',sandbox),'Folder reloading duplicated documents');
+  const folderDraft=vm.runInContext('JSON.stringify(editorDraft)',sandbox);
+  vm.runInContext("api=async()=>{throw new Error('Folder unavailable')}",sandbox);
+  await vm.runInContext('loadResearchFolder()',sandbox);
+  check(vm.runInContext('JSON.stringify(editorDraft)',sandbox)===folderDraft&&element('editorResearchStatus').textContent==='Folder unavailable','Failed folder request lost the draft');
   vm.runInContext("TERMS=[];ARCH.nt=[];DAYS=[];GATES=[];RESEARCH=[];renderArchitecture();renderTimeline();renderGlossary();renderPlan();renderLibrary();",sandbox);
   console.log('PASS: 6 views, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
 }).catch(error => {console.error(error); process.exitCode = 1;});

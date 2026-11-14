@@ -113,6 +113,8 @@ def check_management(owner, viewer, token, private):
         check(not viewer.tool('edit_site', {'revision': revision, 'changesJson': json.dumps(changes), 'reason': 'Negative test'}, token)[0], 'Invalid patch accepted')
         check(viewer.api('version')[1]['revision'] == revision, 'Failed patch partially committed')
     check(viewer.api('data')[1]['content']['site']['name'] == 'Управление ИИ 🧪', 'Atomic patch rolled back incorrectly')
+    from research_import_checks import check_research_import
+    check_research_import(owner, viewer, token, private, write, patch)
     check(not viewer.tool('restore_backup', {'revision': revision - 1, 'backupId': baseline_id, 'reason': 'Stale restore'}, token)[0], 'Stale full restore accepted')
     check(owner.api('restore-backup', {'revision': revision, 'backupId': baseline_id})[0] == 200, 'Owner full restore')
     revision += 1

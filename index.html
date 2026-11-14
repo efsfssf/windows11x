@@ -7,13 +7,13 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
   <link rel="alternate" type="text/plain" href="ai-context.php" title="Актуальный контекст для ИИ">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=5" defer></script>
+  <script src="editor.js?v=6" defer></script>
   <script src="comments.js?v=4" defer></script>
-  <script src="app.js?v=4" defer></script>
+  <script src="app.js?v=6" defer></script>
   <script src="ai.js?v=5" defer></script>
   <script src="backups.js?v=5" defer></script>
 </head>
@@ -38,6 +38,7 @@
   </svg>
 
   <div class="app-shell">
+    <button id="mobileMenuBackdrop" class="mobile-menu-backdrop" type="button" aria-label="Закрыть меню" hidden></button>
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="#overview" aria-label="Windows 11X — обзор">
         <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
@@ -61,7 +62,7 @@
 
     <div class="workspace">
       <header class="topbar">
-        <button class="mobile-menu icon-button" id="menuButton" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+        <button class="mobile-menu icon-button" id="menuButton" aria-label="Открыть меню" aria-controls="sidebar" aria-expanded="false"><span></span><span></span><span></span></button>
         <div class="crumb"><span class="crumb-root">Windows 11X</span><span class="crumb-sep">/</span><strong id="crumbCurrent">Обзор</strong></div>
         <div class="top-actions">
           <button class="search-trigger" id="globalSearch"><svg><use href="#i-search"/></svg><span>Найти исследование</span><kbd>Ctrl K</kbd></button>
@@ -119,6 +120,7 @@
     <section class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
       <header class="reader-header"><div><p class="eyebrow">УПРАВЛЕНИЕ СОДЕРЖИМЫМ</p><h2 id="editorTitle">Редактор сайта</h2></div><button class="icon-button" data-close-editor aria-label="Закрыть">×</button></header>
       <div class="editor-toolbar"><select id="editorSection" aria-label="Раздел редактора"><option value="site">Оформление и навигация</option><option value="metadata">Дата и артефакт</option><option value="texts">Тексты страниц</option><option value="overviewBlocks">Карточки обзора</option><option value="myths">Частые неверные выводы</option><option value="gates">Этапы и задачи</option><option value="days">Хронология</option><option value="architecture">Архитектура</option><option value="terms">Словарь</option><option value="research">Исследования</option></select><select id="editorTextPage" aria-label="Страница текстов" hidden><option value="overview">Обзор</option><option value="plan">План</option><option value="gate">Этапы</option><option value="taskrow">Строка задачи</option><option value="common">Дополнительные тексты</option><option value="architecture">Архитектура</option><option value="timeline">Хронология</option><option value="library">Исследования</option><option value="glossary">Словарь</option></select></div>
+      <div id="editorResearchSource" class="research-source" hidden><label class="editor-field">Папка исследований на сервере<input id="editorResearchFolder" placeholder="library/ai" autocomplete="off" spellcheck="false"></label><small>«Загрузить с сервера» прочитает все .md, .markdown, .json, .csv, .txt, .ps1 и .py в этой папке и её подпапках. Папка определяется по пути выбранного исследования; её можно изменить. Новым файлам без даты в имени назначается дата изменения файла — проверьте её.</small><p id="editorResearchStatus" role="status"></p></div>
       <div id="editorFields" class="editor-fields"></div>
       <div class="editor-footer"><span>Изменения увидят все посетители.</span><button type="button" class="button button-light" data-download-backup>Скачать копию</button><button type="button" class="button button-light" data-reload-atlas>Загрузить с сервера</button><button type="button" class="button button-light" data-close-editor>Отмена</button><button type="button" class="button button-dark" id="editorSave">Сохранить на сервере</button></div>
     </section>
