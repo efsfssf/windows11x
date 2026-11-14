@@ -114,6 +114,17 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   check(element('commentForm').hidden&&!element('commentList').innerHTML.includes('data-edit-comment'),'Guest can edit comments');
   await vm.runInContext("submitTaskComment({preventDefault(){}})",sandbox);
   check(vm.runInContext("taskComments('g2-dual').length===1",sandbox),'Guest comment submission accepted');
+  vm.runInContext("auth.editor=false;updateChrome()",sandbox);
+  check(element('aiButton').hidden,'Guest sees AI connection button');
+  element('aiOverlay').hidden=true;
+  await vm.runInContext('openAiPanel()',sandbox);
+  check(element('aiOverlay').hidden,'Guest can open AI connection panel');
+  vm.runInContext("auth.editor=true;updateChrome()",sandbox);
+  check(!element('aiButton').hidden,'Owner cannot see AI connection button');
+  await vm.runInContext('openAiPanel()',sandbox);
+  check(!element('aiOverlay').hidden,'Owner cannot open AI connection panel');
+  vm.runInContext("auth.editor=false;updateChrome()",sandbox);
+  check(element('aiOverlay').hidden&&element('aiButton').hidden,'Logout left AI connection panel open');
   vm.runInContext("auth.editor=true",sandbox);
   vm.runInContext("content.texts['overview.1']='<img src=x onerror=alert(1)>';content.gates.push({id:'new',title:'New',subtitle:'',status:'wait',statusText:'',context:'',tasks:[]});",sandbox);
   check(vm.runInContext('renderOverview()',sandbox).includes('&lt;img'),'Editable prose allows raw HTML');

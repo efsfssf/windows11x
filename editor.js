@@ -46,6 +46,8 @@ function updateChrome(){
  document.getElementById('loginButton').hidden=auth.editor;document.getElementById('logoutButton').hidden=!auth.editor;document.getElementById('editButton').hidden=!auth.editor;
  document.getElementById('accessNotice').textContent=auth.editor?'Вы вошли как владелец. Изменения доступны всем после сохранения.':serverReady?'Режим просмотра. Изменять данные может только владелец.':'Режим просмотра. Подключение к серверу…';
  document.getElementById('backupsButton').hidden=!auth.editor;
+ document.getElementById('aiButton').hidden=!auth.editor;
+ if(!auth.editor&&!document.getElementById('aiOverlay').hidden)hideModal('aiOverlay');
  document.body.classList.toggle('is-editor',auth.editor);
 }
 function setSync(text){document.getElementById('syncStatus').textContent=text;document.getElementById('noteSaved').textContent=text;}

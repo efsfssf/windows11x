@@ -11,10 +11,10 @@
   <link rel="alternate" type="text/plain" href="ai-context.php" title="Актуальный контекст для ИИ">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=6" defer></script>
+  <script src="editor.js?v=7" defer></script>
   <script src="comments.js?v=4" defer></script>
   <script src="app.js?v=6" defer></script>
-  <script src="ai.js?v=5" defer></script>
+  <script src="ai.js?v=7" defer></script>
   <script src="backups.js?v=5" defer></script>
 </head>
 <body>
@@ -67,7 +67,7 @@
         <div class="top-actions">
           <button class="search-trigger" id="globalSearch"><svg><use href="#i-search"/></svg><span>Найти исследование</span><kbd>Ctrl K</kbd></button>
           <span id="snapshotDate" class="top-date">Срез знаний · 12.11.2026</span>
-        <button class="button button-light" id="aiButton">Для ИИ</button><button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
+        <button class="button button-light" id="aiButton" hidden>Для ИИ</button><button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
       </header>
       <div class="sync-bar"><span id="syncStatus" role="status">Подключение…</span><button id="retrySave" hidden>Повторить сохранение</button><button id="reloadData" hidden>Загрузить актуальные данные</button><button id="backupsButton" hidden>Резервные копии · 7 дней</button><button id="downloadBackup">Скачать полную копию</button><button id="migrateLocal" class="owner-only">Перенести старый локальный план</button><label class="owner-only backup-upload">Восстановить копию<input type="file" id="restoreBackup" accept="application/json,.json" hidden></label></div>
       <main id="view" tabindex="-1"></main>
