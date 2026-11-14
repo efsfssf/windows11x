@@ -9,11 +9,19 @@ try {
     if ($method==='GET' && $action==='version') { $data=atlasData();reply(200,['revision'=>$data['revision'],'updatedAt'=>$data['updatedAt']??null]); }
     $editor=atlasSession();
     if ($method==='GET' && $action==='session') reply(200,['editor'=>$editor,'configured'=>$configured,'csrf'=>$_SESSION['csrf']]);
+    if ($method==='GET' && in_array($action,['backups','backup','backup-info'],true)) {
+        if(!$editor) fail(401,'Нужен вход владельца');
+        if($action==='backups') reply(200,listAtlasBackups(max(0,(int)($_GET['offset']??0)),50));
+        if(!is_string($_GET['id']??null)) fail(422,'Нужен ID копии');
+        $backup=readAtlasBackup($_GET['id']);
+        if($action==='backup-info') reply(200,['metadata'=>$backup['metadata'],'gates'=>count($backup['snapshot']['content']['gates']),'tasks'=>count(allAtlasTasks($backup['snapshot'])),'research'=>count($backup['snapshot']['content']['research']),'comments'=>array_sum(array_map(fn($t)=>count($t['comments']),allAtlasTasks($backup['snapshot'])))]);
+        reply(200,$backup);
+    }
     if ($method!=='POST') fail(405,'Метод не поддерживается');
     if (!hash_equals($_SESSION['csrf'],(string)($_SERVER['HTTP_X_CSRF_TOKEN']??''))) fail(403,'Обновите страницу и повторите действие');
     if (in_array($action,['ai-connections','ai-revoke'],true)) { require __DIR__.'/oauth-lib.php'; manageConnections($action,$editor); }
-    if (!in_array($action,['login','logout','save'],true)) fail(404,'Действие не найдено');
-    if ($action==='save' && !$editor) fail(401,'Для изменения нужен вход владельца');
+    if (!in_array($action,['login','logout','save','restore-backup'],true)) fail(404,'Действие не найдено');
+    if (in_array($action,['save','restore-backup'],true) && !$editor) fail(401,'Для изменения нужен вход владельца');
     if ((int)($_SERVER['CONTENT_LENGTH']??0)>12582912) fail(413,'Данные больше 12 МБ');
     $raw=file_get_contents('php://input',false,null,0,12582913);
     if ($raw===false || strlen($raw)>12582912) fail(413,'Данные больше 12 МБ');
@@ -35,6 +43,11 @@ try {
         reply(200,['editor'=>true,'csrf'=>$_SESSION['csrf']]);
     }
     if ($action==='logout') { $_SESSION=[]; session_regenerate_id(true); $_SESSION['csrf']=bin2hex(random_bytes(32)); reply(200,['editor'=>false,'csrf'=>$_SESSION['csrf']]); }
+    if($action==='restore-backup') {
+        if(!is_string($input['backupId']??null)) fail(422,'Нужен ID копии');
+        $result=restoreAtlasBackup($input['revision']??null,$input['backupId'],['actor'=>'owner','reason'=>'Восстановление из панели резервных копий']);
+        reply(200,['revision'=>$result['revision'],'updatedAt'=>$result['updatedAt'],'backupId'=>$result['backupId'],'backupExpiresAt'=>$result['backupExpiresAt']]);
+    }
     $result=atlasMutate($input['revision']??null, fn($previous)=>['content'=>$input['content']??null,'state'=>$input['state']??null], ['actor'=>'owner','action'=>'site_save']);
-    reply(200,['revision'=>$result['revision'],'updatedAt'=>$result['updatedAt']]);
+    reply(200,['revision'=>$result['revision'],'updatedAt'=>$result['updatedAt'],'backupId'=>$result['backupId'],'backupExpiresAt'=>$result['backupExpiresAt']]);
 } catch (AtlasError $e) { reply($e->status,['error'=>$e->getMessage()]); } catch (Throwable $e) { error_log('Windows11X API: '.$e->getMessage()); fail(503,'Серверное сохранение недоступно. Проверьте настройку PHP и закрытой папки данных'); }

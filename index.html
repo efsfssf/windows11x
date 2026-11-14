@@ -7,14 +7,15 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
   <link rel="alternate" type="text/plain" href="ai-context.php" title="Актуальный контекст для ИИ">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=4" defer></script>
+  <script src="editor.js?v=5" defer></script>
   <script src="comments.js?v=4" defer></script>
   <script src="app.js?v=4" defer></script>
-  <script src="ai.js?v=4" defer></script>
+  <script src="ai.js?v=5" defer></script>
+  <script src="backups.js?v=5" defer></script>
 </head>
 <body>
   <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +68,7 @@
           <span id="snapshotDate" class="top-date">Срез знаний · 12.11.2026</span>
         <button class="button button-light" id="aiButton">Для ИИ</button><button class="button button-light" id="loginButton">Войти</button><button class="button button-dark" id="editButton" hidden>Редактировать</button><button class="button button-light" id="logoutButton" hidden>Выйти</button></div>
       </header>
-      <div class="sync-bar"><span id="syncStatus" role="status">Подключение…</span><button id="retrySave" hidden>Повторить сохранение</button><button id="reloadData" hidden>Загрузить актуальные данные</button><button id="downloadBackup">Скачать полную копию</button><button id="migrateLocal" class="owner-only">Перенести старый локальный план</button><label class="owner-only backup-upload">Восстановить копию<input type="file" id="restoreBackup" accept="application/json,.json" hidden></label></div>
+      <div class="sync-bar"><span id="syncStatus" role="status">Подключение…</span><button id="retrySave" hidden>Повторить сохранение</button><button id="reloadData" hidden>Загрузить актуальные данные</button><button id="backupsButton" hidden>Резервные копии · 7 дней</button><button id="downloadBackup">Скачать полную копию</button><button id="migrateLocal" class="owner-only">Перенести старый локальный план</button><label class="owner-only backup-upload">Восстановить копию<input type="file" id="restoreBackup" accept="application/json,.json" hidden></label></div>
       <main id="view" tabindex="-1"></main>
       <footer class="site-footer"><span id="footerTitle">Windows 11X · рабочий атлас проекта</span><span id="footerNote">Факты, гипотезы и планы разделены по уровню доказательств.</span></footer>
     </div>
@@ -134,13 +135,20 @@
         <p class="ai-note">Для подключения требуется HTTPS с действительным доверенным SSL-сертификатом. При ошибке сертификата выпустите и назначьте сертификат для домена в панели хостинга, например Let’s Encrypt.</p>
         <p>В ChatGPT откройте «Плагины» → «+» → «Добавить пользовательский MCP-сервер». Назовите его Windows11X, вставьте адрес ниже, выберите OAuth и динамическую регистрацию (DCR), если такой выбор есть. Установите плагин и подключите его к беседе через @. В других клиентах используйте удалённый MCP с OAuth.</p>
         <label class="editor-field">Адрес MCP<input id="aiMcpUrl" readonly></label>
-        <p>Разрешите подключение через вход владельца на этом сайте. После этого ИИ сможет добавлять задачи, комментарии, исследования и события, уточнять задачи и менять галочки с объяснением. Без разрешения доступно только чтение.</p>
+        <p>Разрешите подключение через вход владельца на этом сайте. После этого ИИ сможет добавлять задачи, комментарии, исследования и события, редактировать и удалять комментарии, задачи, этапы и исследования, менять любые разделы сайта, ставить галочки и восстанавливать данные из копий за 7 дней. Без разрешения доступно только чтение.</p>
         <h3>Инструкция для разговора</h3>
         <label class="editor-field">Скопируйте её в инструкции проекта или отправьте ИИ<textarea id="aiPrompt" rows="7" readonly></textarea></label>
         <button id="copyAiPrompt" class="button button-dark" type="button">Скопировать инструкцию и ссылки</button>
         <p class="ai-note">ИИ получает свежие данные при вызове инструмента. Подключение не обеспечивает постоянного наблюдения: перед выводами нужно новое чтение. Версия данных позволяет проверить актуальность; устаревшая запись будет отклонена. Галочки требуют доказательств по критерию задачи.</p>
         <section id="aiConnectionsSection" hidden><h3>Разрешённые подключения</h3><div id="aiConnections"></div></section>
       </div>
+    </section>
+  </div>
+  <div class="overlay" id="backupsOverlay" hidden>
+    <button class="overlay-shade" data-close-backups aria-label="Закрыть резервные копии"></button>
+    <section class="ai-panel" role="dialog" aria-modal="true" aria-labelledby="backupsTitle">
+      <header class="reader-header"><div><p class="eyebrow">ВОССТАНОВЛЕНИЕ ДАННЫХ</p><h2 id="backupsTitle">Резервные копии · 7 дней</h2></div><button id="backupsClose" class="icon-button" data-close-backups aria-label="Закрыть">×</button></header>
+      <div class="ai-panel-body"><p>Перед каждым изменением ИИ или владельца сохраняется полная копия содержимого и плана на 7 дней. Копии доступны только владельцу и авторизованному ИИ. Восстановление всего сайта также создаёт копию текущего состояния.</p><p>Копии хранятся на этом VPS. Они защищают от ошибочных действий, но не от потери самого сервера. Нужную копию можно скачать отдельно.</p><button class="button button-light" id="refreshBackups">Обновить список</button><p id="backupsStatus" role="status"></p><p id="backupPreview" role="status"></p><div id="backupsList"></div><button class="button button-light" id="moreBackups" hidden>Ещё копии</button></div>
     </section>
   </div>
   <input type="file" id="importInput" accept="application/json,.json" hidden>

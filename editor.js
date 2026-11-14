@@ -44,6 +44,7 @@ function updateChrome(){
  const nav=site.nav||{};document.querySelectorAll('[data-nav-label]').forEach(el=>{if(nav[el.dataset.navLabel])el.textContent=nav[el.dataset.navLabel];});
  document.getElementById('loginButton').hidden=auth.editor;document.getElementById('logoutButton').hidden=!auth.editor;document.getElementById('editButton').hidden=!auth.editor;
  document.getElementById('accessNotice').textContent=auth.editor?'Вы вошли как владелец. Изменения доступны всем после сохранения.':serverReady?'Режим просмотра. Изменять данные может только владелец.':'Режим просмотра. Подключение к серверу…';
+ document.getElementById('backupsButton').hidden=!auth.editor;
  document.body.classList.toggle('is-editor',auth.editor);
 }
 function setSync(text){document.getElementById('syncStatus').textContent=text;document.getElementById('noteSaved').textContent=text;}
@@ -171,9 +172,10 @@ document.getElementById('restoreBackup').addEventListener('change',async event=>
 window.addEventListener('beforeunload',event=>{if(pendingSave||saving||commentBusy||commentDrafts.size||(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline)){event.preventDefault();event.returnValue='';}});
 
 document.addEventListener('keydown',event=>{
- const overlay=['aiOverlay','loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
+ const overlay=['backupsOverlay','aiOverlay','loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
  if(!overlay)return;
- if(event.key==='Escape'&&['aiOverlay','loginOverlay','editorOverlay'].includes(overlay.id)){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal(overlay.id);}
+ if(overlay.id==='backupsOverlay'&&typeof backupsBusy!=='undefined'&&backupsBusy&&event.key==='Escape')return;
+ if(event.key==='Escape'&&['backupsOverlay','aiOverlay','loginOverlay','editorOverlay'].includes(overlay.id)){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal(overlay.id);}
  if(event.key==='Tab'){
   const fields=[...overlay.querySelectorAll('button,input,textarea,select,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);
   if(!fields.length)return;const first=fields[0],last=fields.at(-1);

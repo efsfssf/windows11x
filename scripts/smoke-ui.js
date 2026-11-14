@@ -41,6 +41,7 @@ vm.runInContext(fs.readFileSync(path.join(root, 'editor.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'comments.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'app.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'ai.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'backups.js'), 'utf8'), sandbox);
 function check(ok, message) { if (!ok) throw new Error(message); }
 const views = {
   overview: 'Настоящая Core OS', plan: 'Большой маршрут проекта',
@@ -128,6 +129,15 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   await vm.runInContext('refreshAtlasIfChanged()',sandbox);
   check(vm.runInContext('saveBlocked&&pendingSave&&serverRevision===5',sandbox),'Live refresh lost an unsaved draft');
   check(!element('reloadData').hidden,'Conflict did not offer loading current data');
+  sandbox.testBackupRows=[{id:'b-1794680000-1-aaaaaaaaaaaaaaaa',revision:1,createdAt:'2026-11-14T12:00:00Z',expiresAt:'2026-11-21T12:00:00Z',beforeAction:{action:'delete_comment',actor:'<script>unsafe</script>',reason:'<img src=x>'}}];
+  const backupHtml=vm.runInContext('renderBackupRows(testBackupRows)',sandbox);
+  check(backupHtml.includes('&lt;script&gt;')&&!backupHtml.includes('<script>'),'Backup history allows HTML injection');
+  vm.runInContext("pendingSave=false;saving=false;saveBlocked=false;api=async()=>({backups:testBackupRows,total:1,nextOffset:null});",sandbox);
+  await vm.runInContext('loadServerBackups()',sandbox);
+  check(element('backupsList').innerHTML.includes('Восстановить весь сайт')&&element('moreBackups').hidden,'Backup list controls missing');
+  vm.runInContext("pendingSave=true",sandbox);
+  await vm.runInContext("restoreServerSnapshot('b-1794680000-1-aaaaaaaaaaaaaaaa',1)",sandbox);
+  check(vm.runInContext('pendingSave&&!backupsBusy',sandbox),'Restore bypassed unsaved draft guard');
   vm.runInContext("TERMS=[];ARCH.nt=[];DAYS=[];GATES=[];RESEARCH=[];renderArchitecture();renderTimeline();renderGlossary();renderPlan();renderLibrary();",sandbox);
   console.log('PASS: 6 views, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
 }).catch(error => {console.error(error); process.exitCode = 1;});
