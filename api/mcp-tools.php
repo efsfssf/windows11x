@@ -1,11 +1,15 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__.'/site-management.php';
 function mcpTools(): array {
     $str=fn($description,$limit=20000)=>['type'=>'string','description'=>$description,'minLength'=>1,'maxLength'=>$limit];
     $id=$str('Точный ID из свежих данных',100);
     $rev=['type'=>'integer','minimum'=>0,'description'=>'revision из последнего успешного чтения'];
     $date=['type'=>'string','pattern'=>'^\d{4}-\d{2}-\d{2}$','description'=>'Дата исследования YYYY-MM-DD; не подменять датой загрузки'];
     $provenance=['researchDate'=>$date,'source'=>$str('Источник: ID документа, лог, SHA, команда или ссылка',2000),'evidenceLevel'=>['type'=>'string','enum'=>['confirmed','static_observation','offline_test','runtime','hypothesis','not_tested','failed']]];
+    $reason=$str('Причина изменения или удаления',2000);
+    $section=['type'=>'string','enum'=>['site','texts','gates','days','architecture','terms','research','overviewBlocks','myths','metadata','state']];
+    $page=['offset'=>['type'=>'integer','minimum'=>0],'limit'=>['type'=>'integer','minimum'=>100,'maximum'=>30000]];
     $defs=[
         ['get_project_context','Прочитать актуальный проект','Вызывать перед каждым новым исследовательским выводом, советом о галочке и записью. Возвращает свежую revision, весь план, критерии и комментарии, содержимое страниц и каталог исследований. Полные документы читай get_research; не заявляй об актуальности при ошибке.',[],[],false],
         ['get_task','Прочитать задачу и критерий галочки','Точная задача с состоянием, критерием proof, этапом и всеми датированными комментариями. Используй ID, а не приблизительное название.',['taskId'=>$id],['taskId'],false],
@@ -19,8 +23,24 @@ function mcpTools(): array {
         ['save_research','Сохранить исследование','Создать или обновить исследование по стабильному ID. Для обновления сначала прочти существующий текст целиком. Сохраняй ограничения и отрицательные результаты. Не добавляй секреты: чтение сайта публичное.',['revision'=>$rev,'id'=>$id,'title'=>$str('Название',2000),'summary'=>$str('Краткое описание'),'topic'=>$str('Тема',2000),'content'=>$str('Полный текст исследования',2000000),'format'=>['type'=>'string','enum'=>['md','txt','json','csv','ps1','py']],...$provenance],['revision','id','title','summary','topic','content','format',...array_keys($provenance)],true],
         ['save_timeline_entry','Добавить событие хронологии','Создаёт событие на дату исследования или дописывает результат к существующему событию этого дня без потери текста.',['revision'=>$rev,'title'=>$str('Заголовок',2000),'text'=>$str('Событие',15000),...$provenance],['revision','title','text',...array_keys($provenance)],true],
     ];
+    $defs=[...$defs,
+        ['get_site_section','Прочитать исходные данные раздела','Исходный JSON любого раздела сайта. Для правок edit_site сначала прочитайте нужный раздел и все страницы. В state находятся отметки, комментарии и свои задачи.',['section'=>$section,...$page],['section'],false],
+        ['edit_site','Изменить любые данные сайта','Атомарный пакет JSON Patch над /content и /state: add, replace, remove, move, test. Может изменять и удалять любые тексты, оформление, навигацию, этапы, задачи, архитектуру, хронологию, словарь и исследования. Перед записью прочитай get_site_section и актуальную revision. changesJson — JSON-строка массива операций; индекс списка начинается с 0, /- добавляет в конец, ~1 экранирует /, ~0 экранирует ~. Пример: [{"op":"replace","path":"/content/site/name","value":"Новое имя"}]. Итоговая структура должна остаться валидной. Автоматическая полная копия на 7 дней обязательна. Не имеет доступа к паролям, токенам, резервным копиям или серверным командам.',['revision'=>$rev,'changesJson'=>$str('JSON-массив до 100 операций над content/state',2000000),'reason'=>$reason],['revision','changesJson','reason'],true],
+        ['update_comment','Редактировать комментарий','Изменяет конкретный комментарий по commentId, сохраняя его ID и время создания. Перед правкой прочитай get_task. Старое содержимое резервируется на 7 дней.',['revision'=>$rev,'taskId'=>$id,'commentId'=>$str('Точный ID комментария из get_task',200),'text'=>$str('Новый текст',95000),...$provenance],['revision','taskId','commentId','text',...array_keys($provenance)],true],
+        ['delete_comment','Удалить комментарий','Удаляет только указанный commentId из указанной задачи. Не удаляй другие комментарии или задачу. Полная копия на 7 дней создаётся до удаления.',['revision'=>$rev,'taskId'=>$id,'commentId'=>$str('Точный ID комментария',200),'reason'=>$reason],['revision','taskId','commentId','reason'],true],
+        ['delete_task','Удалить задачу','Удаляет указанную задачу (включая исходные задачи), её отметку и комментарии. Не затрагивает другие задачи. Копия на 7 дней обязательна. Для простого снятия галочки используй set_task_status(done=false).',['revision'=>$rev,'taskId'=>$id,'reason'=>$reason],['revision','taskId','reason'],true],
+        ['save_gate','Добавить или изменить этап','Создаёт этап или меняет его поля по ID; существующие задачи сохраняются. Перестановка этапов доступна через edit_site.',['revision'=>$rev,'id'=>$id,'title'=>$str('Название'),'subtitle'=>['type'=>'string','maxLength'=>20000],'status'=>['type'=>'string','enum'=>['partial','wait','future','complete']],'statusText'=>['type'=>'string','maxLength'=>20000],'context'=>['type'=>'string','maxLength'=>20000],'focus'=>['type'=>'boolean']],['revision','id','title','subtitle','status','statusText','context','focus'],true],
+        ['delete_gate','Удалить этап и его задачи','Каскадно удаляет этап со всеми его задачами, отметками и комментариями. Используй только при запросе удалить весь этап. Всё резервируется на 7 дней.',['revision'=>$rev,'gateId'=>$id,'reason'=>$reason],['revision','gateId','reason'],true],
+        ['move_task','Переместить задачу','Переносит задачу в другой этап или меняет её порядок. ID, отметка и комментарии сохраняются. Позиция с нуля, по умолчанию конец этапа.',['revision'=>$rev,'taskId'=>$id,'gateId'=>$id,'position'=>['type'=>'integer','minimum'=>0]],['revision','taskId','gateId'],true],
+        ['delete_research','Удалить исследование','Удаляет документ по точному ID; копия полного текста сохраняется на 7 дней.',['revision'=>$rev,'id'=>$id,'reason'=>$reason],['revision','id','reason'],true],
+        ['delete_timeline_entry','Удалить событие дня','Удаляет событие хронологии по дате исследования; перед удалением резервирует всё содержимое.',['revision'=>$rev,'researchDate'=>$date,'reason'=>$reason],['revision','researchDate','reason'],true],
+        ['list_backups','Посмотреть резервные копии за 7 дней','Закрытый список автоматических копий с причиной, автором, revision и сроком хранения. Нужен OAuth владельца. Копии нельзя удалить или отключить через MCP.',['offset'=>['type'=>'integer','minimum'=>0],'limit'=>['type'=>'integer','minimum'=>1,'maximum'=>200]],[],false],
+        ['get_backup','Прочитать резервную копию','Закрытый просмотр копии до ошибочного изменения. summary показывает состав, остальные section возвращают исходный JSON по страницам. Для восстановления отдельных записей прочти копию и перенеси нужные данные через edit_site с текущей revision. Полный откат всего сайта выполняет restore_backup.',['backupId'=>$str('ID из list_backups',120),'section'=>['type'=>'string','enum'=>['summary',...$section['enum']]],...$page],['backupId'],false],
+        ['restore_backup','Восстановить весь сайт из копии','Возвращает ВСЁ содержимое и план к указанной копии: более поздние изменения тоже откатываются. Сначала прочти get_backup и уточни соответствие запрошенному восстановлению. Для одной записи используй edit_site. Текущее состояние предварительно резервируется на 7 дней; revision всегда увеличивается, история операций остаётся текущей.',['revision'=>$rev,'backupId'=>$str('ID копии',120),'reason'=>$reason],['revision','backupId','reason'],true],
+    ];
     return array_map(function($d){[$name,$title,$description,$properties,$required,$write]=$d;
-        $security=$write?[['type'=>'oauth2','scopes'=>['atlas:write']]]:[['type'=>'noauth']];
+        $protected=in_array($name,['list_backups','get_backup'],true);
+        $security=($write||$protected)?[['type'=>'oauth2','scopes'=>['atlas:write']]]:[['type'=>'noauth']];
         return ['name'=>$name,'title'=>$title,'description'=>$description,'inputSchema'=>['type'=>'object','properties'=>$properties?:new stdClass(),'required'=>$required,'additionalProperties'=>false],'annotations'=>['readOnlyHint'=>!$write,'destructiveHint'=>$write,'idempotentHint'=>!$write,'openWorldHint'=>false],'securitySchemes'=>$security,'_meta'=>['securitySchemes'=>$security]];
     },$defs);
 }
@@ -39,7 +59,7 @@ function validateArguments(array $args, array $schema): void {
         if (is_int($value) && ($value<($s['minimum']??0) || $value>($s['maximum']??PHP_INT_MAX))) fail(422,'Неверный диапазон '.$key);
     }
     if (isset($args['researchDate']) && !validDate($args['researchDate'])) fail(422,'Несуществующая дата исследования');
-    foreach (['id','taskId','gateId'] as $key) if (isset($args[$key]) && !preg_match('/^[A-Za-z0-9_-]+$/D',$args[$key])) fail(422,'Неверный ID');
+    foreach (['id','taskId','gateId','commentId'] as $key) if (isset($args[$key]) && !preg_match('/^[A-Za-z0-9_-]+$/D',$args[$key])) fail(422,'Неверный ID');
 }
 function evidenceText(array $args, string $text): string {
     return $text."\n\nИсточник: ".$args['source']."\nУровень доказательства: ".$args['evidenceLevel'];
@@ -59,9 +79,20 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
     if (!$definition) fail(404,'Инструмент не найден');
     validateArguments($a,$definition['inputSchema']);
     $write=!$definition['annotations']['readOnlyHint'];
-    if ($write && (!$grant || !in_array('atlas:write',explode(' ',$grant['scope']),true))) authChallenge();
+    if (($write || in_array($name,['list_backups','get_backup'],true)) && (!$grant || !in_array('atlas:write',explode(' ',$grant['scope']),true))) authChallenge();
+    if($name==='list_backups') return [...listAtlasBackups($a['offset']??0,$a['limit']??50),'revision'=>atlasData()['revision']];
+    if($name==='get_backup') {
+        $b=readAtlasBackup($a['backupId']);$snapshot=$b['snapshot'];$section=$a['section']??'summary';
+        if($section==='summary') return ['metadata'=>$b['metadata'],'tasks'=>count(allAtlasTasks($snapshot)),'research'=>count($snapshot['content']['research']),'gates'=>count($snapshot['content']['gates'])];
+        return ['metadata'=>$b['metadata'],'section'=>$section,...textPage(json_encode(siteSection($snapshot,$section),JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR),$a['offset']??0,$a['limit']??20000)];
+    }
+    if($name==='restore_backup') {
+        $data=restoreAtlasBackup($a['revision'],$a['backupId'],['actor'=>'AI: '.$grant['name'],'reason'=>$a['reason']]);
+        return ['saved'=>true,'revision'=>$data['revision'],'updatedAt'=>$data['updatedAt'],'restoredFrom'=>$a['backupId'],'backupId'=>$data['backupId'],'backupExpiresAt'=>$data['backupExpiresAt']];
+    }
     if (!$write) {
         $data=atlasData();$meta=['revision'=>$data['revision'],'updatedAt'=>$data['updatedAt']??null,'readAt'=>gmdate('c')];
+        if ($name==='get_site_section') return [...$meta,'section'=>$a['section'],...textPage(json_encode(siteSection($data,$a['section']),JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR),$a['offset']??0,$a['limit']??20000)];
         if ($name==='get_project_context') return contextData($data);
         if ($name==='get_task') return [...$meta,'task'=>atlasTask($data,$a['taskId'])];
         if ($name==='get_changes') return [...$meta,'changes'=>array_values(array_filter($data['changes']??[],fn($c)=>$c['revision']>($a['sinceRevision']??0))),'retainedHistoryLimit'=>100];
@@ -95,7 +126,7 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
         fail(404,'Инструмент не найден');
     }
     $result=[];$actor='AI: '.$grant['name'];
-    $audit=['actor'=>$actor,'action'=>$name,'target'=>$a['taskId']??$a['id']??$a['gateId']??$a['researchDate']??'','source'=>$a['source']??null,'evidenceLevel'=>$a['evidenceLevel']??null];
+    $audit=['actor'=>$actor,'action'=>$name,'target'=>$a['taskId']??$a['id']??$a['gateId']??$a['researchDate']??'','source'=>$a['source']??null,'evidenceLevel'=>$a['evidenceLevel']??null,'reason'=>$a['reason']??null,'commentId'=>$a['commentId']??null];
     $data=atlasMutate($a['revision'],function($data)use($name,$a,$actor,&$result){
         switch($name) {
             case 'add_comment': $result['commentId']=appendAiComment($data,$a['taskId'],$a,$a['text'],$actor);break;
@@ -124,9 +155,9 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
                 if($index===false) $data['content']['days'][]=['date'=>$a['researchDate'],'title'=>$a['title'],'text'=>$text,'tags'=>[$a['evidenceLevel'],'ИИ']];
                 else $data['content']['days'][$index]['text'].="\n\n".$a['title']."\n".$text;
                 $result['date']=$a['researchDate'];break;
-            default: fail(404,'Инструмент не найден');
+            default: return manageSiteMutation($name,$a,$data,$actor,$result);
         }
         return ['content'=>$data['content'],'state'=>$data['state']];
     },$audit);
-    return ['saved'=>true,'revision'=>$data['revision'],'updatedAt'=>$data['updatedAt'],...$result];
+    return ['saved'=>true,'revision'=>$data['revision'],'updatedAt'=>$data['updatedAt'],'backupId'=>$data['backupId'],'backupExpiresAt'=>$data['backupExpiresAt'],...$result];
 }

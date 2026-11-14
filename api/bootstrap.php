@@ -1,6 +1,8 @@
 <?php
 /* PHP 8.1+. Credentials and runtime data live OUTSIDE public_html. */
 declare(strict_types=1);
+// API errors belong in server logs, never in JSON responses or credential paths.
+ini_set('display_errors','0');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
@@ -11,8 +13,9 @@ function atomicWrite(string $path, array $data): void {
     $temp = tempnam(dirname($path), '.atlas-');
     if ($temp === false) throw new RuntimeException('Temporary file unavailable');
     try {
-        if (file_put_contents($temp, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)) === false) throw new RuntimeException('Write failed');
-        chmod($temp, 0600);
+        $json=json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        if (file_put_contents($temp,$json)!==strlen($json)) throw new RuntimeException('Incomplete write');
+        if (!chmod($temp,0600)) throw new RuntimeException('Permissions failed');
         if (!rename($temp, $path)) throw new RuntimeException('Rename failed');
     } finally { if (is_file($temp)) unlink($temp); }
 }
@@ -82,6 +85,7 @@ function validatePayload(array $payload): void {
     foreach (collection($c,'research',2000) as $r) {
         if (!is_array($r)) fail(422,'Неверный документ'); validId($r,$ids);
         foreach (['title','summary','topic','group','date','format','content'] as $key) textField($r,$key);
+        if (isset($r['path'])) textField($r,'path',2000);
         if (!validDate($r['date']) || !in_array($r['format'],['md','json','csv','txt','ps1','py'],true)) fail(422,'Неверная дата или формат документа');
     }
     $s = $payload['state'];

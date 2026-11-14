@@ -199,9 +199,12 @@ with tempfile.TemporaryDirectory(prefix='windows11x-mcp-') as tmp:
         check(viewer.tool('get_changes', {'sinceRevision': 0})[1]['changes'][-1]['actor'] == 'AI: Test ИИ', 'Audit actor missing')
         check(json.loads((private / 'atlas.previous.json').read_text())['revision'] == 7, 'Shared AI backup missing')
         check('Обновлённый текст' in viewer.request('/ai-context.php?full=1')[1] and viewer.headers['X-Atlas-Revision'] == '8', 'Context not live after AI write')
+        from management_checks import check_management
+        expected_revision = check_management(owner, viewer, access, private)
         readonly_code = authorize('atlas:read')
         read_tokens = viewer.request('/api/oauth.php?action=token', form={**exchange, 'code': readonly_code})[1]
-        check(not viewer.tool('add_comment', {**comment, 'revision': 8}, read_tokens['access_token'])[0], 'Read-only grant wrote data')
+        check(not viewer.tool('add_comment', {**comment, 'revision': expected_revision}, read_tokens['access_token'])[0], 'Read-only grant wrote data')
+        check(not viewer.tool('list_backups', {}, read_tokens['access_token'])[0], 'Read-only grant can read deleted private snapshots')
         refresh_args = {'grant_type': 'refresh_token', 'refresh_token': tokens['refresh_token'], 'client_id': client_id, 'resource': resource}
         status, rotated = viewer.request('/api/oauth.php?action=token', form=refresh_args)
         check(status == 200 and rotated['access_token'] != access, 'Refresh rotation')
@@ -219,7 +222,7 @@ with tempfile.TemporaryDirectory(prefix='windows11x-mcp-') as tmp:
         (private / 'config.php').write_text("<?php return ['username'=>'changed','password_hash'=>'" + password_hash + "'];")
         check(viewer.rpc('ping', token=credential_tokens['access_token'])[0] == 401, 'Credential change did not revoke access')
         check(owner.api('save', viewer.api('data')[1])[0] == 401, 'Credential change did not revoke owner session')
-        check(viewer.api('version')[1]['revision'] == 8, 'Security tests changed project data')
+        check(viewer.api('version')[1]['revision'] == expected_revision, 'Security tests changed project data')
         print('PASS: live public context, Unicode source pagination, MCP discovery/read/write, OAuth DCR + PKCE + audience + replay protection, readonly scope, owner/AI conflicts, dated evidence, backup/audit, refresh rotation, revocation and credential invalidation')
     except Exception:
         log.flush()
