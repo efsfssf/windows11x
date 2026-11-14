@@ -29,28 +29,31 @@ jobs:
           python3 scripts/test-api.py
           python3 scripts/test-mcp.py
 
-      - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /domains/dandomi.tech/public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.github/**
-            **/.research/**
-            **/scripts/smoke-ui.js
-            **/scripts/test-api.py
-            **/scripts/test-mcp.py
-            **/scripts/check-live.py
-            **/scripts/build_research.py
-            **/windows11x-private/**
-            **/.env*
-            **/README.md
+      - name: Configure VPS SSH access
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          if [ -z "$VPS_SSH_KEY" ] || [ -z "$VPS_KNOWN_HOSTS" ]; then
+            echo "Add VPS_SSH_KEY and VPS_KNOWN_HOSTS in repository Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Upload code with restricted deployment account
+        run: |
+          # The SSH key is restricted by rrsync to the public code directory.
+          # No root SSH, remote shell commands, deletion, or runtime data access.
+          rsync -rltz --delay-updates --chmod=D750,F640 \
+            --exclude='.git/' --exclude='.github/' --exclude='.research/' \
+            --exclude='scripts/' --exclude='node_modules/' --exclude='.env*' \
+            --exclude='windows11x-private/' --exclude='README.md' \
+            -e 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes' \
+            ./ windows11x-deploy@155.212.217.163:./
 
       - name: Verify published AI endpoints
         run: python3 scripts/check-live.py
