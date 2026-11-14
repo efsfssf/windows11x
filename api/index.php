@@ -8,6 +8,12 @@ try {
     if ($method==='GET' && $action==='data') reply(200,atlasData());
     if ($method==='GET' && $action==='version') { $data=atlasData();reply(200,['revision'=>$data['revision'],'updatedAt'=>$data['updatedAt']??null]); }
     $editor=atlasSession();
+    if ($method==='GET' && $action==='scan-research') {
+        if(!$editor) fail(401,'Нужен вход владельца');
+        if(!is_string($_GET['folder']??null)) fail(422,'Нужна папка исследований');
+        require __DIR__.'/research-files.php';
+        reply(200,scanResearchFolder($_GET['folder']));
+    }
     if ($method==='GET' && $action==='session') reply(200,['editor'=>$editor,'configured'=>$configured,'csrf'=>$_SESSION['csrf']]);
     if ($method==='GET' && in_array($action,['backups','backup','backup-info'],true)) {
         if(!$editor) fail(401,'Нужен вход владельца');

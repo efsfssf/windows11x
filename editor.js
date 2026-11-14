@@ -3,6 +3,7 @@ let auth = {editor:false, csrf:'', configured:false};
 let serverRevision = 0, serverReady = false, pendingSave = false, saving = false;
 let saveTimer = null, saveBlocked = false, editorDraft = null, editorSection = 'site';
 let editorSelection = 0, editorBaseline = '';
+let researchFolderDraft=null,researchImportBusy=false;
 const sectionLabels = {site:'Оформление и навигация',texts:'Тексты всех страниц',gates:'Этапы и задачи',days:'Хронология',architecture:'Архитектура',terms:'Словарь',research:'Исследования',metadata:'Дата и артефакт',overviewBlocks:'Карточки обзора',myths:'Частые неверные выводы'};
 const fieldLabels = {name:'Название сайта',subtitle:'Подзаголовок',latest:'Последняя точка',footer:'Подпись внизу',footerNote:'Пояснение внизу',nav:'Названия разделов',overview:'Обзор',plan:'План',architecture:'Архитектура',timeline:'Хронология',library:'Исследования',glossary:'Словарь',snapshot:'Дата среза',artifactHash:'SHA-256 артефакта',id:'Идентификатор',title:'Название',short:'Кратко',detail:'Подробности',description:'Описание',proof:'Критерий результата',done:'Отмечено по умолчанию',focus:'Выделить этап',status:'Цвет статуса',statusText:'Текст статуса',context:'Контекст',tasks:'Задачи',date:'Дата',text:'Текст',tags:'Теги',evidence:'Уровень доказательства',nt:'Наш кандидат',fos:'Эталон',summary:'Краткое описание',topic:'Тема',group:'Источник',format:'Формат',path:'Исходное имя файла',content:'Содержимое документа',featuredResearchId:'ID исследования для ссылки на главной',volumes:'Роли хранения',phases:'Фазы',label:'Подпись',letter:'Буква тома',when:'Когда выполняется',proofSteps:'Лестница доказательств',corrections:'Исправления',flow:'Маршрут проверок',complete:'Достигнуто',current:'Текущий шаг',before:'Прежний вывод',after:'Исправленный вывод'};
 function formatDate(value){return /^\d{4}-\d{2}-\d{2}$/.test(value)?value.split('-').reverse().join('.'):value;}
@@ -59,7 +60,7 @@ async function flushSaves(){
 }
 function showModal(id){document.getElementById(id).hidden=false;document.body.style.overflow='hidden';}
 function hideModal(id){document.getElementById(id).hidden=true;document.body.style.overflow='';}
-function openEditor(){if(!canEdit())return;editorDraft=structuredClone(content);for(const task of state.custom){const gate=editorDraft.gates.find(g=>g.id===task.gate);if(gate){const {custom,gate:gateId,...fields}=task;gate.tasks.push(fields);}}editorBaseline=JSON.stringify(editorDraft);editorSelection=0;renderEditor();showModal('editorOverlay');document.getElementById('editorSection').focus();}
+function openEditor(){if(!canEdit())return;editorDraft=structuredClone(content);for(const task of state.custom){const gate=editorDraft.gates.find(g=>g.id===task.gate);if(gate){const {custom,gate:gateId,...fields}=task;gate.tasks.push(fields);}}editorBaseline=JSON.stringify(editorDraft);researchFolderDraft=null;editorSelection=0;renderEditor();showModal('editorOverlay');document.getElementById('editorSection').focus();}
 function pathValue(path){return path.reduce((obj,key)=>obj[key],editorDraft);}
 function fieldPath(path){return esc(JSON.stringify(path));}
 function editorField(value,path,label){
@@ -76,6 +77,7 @@ function editorField(value,path,label){
 }
 function renderEditor(){
  document.getElementById('editorSection').value=editorSection;
+ document.getElementById('editorResearchSource').hidden=editorSection!=='research';
  let value=editorDraft[editorSection], path=[editorSection];
  let selection='';
  if(editorSection==='metadata'){value={snapshot:editorDraft.snapshot,artifactHash:editorDraft.artifactHash};path=[];}
@@ -90,8 +92,46 @@ function renderEditor(){
   path=[...path,editorSelection];value=value[editorSelection]??null;
  }
  document.getElementById('editorTextPage').hidden=editorSection!=='texts';
+ if(editorSection==='research')document.getElementById('editorResearchFolder').value=researchFolderDraft??researchFolderFor(editorDraft.research[editorSelection]);
  const title=editorSection==='texts'?'Текст':sectionLabels[editorSection];
  document.getElementById('editorFields').innerHTML=selection+(value===null?'<p>Добавьте первую запись.</p>':editorField(value,path,title));
+}
+function researchFolderFor(record){
+ const path=record?.path||'';
+ return path.startsWith('library/')&&path.includes('/')?path.slice(0,path.lastIndexOf('/')):'library';
+}
+function mergeResearchDraft(existing,files){
+ const next=structuredClone(existing),byPath=new Map(next.map((r,i)=>[r.path,i])),ids=new Set(next.map(r=>r.id));let added=0,updated=0;
+ for(const file of files){
+  if(byPath.has(file.path)){
+   const i=byPath.get(file.path);if(next[i].content!==file.content||next[i].format!==file.format)updated++;
+   next[i]={...file,...next[i],content:file.content,format:file.format,path:file.path};
+  }else{
+   const item=structuredClone(file);while(ids.has(item.id))item.id+='-x';if(item.id.length>100)throw new Error('Конфликт ID импортируемого файла');ids.add(item.id);byPath.set(item.path,next.length);next.push(item);added++;
+  }
+ }
+ return {research:next,added,updated};
+}
+async function loadResearchFolder(){
+ if(researchImportBusy||!editorDraft||!canEdit())return;
+ const draft=editorDraft,folder=researchFolderDraft??researchFolderFor(draft.research[editorSelection]),selectedId=draft.research[editorSelection]?.id;
+ const button=document.querySelector('[data-reload-atlas]');researchImportBusy=true;button.disabled=true;
+ document.getElementById('editorResearchStatus').textContent='Чтение файлов из '+folder+'…';
+ try{
+  const data=await api('scan-research&folder='+encodeURIComponent(folder));if(editorDraft!==draft)return;
+  const incoming=new Map(data.files.map(r=>[r.path,r]));
+  const overwrittenDrafts=draft.research.filter(r=>incoming.has(r.path)&&incoming.get(r.path).content!==r.content&&content.research.find(old=>old.id===r.id)?.content!==r.content);
+  if(overwrittenDrafts.length&&!confirm('Тексты '+overwrittenDrafts.length+' исследований изменены в черновике. Заменить их содержимым файлов сервера?')){document.getElementById('editorResearchStatus').textContent='Загрузка отменена. Черновик сохранён в редакторе.';return;}
+  const merged=mergeResearchDraft(draft.research,data.files);
+  if(merged.research.length>2000)throw new Error('В каталоге получится больше 2000 документов. Выберите подпапку.');
+  if(new Blob([JSON.stringify({...draft,research:merged.research})]).size>12000000)throw new Error('Каталог слишком большой для сохранения. Выберите подпапку.');
+  draft.research=merged.research;researchFolderDraft=data.folder;
+  if(editorSection==='research')editorSelection=Math.max(0,draft.research.findIndex(r=>r.id===selectedId));renderEditor();
+  const message=`Добавлено: ${merged.added}, обновлено: ${merged.updated}. `+(data.count?'Нажмите «Сохранить на сервере», чтобы опубликовать.':'Поддерживаемых файлов в этой папке нет.');
+  document.getElementById('editorResearchStatus').textContent=message+(data.warnings.length?' Пропущено файлов: '+data.warnings.length+'. '+data.warnings.join('; '):'');
+  toast(message);
+ }catch(error){if(editorDraft===draft){document.getElementById('editorResearchStatus').textContent=error.message;toast(error.message);}}
+ finally{researchImportBusy=false;button.disabled=false;}
 }
 function newItem(path){
  const key=path.at(-1),id='item-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
@@ -112,13 +152,16 @@ function newItem(path){
 function downloadBackup(value,name){const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function closeEditor(){if(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline&&!confirm('Закрыть редактор без сохранения?'))return;editorDraft=null;hideModal('editorOverlay');}
 document.addEventListener('input',event=>{
- const el=event.target;if(!el.matches('[data-editor-path]')||!editorDraft)return;
+ const el=event.target;
+ if(el.id==='editorResearchFolder'){researchFolderDraft=el.value.trim();return;}
+ if(!el.matches('[data-editor-path]')||!editorDraft)return;
  const path=JSON.parse(el.dataset.editorPath),key=path.pop();pathValue(path)[key]=el.type==='checkbox'?el.checked:el.value;
 });
 document.addEventListener('change',event=>{
  if(event.target.id==='editorSection'){editorSection=event.target.value;editorSelection=0;renderEditor();}
  if(event.target.id==='editorTextPage')renderEditor();
- if(event.target.id==='editorRecord'){editorSelection=Number(event.target.value);renderEditor();}
+ if(event.target.id==='editorRecord'){editorSelection=Number(event.target.value);researchFolderDraft=null;document.getElementById('editorResearchStatus').textContent='';renderEditor();}
+ if(event.target.id==='editorResearchFolder')researchFolderDraft=event.target.value.trim();
 });
 document.addEventListener('click',async event=>{
  const target=event.target;
@@ -128,7 +171,10 @@ document.addEventListener('click',async event=>{
  if(target.closest('[data-close-editor]'))closeEditor();
  if(target.closest('#retrySave'))await flushSaves();
  if(target.closest('#downloadBackup,[data-download-backup]')){const backupState=structuredClone(state);if(editorDraft)backupState.custom=[];downloadBackup({app:'Windows11X Atlas',version:2,content:editorDraft||content,state:backupState},'Windows11X-full-backup.json');}
- if(target.closest('#reloadData,[data-reload-atlas]')){if(confirm('Перед загрузкой актуальной версии скачайте копию своих изменений. Продолжить?'))location.reload();}
+ if(target.closest('#reloadData,[data-reload-atlas]')){
+  if(target.closest('[data-reload-atlas]')&&editorDraft&&editorSection==='research')await loadResearchFolder();
+  else if(confirm('Перед загрузкой актуальной версии скачайте копию своих изменений. Продолжить?'))location.reload();
+ }
  if(target.closest('#migrateLocal')){if(canEdit()&&confirm('Заменить общий план отметками и заметками из старого хранилища этого браузера?')){try{await replacePlan(loadState());render();toast('Старый план перенесён на сервер');}catch(error){toast(error.message);}}}
  if(target.closest('#logoutButton')){
   if((pendingSave||saving)&&!await flushSaves()){toast('Сначала сохраните изменения или скачайте резервную копию');return;}

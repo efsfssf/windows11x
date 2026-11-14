@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/site-management.php';
+require_once __DIR__.'/research-files.php';
 function mcpTools(): array {
     $str=fn($description,$limit=20000)=>['type'=>'string','description'=>$description,'minLength'=>1,'maxLength'=>$limit];
     $id=$str('Точный ID из свежих данных',100);
@@ -24,6 +25,7 @@ function mcpTools(): array {
         ['save_timeline_entry','Добавить событие хронологии','Создаёт событие на дату исследования или дописывает результат к существующему событию этого дня без потери текста.',['revision'=>$rev,'title'=>$str('Заголовок',2000),'text'=>$str('Событие',15000),...$provenance],['revision','title','text',...array_keys($provenance)],true],
     ];
     $defs=[...$defs,
+        ['import_research_folder','Загрузить исследования из папки сервера','Рекурсивно импортирует md/markdown/json/csv/txt/ps1/py из library или её подпапки. Существующие записи обновляет по path с сохранением ID и метаданных, новые добавляет; другие исследования не удаляет. Новым файлам без даты в имени назначается дата изменения файла: её нужно проверить. Изменение резервируется на 7 дней.',['revision'=>$rev,'folder'=>$str('Папка относительно корня сайта, например library/ai',2000),'reason'=>$reason],['revision','folder','reason'],true],
         ['get_site_section','Прочитать исходные данные раздела','Исходный JSON любого раздела сайта. Для правок edit_site сначала прочитайте нужный раздел и все страницы. В state находятся отметки, комментарии и свои задачи.',['section'=>$section,...$page],['section'],false],
         ['edit_site','Изменить любые данные сайта','Атомарный пакет JSON Patch над /content и /state: add, replace, remove, move, test. Может изменять и удалять любые тексты, оформление, навигацию, этапы, задачи, архитектуру, хронологию, словарь и исследования. Перед записью прочитай get_site_section и актуальную revision. changesJson — JSON-строка массива операций; индекс списка начинается с 0, /- добавляет в конец, ~1 экранирует /, ~0 экранирует ~. Пример: [{"op":"replace","path":"/content/site/name","value":"Новое имя"}]. Итоговая структура должна остаться валидной. Автоматическая полная копия на 7 дней обязательна. Не имеет доступа к паролям, токенам, резервным копиям или серверным командам.',['revision'=>$rev,'changesJson'=>$str('JSON-массив до 100 операций над content/state',2000000),'reason'=>$reason],['revision','changesJson','reason'],true],
         ['update_comment','Редактировать комментарий','Изменяет конкретный комментарий по commentId, сохраняя его ID и время создания. Перед правкой прочитай get_task. Старое содержимое резервируется на 7 дней.',['revision'=>$rev,'taskId'=>$id,'commentId'=>$str('Точный ID комментария из get_task',200),'text'=>$str('Новый текст',95000),...$provenance],['revision','taskId','commentId','text',...array_keys($provenance)],true],
@@ -126,9 +128,12 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
         fail(404,'Инструмент не найден');
     }
     $result=[];$actor='AI: '.$grant['name'];
-    $audit=['actor'=>$actor,'action'=>$name,'target'=>$a['taskId']??$a['id']??$a['gateId']??$a['researchDate']??'','source'=>$a['source']??null,'evidenceLevel'=>$a['evidenceLevel']??null,'reason'=>$a['reason']??null,'commentId'=>$a['commentId']??null];
+    $audit=['actor'=>$actor,'action'=>$name,'target'=>$a['taskId']??$a['id']??$a['gateId']??$a['researchDate']??$a['folder']??'','source'=>$a['source']??null,'evidenceLevel'=>$a['evidenceLevel']??null,'reason'=>$a['reason']??null,'commentId'=>$a['commentId']??null];
     $data=atlasMutate($a['revision'],function($data)use($name,$a,$actor,&$result){
         switch($name) {
+            case 'import_research_folder':
+                $scan=scanResearchFolder($a['folder']);$merge=mergeResearchFiles($data['content']['research'],$scan['files']);
+                $data['content']['research']=$merge['research'];$result=['folder'=>$scan['folder'],'added'=>$merge['added'],'updated'=>$merge['updated'],'warnings'=>$scan['warnings']];break;
             case 'add_comment': $result['commentId']=appendAiComment($data,$a['taskId'],$a,$a['text'],$actor);break;
             case 'set_task_status':
                 $task=atlasTask($data,$a['taskId']);
