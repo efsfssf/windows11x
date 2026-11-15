@@ -23,6 +23,7 @@ function mcpTools(): array {
         ['update_task','Уточнить задачу','Меняет только название, описание и критерий, сохраняя ID, галочку и комментарии. Не переписывай критерий ради уже полученного результата.',['revision'=>$rev,'taskId'=>$id,'title'=>$str('Название',2000),'description'=>$str('Контекст'),'proof'=>$str('Критерий выполнения')],['revision','taskId','title','description','proof'],true],
         ['save_research','Сохранить исследование','Создать или обновить исследование по стабильному ID. Для обновления сначала прочти существующий текст целиком. Сохраняй ограничения и отрицательные результаты. Не добавляй секреты: чтение сайта публичное.',['revision'=>$rev,'id'=>$id,'title'=>$str('Название',2000),'summary'=>$str('Краткое описание'),'topic'=>$str('Тема',2000),'content'=>$str('Полный текст исследования',2000000),'format'=>['type'=>'string','enum'=>['md','txt','json','csv','ps1','py']],...$provenance],['revision','id','title','summary','topic','content','format',...array_keys($provenance)],true],
         ['save_timeline_entry','Добавить событие хронологии','Создаёт событие на дату исследования или дописывает результат к существующему событию этого дня без потери текста.',['revision'=>$rev,'title'=>$str('Заголовок',2000),'text'=>$str('Событие',15000),...$provenance],['revision','title','text',...array_keys($provenance)],true],
+        ['update_timeline_entry','Обновить событие хронологии','Заменяет заголовок и текст существующего события за точную дату researchDate. Сначала прочитай хронологию через get_site_section(section=days), включая все страницы. Передай полный новый текст с сохранением нужных результатов и ограничений: старый текст заменяется, а не дописывается. Теги и дополнительные поля события сохраняются; другие даты и разделы не меняются. Для новой даты используй save_timeline_entry. Перед заменой обязательна резервная копия на 7 дней.',['revision'=>$rev,'title'=>$str('Новый заголовок',2000),'text'=>$str('Полный новый текст события',15000),'reason'=>$reason,...$provenance],['revision','title','text','reason',...array_keys($provenance)],true],
     ];
     $defs=[...$defs,
         ['import_research_folder','Загрузить исследования из папки сервера','Рекурсивно импортирует md/markdown/json/csv/txt/ps1/py из library или её подпапки. Существующие записи обновляет по path с сохранением ID и метаданных, новые добавляет; другие исследования не удаляет. Новым файлам без даты в имени назначается дата изменения файла: её нужно проверить. Изменение резервируется на 7 дней.',['revision'=>$rev,'folder'=>$str('Папка относительно корня сайта, например library/ai',2000),'reason'=>$reason],['revision','folder','reason'],true],
@@ -154,6 +155,11 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
                 $index=array_search($a['id'],array_column($data['content']['research'],'id'),true);
                 if ($index===false) $data['content']['research'][]=$record;else $data['content']['research'][$index]=array_merge($data['content']['research'][$index],$record);
                 $result['researchId']=$a['id'];break;
+            case 'update_timeline_entry':
+                $index=array_search($a['researchDate'],array_column($data['content']['days'],'date'),true);
+                if($index===false) fail(404,'Событие не найдено. Для новой даты используйте save_timeline_entry');
+                $data['content']['days'][$index]=[...$data['content']['days'][$index],'title'=>$a['title'],'text'=>evidenceText($a,$a['text']),'source'=>$a['source'],'evidenceLevel'=>$a['evidenceLevel']];
+                $result['date']=$a['researchDate'];break;
             case 'save_timeline_entry':
                 $index=array_search($a['researchDate'],array_column($data['content']['days'],'date'),true);
                 $text=evidenceText($a,$a['text']);

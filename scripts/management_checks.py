@@ -89,6 +89,25 @@ def check_management(owner, viewer, token, private):
     check(viewer.tool('get_task', {'taskId': 'g2-dual'})[0], 'Deleting one task removed another')
     write('delete_research', {'id': 'ai-test-doc', 'reason': 'Delete test document'})
     check(not viewer.tool('get_research', {'id': 'ai-test-doc'})[0], 'Research not deleted')
+    # Timeline replacement changes exactly one existing day and keeps its metadata.
+    before_timeline = viewer.api('data')[1]
+    old_day = next(d for d in before_timeline['content']['days'] if d['date'] == '2026-11-12')
+    timeline_args = {**provenance, 'researchDate': '2026-11-12', 'title': 'Уточнённый итог дня',
+                     'text': 'Полный исправленный результат', 'reason': 'Correct existing timeline event'}
+    check(not viewer.tool('update_timeline_entry', {'revision': revision, **timeline_args})[0], 'Anonymous timeline replacement allowed')
+    check(not viewer.tool('update_timeline_entry', {'revision': revision - 1, **timeline_args}, token)[0], 'Stale timeline replacement allowed')
+    check(not viewer.tool('update_timeline_entry', {'revision': revision, **timeline_args, 'researchDate': '2099-01-01'}, token)[0], 'Update created a missing timeline day')
+    check(viewer.api('data')[1] == before_timeline, 'Rejected timeline update changed data')
+    updated_day = write('update_timeline_entry', timeline_args)
+    after_timeline = viewer.api('data')[1]
+    new_day = next(d for d in after_timeline['content']['days'] if d['date'] == '2026-11-12')
+    check(new_day['title'] == timeline_args['title'] and new_day['text'].startswith(timeline_args['text'] + '\n\nИсточник:'), 'Timeline update appended instead of replacing')
+    check(new_day['tags'] == old_day['tags'] and new_day['date'] == old_day['date'], 'Timeline update lost tags/date')
+    expected_day = {**old_day, 'title': new_day['title'], 'text': new_day['text'], 'source': provenance['source'], 'evidenceLevel': provenance['evidenceLevel']}
+    expected_content = copy.deepcopy(before_timeline['content'])
+    expected_content['days'] = [expected_day if d['date'] == old_day['date'] else d for d in expected_content['days']]
+    check(after_timeline['content'] == expected_content and after_timeline['state'] == before_timeline['state'], 'Timeline update changed other content or plan')
+    check(raw_snapshot(updated_day['backupId'])['content'] == before_timeline['content'], 'Timeline replacement did not back up old text')
     write('delete_timeline_entry', {'researchDate': '2026-11-12', 'reason': 'Delete one day'})
     check(not any(x['date'] == '2026-11-12' for x in viewer.api('data')[1]['content']['days']), 'Timeline not deleted')
     # Every section is editable without executing uploaded strings as code.
