@@ -17,7 +17,7 @@ async function loadServerBackups(reset=true){
 }
 async function restoreServerSnapshot(id,revision){
  if(!auth.editor||backupsBusy)return;
- if(pendingSave||saving||editorDraft||commentBusy||commentDrafts.size){toast('Сначала сохраните или скачайте свои черновики. Восстановление их заменит.');return;}
+ if(artifactBusy||artifactFormOpen||pendingSave||saving||editorDraft||commentBusy||commentDrafts.size){toast('Сначала сохраните или скачайте свои черновики. Восстановление их заменит.');return;}
  backupsBusy=true;
  try{
   const current=await api('version');
@@ -40,7 +40,10 @@ document.addEventListener('click',async event=>{
    const id=preview?.dataset.previewBackup||download.dataset.downloadSnapshot;
    const data=await api((preview?'backup-info':'backup')+'&id='+encodeURIComponent(id));
    if(download)downloadBackup({app:'Windows11X Atlas',version:2,content:data.snapshot.content,state:data.snapshot.state},'Windows11X-revision-'+data.metadata.revision+'.json');
-   else document.getElementById('backupPreview').textContent=`Версия ${data.metadata.revision} · этапов: ${data.gates} · задач: ${data.tasks} · исследований: ${data.research} · комментариев: ${data.comments}. Копия создана перед действием ${data.metadata.beforeAction.action}. Восстановление заменит весь проект; для отдельных записей можно скачать копию или попросить ИИ восстановить только нужное.`;
+   else {
+    document.getElementById('backupPreview').textContent=`Версия ${data.metadata.revision} · этапов: ${data.gates} · задач: ${data.tasks} · исследований: ${data.research} · комментариев: ${data.comments} · файлов: ${(data.artifacts||[]).length}. Копия создана перед действием ${data.metadata.beforeAction.action}. Полное восстановление заменит весь проект. Отдельные файлы можно вернуть кнопками ниже.`;
+    document.getElementById('backupPreview').innerHTML+=(data.artifacts||[]).map(f=>`<div class="backup-file"><strong>${esc(f.title)}</strong><small>${esc(f.filename)} · ${esc(f.version)}</small><a href="api/files.php?action=download&amp;id=${encodeURIComponent(f.id)}&amp;backupId=${encodeURIComponent(id)}">Скачать файл</a><button class="button button-light" type="button" data-restore-artifact="${esc(f.id)}" data-artifact-backup="${esc(id)}">Восстановить только этот файл</button></div>`).join('');
+   }
   }catch(error){toast(error.message);document.getElementById('backupsStatus').textContent=error.message;}
   finally{backupsBusy=false;}
  }

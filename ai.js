@@ -37,6 +37,7 @@ function openLinkedTask(){
  expandedGates.add(found.gate.id);route='plan';location.hash='#plan';render();openTask(id);
 }
 async function refreshAtlasIfChanged(){
+ if(artifactBusy||artifactFormOpen)return;
  if(!serverReady||refreshingAtlas||document.hidden||(typeof backupsBusy!=='undefined'&&backupsBusy))return;
  refreshingAtlas=true;
  try{

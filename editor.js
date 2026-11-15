@@ -220,10 +220,11 @@ document.getElementById('restoreBackup').addEventListener('change',async event=>
 window.addEventListener('beforeunload',event=>{if(pendingSave||saving||commentBusy||commentDrafts.size||(editorDraft&&JSON.stringify(editorDraft)!==editorBaseline)){event.preventDefault();event.returnValue='';}});
 
 document.addEventListener('keydown',event=>{
- const overlay=['backupsOverlay','aiOverlay','loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
+ const overlay=['artifactOverlay','backupsOverlay','aiOverlay','loginOverlay','editorOverlay','readerOverlay','taskOverlay'].map(id=>document.getElementById(id)).find(el=>!el.hidden);
  if(!overlay)return;
+ if(overlay.id==='artifactOverlay'&&event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();closeArtifact();return;}
  if(overlay.id==='backupsOverlay'&&typeof backupsBusy!=='undefined'&&backupsBusy&&event.key==='Escape')return;
- if(event.key==='Escape'&&['backupsOverlay','aiOverlay','loginOverlay','editorOverlay'].includes(overlay.id)){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal(overlay.id);}
+ if(event.key==='Escape'&&['artifactOverlay','backupsOverlay','aiOverlay','loginOverlay','editorOverlay'].includes(overlay.id)){event.preventDefault();event.stopImmediatePropagation();overlay.id==='editorOverlay'?closeEditor():hideModal(overlay.id);}
  if(event.key==='Tab'){
   const fields=[...overlay.querySelectorAll('button,input,textarea,select,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);
   if(!fields.length)return;const first=fields[0],last=fields.at(-1);

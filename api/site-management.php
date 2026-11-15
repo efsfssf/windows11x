@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 function siteSection(array $data,string $section): mixed {
+    if($section==='artifacts') return artifactRows($data);
     if($section==='state') return $data['state'];
     if($section==='metadata') return ['snapshot'=>$data['content']['snapshot'],'artifactHash'=>$data['content']['artifactHash']];
     if(!array_key_exists($section,$data['content'])) fail(404,'Раздел не найден');

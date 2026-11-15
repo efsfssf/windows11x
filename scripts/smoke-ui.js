@@ -40,6 +40,7 @@ vm.runInContext(fs.readFileSync(path.join(root, 'research-data.js'), 'utf8'), sa
 vm.runInContext(fs.readFileSync(path.join(root, 'content-defaults.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'editor.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'comments.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'artifacts.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'app.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'ai.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'backups.js'), 'utf8'), sandbox);
@@ -47,7 +48,7 @@ function check(ok, message) { if (!ok) throw new Error(message); }
 const views = {
   overview: 'Настоящая Core OS', plan: 'Большой маршрут проекта',
   architecture: 'Как устроена система', timeline: 'Хронология исследований',
-  library: 'Исследования по датам', glossary: 'Словарь проекта',
+  library: 'Исследования по датам', glossary: 'Словарь проекта', files:'Файлы проекта',
 };
 for (const [route, text] of Object.entries(views)) {
   sandbox.location.hash = '#' + route;
@@ -167,6 +168,19 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   vm.runInContext("api=async()=>{throw new Error('Folder unavailable')}",sandbox);
   await vm.runInContext('loadResearchFolder()',sandbox);
   check(vm.runInContext('JSON.stringify(editorDraft)',sandbox)===folderDraft&&element('editorResearchStatus').textContent==='Folder unavailable','Failed folder request lost the draft');
+  sandbox.artifactFixture={id:'file-test',familyId:'file-test',filename:'build.dll',title:'<script>Unsafe title</script>',description:'A build',version:'exp01',status:'offline_pass',issues:'Boot not tested',testedOn:'VM fixture',verification:'Static only',sha256:'b'.repeat(64),size:1024,taskIds:['g2-dual'],createdAt:'2026-11-15T00:00:00Z',updatedAt:'2026-11-15T00:00:00Z'};
+  vm.runInContext("content.artifacts=[artifactFixture];auth.editor=false;artifactQuery='';artifactStatus='';artifactTask='';",sandbox);
+  const guestFiles=vm.runInContext('renderArtifacts()',sandbox);
+  check(guestFiles.includes('&lt;script&gt;')&&!guestFiles.includes('<script>')&&!guestFiles.includes('data-new-artifact'),'Guest file view permits HTML or upload');
+  vm.runInContext("auth.editor=true",sandbox);
+  check(vm.runInContext('renderArtifacts()',sandbox).includes('data-new-artifact'),'Owner file upload missing');
+  vm.runInContext("artifactQuery='Boot';artifactStatus='offline_pass';artifactTask='g2-dual'",sandbox);
+  check(vm.runInContext('artifactFilterRows().length===1',sandbox),'File search/status/task filter');
+  vm.runInContext("artifactStatus='runtime_pass'",sandbox);
+  check(vm.runInContext('artifactFilterRows().length===0',sandbox),'File status filter ignored');
+  vm.runInContext("artifactStatus='';openArtifact('file-test');renderTaskArtifacts('g2-dual')",sandbox);
+  check(element('artifactBody').innerHTML.includes('Офлайн-проверка пройдена')&&!element('artifactBody').innerHTML.includes('<script>'),'File details/evidence escaping');
+  check(element('taskArtifacts').innerHTML.includes('file-test'),'Task view omitted related file');
   vm.runInContext("TERMS=[];ARCH.nt=[];DAYS=[];GATES=[];RESEARCH=[];renderArchitecture();renderTimeline();renderGlossary();renderPlan();renderLibrary();",sandbox);
-  console.log('PASS: 6 views, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
+  console.log('PASS: 7 views, artifact filters/task links/safe downloads, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
 }).catch(error => {console.error(error); process.exitCode = 1;});

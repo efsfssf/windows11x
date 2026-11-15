@@ -27,7 +27,7 @@ try {
         case 'initialize':
             $version=$params['protocolVersion']??'';
             if(!in_array($version,['2025-03-26','2025-06-18','2025-11-25'],true)) $version='2025-11-25';
-            rpcResult($id,['protocolVersion'=>$version,'serverInfo'=>['name'=>'windows11x-atlas','version'=>'2.1.0'],'capabilities'=>['tools'=>new stdClass(),'resources'=>new stdClass(),'prompts'=>new stdClass()],'instructions'=>aiInstructions()]);
+            rpcResult($id,['protocolVersion'=>$version,'serverInfo'=>['name'=>'windows11x-atlas','version'=>'2.2.0'],'capabilities'=>['tools'=>new stdClass(),'resources'=>new stdClass(),'prompts'=>new stdClass()],'instructions'=>aiInstructions()]);
         case 'ping': rpcResult($id,[]);
         case 'tools/list': rpcResult($id,['tools'=>mcpTools()]);
         case 'tools/call':

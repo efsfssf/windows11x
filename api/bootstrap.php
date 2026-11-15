@@ -38,6 +38,7 @@ function validId(array $row, array &$ids, int $limit = 100): void {
     $ids[$row['id']] = true;
 }
 function validDate(string $date): bool { $d = DateTimeImmutable::createFromFormat('!Y-m-d', $date); return $d && $d->format('Y-m-d') === $date; }
+require_once __DIR__.'/artifact-storage.php';
 function validatePayload(array $payload): void {
     if (!isset($payload['content'], $payload['state']) || !is_array($payload['content']) || !is_array($payload['state'])) fail(422, 'Нужны содержимое и состояние плана');
     $c = $payload['content'];
@@ -88,6 +89,8 @@ function validatePayload(array $payload): void {
         if (isset($r['path'])) textField($r,'path',2000);
         if (!validDate($r['date']) || !in_array($r['format'],['md','json','csv','txt','ps1','py'],true)) fail(422,'Неверная дата или формат документа');
     }
+    $artifactIds=[];
+    foreach(collection($c+['artifacts'=>[]],'artifacts',2000) as $row) {if(!is_array($row))fail(422,'Неверный файл');validId($row,$artifactIds);validateArtifact($row);}
     $s = $payload['state'];
     if (($s['version']??0)!==1 || !is_array($s['done']??null) || !is_array($s['notes']??null)) fail(422,'Неверное состояние плана');
     foreach ($s['done'] as $id=>$done) if (!is_string($id) || !is_bool($done)) fail(422,'Неверная отметка');

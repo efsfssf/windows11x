@@ -9,7 +9,7 @@ function mcpTools(): array {
     $date=['type'=>'string','pattern'=>'^\d{4}-\d{2}-\d{2}$','description'=>'Дата исследования YYYY-MM-DD; не подменять датой загрузки'];
     $provenance=['researchDate'=>$date,'source'=>$str('Источник: ID документа, лог, SHA, команда или ссылка',2000),'evidenceLevel'=>['type'=>'string','enum'=>['confirmed','static_observation','offline_test','runtime','hypothesis','not_tested','failed']]];
     $reason=$str('Причина изменения или удаления',2000);
-    $section=['type'=>'string','enum'=>['site','texts','gates','days','architecture','terms','research','overviewBlocks','myths','metadata','state']];
+    $section=['type'=>'string','enum'=>['site','texts','gates','days','architecture','terms','research','artifacts','overviewBlocks','myths','metadata','state']];
     $page=['offset'=>['type'=>'integer','minimum'=>0],'limit'=>['type'=>'integer','minimum'=>100,'maximum'=>30000]];
     $defs=[
         ['get_project_context','Прочитать актуальный проект','Вызывать перед каждым новым исследовательским выводом, советом о галочке и записью. Возвращает свежую revision, весь план, критерии и комментарии, содержимое страниц и каталог исследований. Полные документы читай get_research; не заявляй об актуальности при ошибке.',[],[],false],

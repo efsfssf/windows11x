@@ -7,15 +7,16 @@
   <meta name="description" content="Windows 11X: понятный атлас исследований настоящей Windows Core OS на NT 26100, живой план и первоисточники.">
   <title>Windows 11X — исследовательский атлас</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=8">
   <link rel="alternate" type="text/plain" href="ai-context.php" title="Актуальный контекст для ИИ">
   <script src="research-data.js?v=2" defer></script>
   <script src="content-defaults.js?v=2" defer></script>
-  <script src="editor.js?v=7" defer></script>
+  <script src="editor.js?v=8" defer></script>
   <script src="comments.js?v=4" defer></script>
-  <script src="app.js?v=6" defer></script>
-  <script src="ai.js?v=7" defer></script>
-  <script src="backups.js?v=5" defer></script>
+  <script src="artifacts.js?v=8" defer></script>
+  <script src="app.js?v=8" defer></script>
+  <script src="ai.js?v=8" defer></script>
+  <script src="backups.js?v=8" defer></script>
 </head>
 <body>
   <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -52,6 +53,7 @@
         <a href="#architecture" data-nav="architecture"><svg><use href="#i-layers"/></svg><span data-nav-label="architecture">Как устроено</span></a>
         <a href="#timeline" data-nav="timeline"><svg><use href="#i-clock"/></svg><span data-nav-label="timeline">Хронология</span></a>
         <a href="#library" data-nav="library"><svg><use href="#i-book"/></svg><span data-nav-label="library">Исследования</span></a>
+        <a href="#files" data-nav="files"><svg><use href="#i-layers"/></svg><span data-nav-label="files">Файлы</span></a>
         <a href="#glossary" data-nav="glossary"><svg><use href="#i-help"/></svg><span data-nav-label="glossary">Словарь</span></a>
       </nav>
       <div class="sidebar-bottom">
@@ -91,6 +93,7 @@
       <div class="task-panel-body">
         <p id="taskDescription"></p>
         <div class="proof-box"><strong>Что считать результатом</strong><p id="taskProof"></p></div>
+        <section id="taskArtifacts" class="task-artifacts"></section>
         <section class="task-comments" aria-labelledby="commentsHeading">
           <h3 id="commentsHeading">Комментарии <span id="commentCount">0</span></h3>
           <div id="commentList" aria-live="polite"></div>
@@ -124,6 +127,10 @@
       <div id="editorFields" class="editor-fields"></div>
       <div class="editor-footer"><span>Изменения увидят все посетители.</span><button type="button" class="button button-light" data-download-backup>Скачать копию</button><button type="button" class="button button-light" data-reload-atlas>Загрузить с сервера</button><button type="button" class="button button-light" data-close-editor>Отмена</button><button type="button" class="button button-dark" id="editorSave">Сохранить на сервере</button></div>
     </section>
+  </div>
+  <div class="overlay" id="artifactOverlay" hidden>
+    <button class="overlay-shade" type="button" data-close-artifact aria-label="Закрыть файл"></button>
+    <section class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="artifactDialogTitle"><header class="reader-header"><div><p class="eyebrow">ФАЙЛЫ ПРОЕКТА</p><h2 id="artifactDialogTitle">Файл</h2></div><button class="icon-button" id="artifactClose" type="button" data-close-artifact aria-label="Закрыть">×</button></header><div id="artifactBody" class="artifact-panel-body"></div></section>
   </div>
   <div class="overlay" id="aiOverlay" hidden>
     <button class="overlay-shade" data-close-ai aria-label="Закрыть"></button>

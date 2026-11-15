@@ -20,7 +20,7 @@ try {
         if($action==='backups') reply(200,listAtlasBackups(max(0,(int)($_GET['offset']??0)),50));
         if(!is_string($_GET['id']??null)) fail(422,'Нужен ID копии');
         $backup=readAtlasBackup($_GET['id']);
-        if($action==='backup-info') reply(200,['metadata'=>$backup['metadata'],'gates'=>count($backup['snapshot']['content']['gates']),'tasks'=>count(allAtlasTasks($backup['snapshot'])),'research'=>count($backup['snapshot']['content']['research']),'comments'=>array_sum(array_map(fn($t)=>count($t['comments']),allAtlasTasks($backup['snapshot'])))]);
+        if($action==='backup-info') reply(200,['metadata'=>$backup['metadata'],'gates'=>count($backup['snapshot']['content']['gates']),'tasks'=>count(allAtlasTasks($backup['snapshot'])),'research'=>count($backup['snapshot']['content']['research']),'artifacts'=>artifactRows($backup['snapshot']),'comments'=>array_sum(array_map(fn($t)=>count($t['comments']),allAtlasTasks($backup['snapshot'])))]);
         reply(200,$backup);
     }
     if ($method!=='POST') fail(405,'Метод не поддерживается');

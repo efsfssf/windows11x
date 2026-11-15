@@ -19,6 +19,7 @@ jobs:
 
       - name: Check UI and server access
         run: |
+          node --check artifacts.js
           node --check app.js
           node --check editor.js
           node --check comments.js

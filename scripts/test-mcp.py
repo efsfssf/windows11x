@@ -201,6 +201,8 @@ with tempfile.TemporaryDirectory(prefix='windows11x-mcp-') as tmp:
         check('Обновлённый текст' in viewer.request('/ai-context.php?full=1')[1] and viewer.headers['X-Atlas-Revision'] == '8', 'Context not live after AI write')
         from management_checks import check_management
         expected_revision = check_management(owner, viewer, access, private)
+        from artifact_checks import check_artifacts
+        expected_revision = check_artifacts(owner, viewer, access, private)
         readonly_code = authorize('atlas:read')
         read_tokens = viewer.request('/api/oauth.php?action=token', form={**exchange, 'code': readonly_code})[1]
         check(not viewer.tool('add_comment', {**comment, 'revision': expected_revision}, read_tokens['access_token'])[0], 'Read-only grant wrote data')

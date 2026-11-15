@@ -33,7 +33,10 @@ for attempt in range(3):
         assert json.loads(raw)['result']['serverInfo']['name'] == 'windows11x-atlas'
         _, raw = fetch('/api/mcp.php', {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/list'})
         assert any(t['name'] == 'add_comment' for t in json.loads(raw)['result']['tools'])
-        print('PASS: published context revision ' + headers['X-Atlas-Revision'] + ', OAuth discovery, MCP initialize and tools/list')
+        _, files_raw = fetch('/api/files.php?action=list')
+        files = json.loads(files_raw)
+        assert isinstance(files['files'], list) and files['storage']['fileLimitBytes'] == 104857600
+        print('PASS: published artifact catalogue, context revision ' + headers['X-Atlas-Revision'] + ', OAuth discovery, MCP initialize and tools/list')
         break
     except Exception:
         if attempt == 2:
