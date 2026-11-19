@@ -151,9 +151,9 @@ function callAtlasTool(string $name, array $a, ?array $grant): array {
                 foreach($data['state']['custom'] as &$t) if($t['id']===$a['taskId']) foreach(['title','description','proof'] as $key) $t[$key]=$a[$key];unset($t);
                 $result['taskId']=$a['taskId'];break;
             case 'save_research':
-                $record=['id'=>$a['id'],'title'=>$a['title'],'summary'=>$a['summary'],'topic'=>$a['topic'],'group'=>$actor,'date'=>$a['researchDate'],'format'=>$a['format'],'content'=>$a['content'],'source'=>$a['source'],'evidenceLevel'=>$a['evidenceLevel']];
+                $record=['updatedAt'=>gmdate('c'),'id'=>$a['id'],'title'=>$a['title'],'summary'=>$a['summary'],'topic'=>$a['topic'],'group'=>$actor,'date'=>$a['researchDate'],'format'=>$a['format'],'content'=>$a['content'],'source'=>$a['source'],'evidenceLevel'=>$a['evidenceLevel']];
                 $index=array_search($a['id'],array_column($data['content']['research'],'id'),true);
-                if ($index===false) $data['content']['research'][]=$record;else $data['content']['research'][$index]=array_merge($data['content']['research'][$index],$record);
+                if ($index===false) $data['content']['research'][]=[...$record,'createdAt'=>gmdate('c')];else $data['content']['research'][$index]=array_merge($data['content']['research'][$index],$record);
                 $result['researchId']=$a['id'];break;
             case 'update_timeline_entry':
                 $index=array_search($a['researchDate'],array_column($data['content']['days'],'date'),true);

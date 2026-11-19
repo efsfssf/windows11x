@@ -190,8 +190,24 @@ with tempfile.TemporaryDirectory(prefix='windows11x-mcp-') as tmp:
         check(viewer.tool('get_task', {'taskId': new_task})[1]['task']['title'] == 'Уточнено', 'Updated task missing')
         doc = {'revision': 4, 'id': 'ai-test-doc', 'title': 'Исследование ИИ', 'summary': 'Проверено', 'topic': 'API Set', 'content': 'Текст исследования 🧪', 'format': 'md', **provenance}
         check(viewer.tool('save_research', doc, access)[0], 'Save research')
+        created_time = viewer.tool('get_research', {'id': 'ai-test-doc'})[1]['research']['createdAt']
+        check(re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00', created_time), 'Research creation timestamp lacks seconds')
         check(viewer.tool('save_research', {**doc, 'revision': 5, 'content': 'Обновлённый текст'}, access)[0], 'Update research')
+        check(viewer.tool('get_research', {'id': 'ai-test-doc'})[1]['research']['createdAt'] == created_time, 'Editing research reset its creation order')
         check(viewer.tool('get_research', {'id': 'ai-test-doc'})[1]['research']['content'] == 'Обновлённый текст', 'Research update invisible')
+        # Simulate a persisted record from before precise timestamps were introduced.
+        atlas_path = private / 'atlas.json'
+        saved_bytes = atlas_path.read_bytes()
+        legacy = json.loads(saved_bytes)
+        legacy_doc = next(r for r in legacy['content']['research'] if r['id'] == 'ai-test-doc')
+        legacy_doc.pop('createdAt'); legacy_doc.pop('updatedAt')
+        atlas_path.write_text(json.dumps(legacy, ensure_ascii=False))
+        try:
+            recovered = viewer.tool('get_research', {'id': 'ai-test-doc'})[1]['research']
+            known_save = next(c['at'] for c in reversed(legacy['changes']) if c['action'] == 'save_research' and c['target'] == 'ai-test-doc')
+            check(recovered['updatedAt'] == known_save and recovered['date'] == doc['researchDate'], 'Legacy precise save time missing or research date fabricated')
+        finally:
+            atlas_path.write_bytes(saved_bytes)
         event = {'revision': 6, 'title': 'Запись ИИ', 'text': 'Проверенный результат', **provenance}
         check(viewer.tool('save_timeline_entry', event, access)[0], 'Timeline write')
         check(viewer.tool('save_timeline_entry', {**event, 'revision': 7, 'text': 'Дополнение'}, access)[0], 'Timeline append')

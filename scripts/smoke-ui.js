@@ -28,7 +28,7 @@ const sandbox = {
   setTimeout() {return 1;}, clearTimeout() {}, setInterval() {return 1;},
   confirm() {return true;},
   scrollTo() {}, addEventListener() {},
-  structuredClone,
+  structuredClone, URLSearchParams,
   fetch() {return Promise.reject(new Error("Test offline"));},
   Blob,
   URL: class extends URL {static createObjectURL(blob) {sandbox.exportedBlob = blob; return 'blob:smoke';} static revokeObjectURL() {}},
@@ -181,6 +181,25 @@ Promise.all([sandbox.exportedBlob.text(), vm.runInContext('copyForAI()', sandbox
   vm.runInContext("artifactStatus='';openArtifact('file-test');renderTaskArtifacts('g2-dual')",sandbox);
   check(element('artifactBody').innerHTML.includes('Офлайн-проверка пройдена')&&!element('artifactBody').innerHTML.includes('<script>'),'File details/evidence escaping');
   check(element('taskArtifacts').innerHTML.includes('file-test'),'Task view omitted related file');
+  vm.runInContext("content.artifacts=[{...artifactFixture,id:'archived',status:'archived',createdAt:'2026-11-20T12:00:00Z'},{...artifactFixture,id:'tested-old',status:'runtime_pass',createdAt:'2026-11-18T12:00:00Z'},{...artifactFixture,id:'middle',status:'failed',createdAt:'2026-11-19T12:00:00Z'},{...artifactFixture,id:'tested-new',status:'runtime_pass',createdAt:'2026-11-19T12:00:00Z'}];artifactQuery='';artifactStatus='';artifactTask='';",sandbox);
+  check(vm.runInContext("artifactFilterRows().map(r=>r.id).join(',')",sandbox)==='tested-new,tested-old,middle,archived','Artifact status priority/newest ordering');
+  sandbox.location.hash='#files?file=tested-old';
+  vm.runInContext('serverReady=false;openLinkedArtifact()',sandbox);
+  vm.runInContext('serverReady=true;openLinkedArtifact()',sandbox);
+  check(element('artifactBody').innerHTML.includes('id=tested-old'),'Direct artifact link did not open the requested file after loading');
+  check(vm.runInContext("artifactLink('tested-old')",sandbox)==='https://dandomi.tech/#files?file=tested-old','Artifact share URL contains stale route/task query');
+  check(vm.runInContext("artifactCard(content.artifacts[1])",sandbox).includes('href="https://dandomi.tech/#files?file=tested-old"'),'Artifact title is not a real shareable link');
+  sandbox.location.hash='#library';vm.runInContext('openLinkedArtifact()',sandbox);
+  check(element('artifactOverlay').hidden,'Navigating back to another section left the file dialog open');
+  sandbox.location.hash='#files?file=missing-file';vm.runInContext('openLinkedArtifact()',sandbox);
+  check(element('artifactOverlay').hidden&&element('toast').innerHTML.includes('Файл удалён'),'Missing artifact link silently opens another file');
+  sandbox.timedResearch=[{id:'later',date:'2026-11-18',title:'A',createdAt:'2026-11-19T12:00:02Z'},{id:'earlier',date:'2026-11-18',title:'Z',createdAt:'2026-11-19T12:00:01Z'},{id:'older',date:'2026-11-17',createdAt:'2026-11-20T12:00:02Z'}];
+  vm.runInContext('RESEARCH=timedResearch',sandbox);
+  check(vm.runInContext("sortedResearch([...timedResearch].reverse()).map(r=>r.id).join(',')",sandbox)==='later,earlier,older','Research seconds ignored or research date changed by upload date');
+  check(vm.runInContext("researchTimestamp({sourceModifiedAt:'2026-11-19T12:00:03Z',createdAt:'2026-11-20T12:00:00Z'})",sandbox)===Date.parse('2026-11-19T12:00:03Z'),'Source file time replaced by import time');
+  check(vm.runInContext("researchTimestamp({createdAt:'invalid'})===0&&researchClock({date:'2026-11-19'})==='';",sandbox),'Unknown research time was fabricated');
+  vm.runInContext("RESEARCH=[{id:'first',date:'2026-11-18'},{id:'second',date:'2026-11-18'}]",sandbox);
+  check(vm.runInContext("sortedResearch(RESEARCH).map(r=>r.id).join(',')",sandbox)==='second,first','Legacy entries lost insertion order fallback');
   vm.runInContext("TERMS=[];ARCH.nt=[];DAYS=[];GATES=[];RESEARCH=[];renderArchitecture();renderTimeline();renderGlossary();renderPlan();renderLibrary();",sandbox);
   console.log('PASS: 7 views, artifact filters/task links/safe downloads, 86 sources (28 AI archive), reader, safe Markdown, plan toggle, export/import and AI summary');
 }).catch(error => {console.error(error); process.exitCode = 1;});

@@ -19,6 +19,9 @@ function atlasData(): array {
     $data=readJson($privateDir.'/atlas.json',[]);
     if (!$data) return initialAtlas();
     if (empty($data['content'])) $data['content']=initialAtlas()['content'];
+    // Recover known save times for older research records without inventing research dates.
+    $times=[];foreach($data['changes']??[] as $change)if(($change['action']??'')==='save_research' && isset($change['target'],$change['at']))$times[$change['target']]=$change['at'];
+    foreach($data['content']['research'] as &$record)if(empty($record['researchedAt']) && empty($record['sourceModifiedAt']) && empty($record['createdAt']) && empty($record['updatedAt']) && isset($times[$record['id']]))$record['updatedAt']=$times[$record['id']];unset($record);
     return $data;
 }
 function atlasMutate(mixed $revision, callable $mutation, array $audit): array {

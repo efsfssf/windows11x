@@ -50,6 +50,7 @@ def check_research_import(owner, viewer, token, private, write, patch):
         md = records['2026-11-13 Обзор.MD']
         check(md['title'] == 'Заголовок исследования' and md['date'] == '2026-11-13' and md['dateSource'] == 'filename', 'Markdown title/date metadata')
         check(records['nested/data.JSON']['format'] == 'json' and records['another.markdown']['format'] == 'md', 'Extension mapping')
+        check(md['sourceModifiedAt'] and records['nested/data.JSON']['sourceModifiedAt'], 'Source modification seconds missing')
         check(records['sample.py']['dateSource'] == 'file_mtime', 'Fallback date provenance missing')
         check(owner.api('scan-research&folder=' + quote(relative + '/empty'))[1]['count'] == 0, 'Empty folder scan')
         for bad in ['../', '/etc', '/library', 'library/../api', 'library//ai', 'library/.git', relative + '/outside-dir']:

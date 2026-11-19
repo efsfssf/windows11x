@@ -5,7 +5,7 @@ let saveTimer = null, saveBlocked = false, editorDraft = null, editorSection = '
 let editorSelection = 0, editorBaseline = '';
 let researchFolderDraft=null,researchImportBusy=false;
 const sectionLabels = {site:'Оформление и навигация',texts:'Тексты всех страниц',gates:'Этапы и задачи',days:'Хронология',architecture:'Архитектура',terms:'Словарь',research:'Исследования',metadata:'Дата и артефакт',overviewBlocks:'Карточки обзора',myths:'Частые неверные выводы'};
-const fieldLabels = {name:'Название сайта',subtitle:'Подзаголовок',latest:'Последняя точка',footer:'Подпись внизу',footerNote:'Пояснение внизу',nav:'Названия разделов',overview:'Обзор',plan:'План',architecture:'Архитектура',timeline:'Хронология',library:'Исследования',glossary:'Словарь',snapshot:'Дата среза',artifactHash:'SHA-256 артефакта',id:'Идентификатор',title:'Название',short:'Кратко',detail:'Подробности',description:'Описание',proof:'Критерий результата',done:'Отмечено по умолчанию',focus:'Выделить этап',status:'Цвет статуса',statusText:'Текст статуса',context:'Контекст',tasks:'Задачи',date:'Дата',text:'Текст',tags:'Теги',evidence:'Уровень доказательства',nt:'Наш кандидат',fos:'Эталон',summary:'Краткое описание',topic:'Тема',group:'Источник',format:'Формат',path:'Исходное имя файла',content:'Содержимое документа',featuredResearchId:'ID исследования для ссылки на главной',volumes:'Роли хранения',phases:'Фазы',label:'Подпись',letter:'Буква тома',when:'Когда выполняется',proofSteps:'Лестница доказательств',corrections:'Исправления',flow:'Маршрут проверок',complete:'Достигнуто',current:'Текущий шаг',before:'Прежний вывод',after:'Исправленный вывод'};
+const fieldLabels = {createdAt:'Добавлено (точное время)',updatedAt:'Сохранено (точное время)',sourceModifiedAt:'Время изменения исходного файла',researchedAt:'Дата и время исследования (ISO 8601)',name:'Название сайта',subtitle:'Подзаголовок',latest:'Последняя точка',footer:'Подпись внизу',footerNote:'Пояснение внизу',nav:'Названия разделов',overview:'Обзор',plan:'План',architecture:'Архитектура',timeline:'Хронология',library:'Исследования',glossary:'Словарь',snapshot:'Дата среза',artifactHash:'SHA-256 артефакта',id:'Идентификатор',title:'Название',short:'Кратко',detail:'Подробности',description:'Описание',proof:'Критерий результата',done:'Отмечено по умолчанию',focus:'Выделить этап',status:'Цвет статуса',statusText:'Текст статуса',context:'Контекст',tasks:'Задачи',date:'Дата',text:'Текст',tags:'Теги',evidence:'Уровень доказательства',nt:'Наш кандидат',fos:'Эталон',summary:'Краткое описание',topic:'Тема',group:'Источник',format:'Формат',path:'Исходное имя файла',content:'Содержимое документа',featuredResearchId:'ID исследования для ссылки на главной',volumes:'Роли хранения',phases:'Фазы',label:'Подпись',letter:'Буква тома',when:'Когда выполняется',proofSteps:'Лестница доказательств',corrections:'Исправления',flow:'Маршрут проверок',complete:'Достигнуто',current:'Текущий шаг',before:'Прежний вывод',after:'Исправленный вывод'};
 function formatDate(value){return /^\d{4}-\d{2}-\d{2}$/.test(value)?value.split('-').reverse().join('.'):value;}
 function canEdit(){if(auth.editor&&serverReady&&!saveBlocked)return true;toast(saveBlocked?'Есть конфликт сохранения. Сохраните копию и загрузите актуальные данные.':'Для изменения войдите как владелец');return false;}
 async function api(action,body){
@@ -30,7 +30,7 @@ async function initializeAtlas(){
   const [session,data]=await Promise.all([api('session'),api('data')]);auth=session;serverRevision=data.revision;
   if(data.content)useContent(data.content);
   state=normalizePlan(data.state);serverReady=true;
-  render();setSync('Данные загружены · версия '+serverRevision);if(typeof openLinkedTask==='function')openLinkedTask();
+  render();setSync('Данные загружены · версия '+serverRevision);if(typeof openLinkedTask==='function')openLinkedTask();openLinkedArtifact();
  }catch(error){setSync('Нет связи с сервером');document.getElementById('accessNotice').textContent=error.message;render();}
 }
 function updateChrome(){
@@ -106,8 +106,8 @@ function mergeResearchDraft(existing,files){
  const next=structuredClone(existing),byPath=new Map(next.map((r,i)=>[r.path,i])),ids=new Set(next.map(r=>r.id));let added=0,updated=0;
  for(const file of files){
   if(byPath.has(file.path)){
-   const i=byPath.get(file.path);if(next[i].content!==file.content||next[i].format!==file.format)updated++;
-   next[i]={...file,...next[i],content:file.content,format:file.format,path:file.path};
+   const i=byPath.get(file.path);if(next[i].content!==file.content||next[i].format!==file.format||next[i].sourceModifiedAt!==file.sourceModifiedAt)updated++;
+   next[i]={...file,...next[i],content:file.content,format:file.format,path:file.path,...(file.sourceModifiedAt?{sourceModifiedAt:file.sourceModifiedAt}:{})};
   }else{
    const item=structuredClone(file);while(ids.has(item.id))item.id+='-x';if(item.id.length>100)throw new Error('Конфликт ID импортируемого файла');ids.add(item.id);byPath.set(item.path,next.length);next.push(item);added++;
   }
@@ -141,7 +141,7 @@ function newItem(path){
  if(key==='tasks')return {id,title:'Новая задача',description:'',proof:'',done:false};
  if(key==='days')return {date:new Date().toISOString().slice(0,10),title:'Новое событие',text:'',tags:[]};
  if(key==='terms')return ['Новый термин','Объяснение'];
- if(key==='research')return {id,title:'Новое исследование',summary:'',topic:'Общее',group:'Автор',date:new Date().toISOString().slice(0,10),format:'md',path:id+'.md',content:''};
+ if(key==='research')return {id,title:'Новое исследование',summary:'',topic:'Общее',group:'Автор',date:new Date().toISOString().slice(0,10),format:'md',path:id+'.md',content:'',createdAt:new Date().toISOString()};
  if(key==='proofSteps')return {title:'Новая ступень',text:'',complete:false};
  if(key==='corrections')return {title:'Новое исправление',text:''};
  if(key==='flow')return {title:'Новый шаг',current:false};

@@ -50,7 +50,7 @@ function scanResearchFolder(string $folder): array {
         if($format==='md' && preg_match('/^#\s+(.+)$/m',$text,$m)) $title=trim($m[1]);
         $date=gmdate('Y-m-d',$file->getMTime());$dateSource='file_mtime';
         if(preg_match('/(20[0-9]{2})[-_]([0-9]{2})[-_]([0-9]{2})/',$file->getFilename(),$m) && validDate($m[1].'-'.$m[2].'-'.$m[3])) {$date=$m[1].'-'.$m[2].'-'.$m[3];$dateSource='filename';}
-        $records[]=['id'=>'server-'.hash('sha256',$relative),'path'=>$relative,'format'=>$format,'title'=>$title,'summary'=>'Загружено из файла '.$relative,'date'=>$date,'dateSource'=>$dateSource,'topic'=>'Общее','group'=>'Файлы сервера · '.dirname($relative),'content'=>$text];
+        $records[]=['id'=>'server-'.hash('sha256',$relative),'path'=>$relative,'format'=>$format,'title'=>$title,'summary'=>'Загружено из файла '.$relative,'date'=>$date,'dateSource'=>$dateSource,'sourceModifiedAt'=>gmdate('c',$file->getMTime()),'topic'=>'Общее','group'=>'Файлы сервера · '.dirname($relative),'content'=>$text];
     }
     usort($records,fn($a,$b)=>strcmp($a['path'],$b['path']));
     return ['folder'=>$folder,'files'=>$records,'count'=>count($records),'warnings'=>$warnings,'formats'=>array_keys($formats),'recursive'=>true];
@@ -61,8 +61,8 @@ function mergeResearchFiles(array $existing,array $files): array {
     foreach($files as $file) {
         if(isset($byPath[$file['path']])) {
             $i=$byPath[$file['path']];
-            if($existing[$i]['content']!==$file['content'] || $existing[$i]['format']!==$file['format'])$updated++;
-            $existing[$i]=[...$file,...$existing[$i],'content'=>$file['content'],'format'=>$file['format'],'path'=>$file['path']];
+            if($existing[$i]['content']!==$file['content'] || $existing[$i]['format']!==$file['format'] || ($existing[$i]['sourceModifiedAt']??null)!==$file['sourceModifiedAt'])$updated++;
+            $existing[$i]=[...$file,...$existing[$i],'content'=>$file['content'],'format'=>$file['format'],'path'=>$file['path'],'sourceModifiedAt'=>$file['sourceModifiedAt']];
         } else {
             while(isset($ids[$file['id']])) $file['id'].='-x';
             if(strlen($file['id'])>100) fail(422,'Конфликт ID импортируемого файла');
